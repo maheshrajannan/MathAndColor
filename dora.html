@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Math And Color</title>
+  <!--
+  INFO: this style sheet is not ideal. It is better than nothing.
+  http://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_form_horizontal&stacked=h
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+-->
+
+</head>
+<body>
+
+
+<div class="container">
+  <h2>Math And Color Input</h2>
+  <div class="form-horizontal">
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Name:</label>
+      <div class="col-sm-10">
+        <input type="name" class="form-control" id="nameId" placeholder="Enter Name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="digit1Id">1st Digit:</label>
+      <div class="col-sm-10">
+        <input type="number" class="form-control" id="digit1Id" placeholder="Enter Shirt 1st Digit"
+        onchange="draw()">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="pwd">Password:</label>
+      <div class="col-sm-10">          
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label><input type="checkbox"> Remember me</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">        
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr/>
+
+<canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+</div>
+<script type="text/javascript">
+window.onload = function(){
+     var canvas = document.getElementById("myCanvas");
+     var context = canvas.getContext("2d");
+     var imageObj = new Image();
+     imageObj.onload = function(){
+     	//width="1160" height="1008"
+         context.drawImage(imageObj, 10, 10,1160,1008);
+         context.font = "40pt Calibri";
+         context.fillText("Name:", 30, 40);
+         //Fill your name
+         context.fillText("__________", 30, 140);
+         context.fillText("_______", 30, 240);
+         //Shirt
+         context.fillText(document.getElementById("digit1Id").value, 500, 510);
+         context.fillText("+30", 500, 560);
+         context.fillText("___", 500, 570);
+         context.fillText("___", 500, 620);
+    };
+	     imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"; 
+ };
+ function draw() {
+ 	     var canvas = document.getElementById("myCanvas");
+     	var context = canvas.getContext("2d");
+     	var imageObj = new Image();
+     	imageObj.onload = function(){
+     	//width="1160" height="1008"
+         context.drawImage(imageObj, 0, 0,1160,1008);
+         context.font = "40pt Calibri";
+         context.fillText("Name:", 30, 40);
+         //Fill your name
+         context.fillText("__________", 30, 140);
+         context.fillText("_______", 30, 240);
+         //Shirt
+         context.fillText(document.getElementById("digit1Id").value, 500, 510);
+         context.fillText("+30", 500, 560);
+         context.fillText("___", 500, 570);
+         context.fillText("___", 500, 620);
+    };
+	     imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"; 
+ }
+</script>
+
+
+</body>
+</html>
+
