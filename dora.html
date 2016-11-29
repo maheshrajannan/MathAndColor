@@ -83,6 +83,26 @@ window.onload = function(){
          context.fillText("___", 500, 620);
     };
 	     imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"; 
+
+        var keyHistory = "";
+
+        window.addEventListener("keyup", keyUpHandler, true);
+
+        function addletter(letter) {
+            keyHistory += letter;
+            context.clearRect(0, 0, 300, 300);
+            context.fillText(keyHistory, 20, 20);
+        }
+
+        function keyUpHandler(event) {
+            var letters = "abcdefghijklmnopqrstuvwxyz";
+            var key = event.keyCode;
+            if (key > 64 && key < 91) {
+                var letter = letters.substring(key - 64, key - 65);
+                addletter(letter);
+            }
+        }
+
  };
  function draw() {
  	     var canvas = document.getElementById("myCanvas");
@@ -104,8 +124,8 @@ window.onload = function(){
     };
 	     imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"; 
  }
-</script>
 
+</script>
 
 </body>
 </html>
