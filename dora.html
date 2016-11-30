@@ -60,7 +60,11 @@
 
 <hr/>
 
-<canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;">
+<!--http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
+Added tab index, to make canvas focusable. Unlike other html elements, it is NOT
+focusable by default.
+-->
+<canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;" tabindex="1">
 Your browser does not support the HTML5 canvas tag.</canvas>
 </div>
 <script type="text/javascript">
@@ -85,23 +89,55 @@ window.onload = function(){
 	     imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"; 
 
         var keyHistory = "";
+        var mousePos;
 
-        window.addEventListener("keyup", keyUpHandler, true);
+        canvas.addEventListener("keyup", keyUpHandler, true);
+        canvas.addEventListener('mousemove',mouseMoveHandler,true);
+        //alert('hi');
 
-        function addletter(letter) {
+        function addletter(letter,x,y) {
+            //alert("(x,y)=("+x+","+y+")");
             keyHistory += letter;
-            context.clearRect(0, 0, 300, 300);
-            context.fillText(keyHistory, 20, 20);
+            //context.clearRect(x, y, x+20, y+50);
+            context.fillText(keyHistory, x+20, y+20);
         }
 
+        function mouseMoveHandler(event) {
+          mousePos = getMousePos(canvas, event);
+        }
+
+
         function keyUpHandler(event) {
+            //alert('hi keyup');
+            //INFO:TODO: mouse position comes only from mouse listener not key listener
+            //http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
+            //http://jsfiddle.net/AustinBrunkhorst/qsULv/
+            //INFO: capture the last position of mouse, by mouse listener.
+            //on key down, write to the last known position of the mouse.
+            //var mousePos = getMousePos(canvas, event);
             var letters = "abcdefghijklmnopqrstuvwxyz";
             var key = event.keyCode;
             if (key > 64 && key < 91) {
                 var letter = letters.substring(key - 64, key - 65);
-                addletter(letter);
+                addletter(letter,mousePos.x,mousePos.y);
             }
         }
+
+/**
+http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
+**/
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        //alert("(evt.clientX - rect.left)="+evt.clientX +"-"+rect.left);
+        //alert("(evt.clientY - rect.left)="+evt.clientY +"-"+rect.top);
+        var x= evt.clientX - rect.left;
+        var y= evt.clientY - rect.top;
+        //alert("mousePos (x,y)=("+x+","+y+")");
+        return {
+          x: x,
+          y: y
+        };
+      }
 
  };
  function draw() {
