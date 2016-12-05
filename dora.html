@@ -12,12 +12,17 @@ Added tab index, to make canvas focusable. Unlike other html elements, it is NOT
 focusable by default.
 -->
 
-    <canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;" tabindex="1" onkeyup="keyUpHandler(this,event)" onmousemove="mouseMoveHandler(this,event)">
+    <canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;" tabindex="1" 
+    onkeypress="keyUpHandler(this,event)" 
+    onmousemove="mouseMoveHandler(this,event)">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
 
     </div>
     <script type="text/javascript">
+        var keyHistoryCoordinate={keyHistory:"This is at (10,10)", x:10, y:10};
+        var keyCoordinateHistory=[keyHistoryCoordinate];
+
         var keyHistory = "";
         var mousePos;
         window.onload = function() {
@@ -32,11 +37,6 @@ focusable by default.
                 //Fill your name
                 context.fillText("__________", 30, 140);
                 context.fillText("_______", 30, 240);
-                //Shirt
-                context.fillText(document.getElementById("digit1Id").value, 500, 510);
-                context.fillText("+30", 500, 560);
-                context.fillText("___", 500, 570);
-                context.fillText("___", 500, 620);
             };
             imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
         };
@@ -66,11 +66,12 @@ focusable by default.
             //on key down, write to the last known position of the mouse.
             //var mousePos = getMousePos(canvas, event);
             var letters = "abcdefghijklmnopqrstuvwxyz";
-            var key = event.keyCode;
-            if (key > 64 && key < 91) {
-                var letter = letters.substring(key - 64, key - 65);
+            //var key = event.keyCode;
+            //if (key > 64 && key < 91) {
+                //var letter = letters.substring(key - 64, key - 65);
+                var letter = getKey(event);
                 addletter(canvas, letter, mousePos.x, mousePos.y);
-            }
+            //}
         }
 
         function mouseMoveHandler(canvas, event) {
@@ -103,6 +104,28 @@ focusable by default.
             //context.clearRect(x, y, x+20, y+50);
             context.fillText(keyHistory, x + 20, y + 20);
         }
+
+        function getKey(e){
+          var keynum;
+          var keyPressed;
+
+          if(window.event) { // IE                    
+            keynum = e.keyCode;
+          } else if(e.which){ // Netscape/Firefox/Opera                   
+            keynum = e.which;
+          }
+
+        if (keynum >= 65 && keynum <= 90) {
+            keyPressed = String.fromCharCode(keynum + 32);
+        } else if (96 <= keynum && keynum <= 105) {
+            keyPressed = String.fromCharCode(keynum - 48);
+        }else {
+            keyPressed = String.fromCharCode(keynum);
+        }
+
+          return keyPressed;
+        }
+
     </script>
 
 </body>
