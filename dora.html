@@ -3,16 +3,6 @@
 
 <head>
     <title>Math And Color</title>
-    <!--
-INFO: this style sheet is not ideal. It is better than nothing.
-http://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_form_horizontal&stacked=h
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
--->
-
 </head>
 
 <body>
@@ -138,25 +128,25 @@ focusable by default.
         **/
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
-            //alert("(evt.clientX - rect.left)="+evt.clientX +"-"+rect.left);
-            //alert("(evt.clientY - rect.left)="+evt.clientY +"-"+rect.top);
             var x = evt.clientX - rect.left;
             var y = evt.clientY - rect.top;
-            //alert("mousePos (x,y)=("+x+","+y+")");
             return {
                 x: x,
                 y: y
             };
         }
 
+        //INFO:Instead of adding it on load, if we add it as event based on canvas element,
+        //then it can be re-used across pages.
+        //Later this can also be made data driven.
         //canvas.addEventListener("keyup", keyUpHandler, true);
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
         //alert('hi');
 
         function addletter(canvas, letter, x, y) {
             var context = canvas.getContext("2d");
-            //alert("(x,y)=("+x+","+y+")");
             keyHistory += letter;
+            //INFO: clears a lot of area so commented.
             //context.clearRect(x, y, x+20, y+50);
             context.fillText(keyHistory, x + 20, y + 20);
         }
