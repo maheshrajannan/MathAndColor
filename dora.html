@@ -44,15 +44,18 @@ canvas {
         <br/>
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A" onkeyup="addLetterToA()"/>
+            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"
+             onkeyup="addLetterToA()"/>
             <br/>
             <br/>
             <label for="operatorId">Operator:</label>
-            <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
+            <input class="form-control" type="name" id="operatorId" placeholder="Operator"
+             onkeyup="addLetterToOperator()"/>
             <br/>
             <br/>
             <label for="numberBId">B:</label>
-            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B" />
+            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"
+            onkeyup="addLetterToB()" />
             <br/>
             <br/>
             <label for="doneId">Numbers will Appear</label>
@@ -136,6 +139,7 @@ canvas {
         }
 
         function mouseMoveHandler(canvas, event) {
+            showInputs();
             mousePos = getMousePos(canvas, event);
             $("#xId").val(mousePos.x);
             $("#yId").val(mousePos.y);
@@ -174,15 +178,40 @@ canvas {
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letter = $('#numberAId').val();
-            console.log("adding...");
-            addletter(canvas, letter, $('#xId').val(), $('#yId').val());
+            var x=$('#xId').val();
+            var y=$('#yId').val();
+            console.log("adding...(x,y)=("+x+","+y+")");
+            addletter(canvas, letter, x, y);
             console.log("added...");
         }
         function addLetterToB() {
-
+            console.log("Adding letter to B");
+            var canvas = document.getElementById("myCanvas");
+            console.log("canvassing...");
+            var letter = $('#numberBId').val();
+            var x1=$('#xId').val();
+            var y1=$('#yId').val();
+            console.log("y1"+y1);
+            y1 = Number(y1) +Number(50);
+            console.log("y1"+y1);
+            console.log("adding...(x,y)=("+x1+","+y1+")");
+            //INFO: write in next line.
+            addletter(canvas, letter, x1, y1);
+            console.log("added...");            
         }
-        function addOperator(){
-
+        function addLetterToOperator(){
+            console.log("Adding letter to Operator");
+            var canvas = document.getElementById("myCanvas");
+            console.log("canvassing...");
+            var letter = $('#operatorId').val();
+            var x1=$('#xId').val();
+            var y1=$('#yId').val();
+            x1 = Number(x1)-Number(25);
+            y1 = Number(y1) +Number(25);
+            console.log("adding...(x1,y1)=("+x1+","+y1+")");
+            //INFO: write it between 2 numbers, slightly to left
+            addletter(canvas, letter, x1, y1);
+            console.log("added...");
         }
         /**
         Capturing keypresse will have a lot of disadvantages.
