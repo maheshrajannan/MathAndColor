@@ -124,7 +124,7 @@ canvas {
             //INFO: capture the last position of mouse, by mouse listener.
             //on key down, write to the last known position of the mouse.
             //var mousePos = getMousePos(canvas, event);
-            var letters = "abcdefghijklmnopqrstuvwxyz";
+            //var letters = "abcdefghijklmnopqrstuvwxyz";
             //var key = event.keyCode;
             //if (key > 64 && key < 91) {
                 //var letter = letters.substring(key - 64, key - 65);
@@ -135,6 +135,8 @@ canvas {
 
         function mouseMoveHandler(canvas, event) {
             mousePos = getMousePos(canvas, event);
+            $("#xId").val(mousePos.x);
+            $("#yId").val(mousePos.y);
         }
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
