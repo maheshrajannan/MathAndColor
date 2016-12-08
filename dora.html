@@ -44,7 +44,7 @@ canvas {
         <br/>
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A" />
+            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A" onkeyup="addLetterToA()"/>
             <br/>
             <br/>
             <label for="operatorId">Operator:</label>
@@ -56,7 +56,7 @@ canvas {
             <br/>
             <br/>
             <label for="doneId">Numbers will Appear</label>
-            <button class="form-control" id="doneId">Done</button>
+            <button class="form-control" id="doneId" onclick="addText()">Done</button>
             <button class="form-control" id="doneId" onclick="hideInputs()">Hide</button>
             <br/>
             <br/>
@@ -70,8 +70,7 @@ canvas {
     -->
 
     <canvas id="myCanvas" width="960" height="998" style="border:10px solid #d3d3d3;" tabindex="1" 
-    onkeypress="keyUpHandler(this,event)" 
-    onmousemove="mouseMoveHandler(this,event)">
+    onclick="mouseMoveHandler(this,event)">
         Your browser does not support the HTML5 canvas tag.
     </canvas>
     <div>
@@ -140,6 +139,7 @@ canvas {
             mousePos = getMousePos(canvas, event);
             $("#xId").val(mousePos.x);
             $("#yId").val(mousePos.y);
+            $("#numberAId").focus();
         }
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
@@ -163,12 +163,27 @@ canvas {
 
         function addletter(canvas, letter, x, y) {
             var context = canvas.getContext("2d");
-            keyHistory += letter;
+            //keyHistory += letter;
             //INFO: clears a lot of area so commented.
             //context.clearRect(x, y, x+20, y+50);
-            context.fillText(keyHistory, x + 20, y + 20);
+            context.fillText(letter, x, y );
         }
 
+        function addLetterToA() {
+            console.log("Adding letter to A");
+            var canvas = document.getElementById("myCanvas");
+            console.log("canvassing...");
+            var letter = $('#numberAId').val();
+            console.log("adding...");
+            addletter(canvas, letter, $('#xId').val(), $('#yId').val());
+            console.log("added...");
+        }
+        function addLetterToB() {
+
+        }
+        function addOperator(){
+
+        }
         /**
         Capturing keypresse will have a lot of disadvantages.
         For example, if you press command +/-, then
