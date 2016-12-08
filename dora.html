@@ -56,7 +56,8 @@ canvas {
             <br/>
             <br/>
             <label for="doneId">Numbers will Appear</label>
-            <button class="form-control" id="doneId" onclick="hideInputs()">Done</button>
+            <button class="form-control" id="doneId">Done</button>
+            <button class="form-control" id="doneId" onclick="hideInputs()">Hide</button>
             <br/>
             <br/>
         </fieldset>
@@ -128,6 +129,8 @@ canvas {
             //var key = event.keyCode;
             //if (key > 64 && key < 91) {
                 //var letter = letters.substring(key - 64, key - 65);
+                //INFO: just incase it is hidden by the user.
+                showInputs();
                 var letter = getKey(event);
                 addletter(canvas, letter, mousePos.x, mousePos.y);
             //}
