@@ -158,6 +158,53 @@ canvas {
             };
         }
 
+        //INFO:Class TextCoordinate, group text starting at a particular coordinate.
+        //Say, starting at x,y display 33+40=__. 
+        //Functions:
+        //1. Any time it exceeds coordinates of canvas re-adjust.
+        //2. Any time this falls with in range of another co-ordinate,
+        //do not return the instance.
+        //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
+
+        function TextCoordinate (x, y, a,b,operator) {
+            this.x = x;
+            this.y = y;
+            this.a = a;
+            this.b = b;
+            this.operator = operator;
+            this.adjust = function (canvas) {
+                console.log("adjust");
+                var delta =  Number(50*(Math.max(a.length,b.length)));
+                //left, top, right, bottom, x, y, width, height
+                var canvasBounds = canvas.getBoundingClientRect();
+                console.log("Number(x):"+Number(x));
+                console.log("a.length:"+a.length);
+                console.log("b.length:"+b.length);
+                console.log("Math.max(a.length,b.length):"+Math.max(a.length,b.length));
+                console.log("canvasBounds.right:"+canvasBounds.right);
+                console.log("delta: 50*(Math.max(a.length,b.length)):"
+                    +delta);
+
+                console.log("Number(y):"+Number(y));
+                console.log("canvasBounds.bottom:"+canvasBounds.bottom);
+
+                var delta2 =  Number(y) + Number(200);
+                console.log("Number(y) + Number(200):"+delta2);
+
+                if( (Number(x)+Number(delta))  > canvasBounds.right) {
+                    console.log("readjusted x from x :"+x);
+                    this.x = Number(x) - Number(delta);
+                    console.log("to :"+x);
+                }
+                if( ( Number(y) + Number(200) ) > canvasBounds.bottom) {
+                    console.log("readjusted y from y :"+y);
+                    this.y = Number(y) - Number(200);
+                    console.log("to :"+y);
+                }
+            }
+
+        }
+
         //INFO:Instead of adding it on load, if we add it as event based on canvas element,
         //then it can be re-used across pages.
         //Later this can also be made data driven.
@@ -180,6 +227,12 @@ canvas {
             var letter = $('#numberAId').val();
             var x=$('#xId').val();
             var y=$('#yId').val();
+            var textCoordinate = new TextCoordinate(x,y,letter,""," ");
+            textCoordinate.adjust(canvas);
+            x=textCoordinate.x;
+            y=textCoordinate.y;
+            $('#xId').val(x);
+            $('#yId').val(y);            
             console.log("adding...(x,y)=("+x+","+y+")");
             addletter(canvas, letter, x, y);
             console.log("added...");
@@ -188,9 +241,17 @@ canvas {
             console.log("Adding letter to B");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
+            var letterA = $('#numberAId').val();
             var letter = $('#numberBId').val();
+            var operator = $('#operatorId').val();
             var x1=$('#xId').val();
             var y1=$('#yId').val();
+            var textCoordinate = new TextCoordinate(x1,y1,letterA,letter,operator);
+            textCoordinate.adjust(canvas);
+            x1=textCoordinate.x;
+            y1=textCoordinate.y;
+            $('#xId').val(x1);
+            $('#yId').val(y1);
             console.log("y1"+y1);
             y1 = Number(y1) +Number(50);
             console.log("y1"+y1);
