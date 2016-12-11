@@ -40,6 +40,8 @@ canvas {
             <input class="form-control" type="name" id="xId" placeholder="X"/>
             <label for="yId">Y:</label>
             <input class="form-control" type="name" id="yId" placeholder="Y"/>
+            <label for="fontSizeId">Font Size:</label>
+            <input class="form-control" type="name" id="fontSizeId" value="40"/>
         </fieldset>
         <br/>
         <fieldset>
@@ -57,7 +59,7 @@ canvas {
             <br/>
             <label for="doneId">Numbers will Appear</label>
             <button class="form-control" id="doneId" onclick="addText()">Done</button>
-            <button class="form-control" id="doneId" onclick="hideInputs()">Hide</button>
+            <button class="form-control" id="hideId" onclick="hideInputs()">Hide</button>
             <br/>
             <br/>
         </fieldset>
@@ -81,6 +83,7 @@ canvas {
     <script type="text/javascript">
         var keyHistoryCoordinate={keyHistory:"This is at (10,10)", x:10, y:10};
         var keyCoordinateHistory=[keyHistoryCoordinate];
+        var FONT_SIZE = $('#fontSizeId').val();
 
         var keyHistory = "";
         var mousePos;
@@ -91,7 +94,7 @@ canvas {
             imageObj.onload = function() {
                 //width="1160" height="1008"
                 context.drawImage(imageObj, 10, 10, 1160, 1008);
-                context.font = "40pt Calibri";
+                context.font = FONT_SIZE+"pt Calibri";
                 context.fillText("Name:", 30, 40);
                 //Fill your name
                 context.fillText("__________", 30, 140);
@@ -107,7 +110,7 @@ canvas {
             imageObj.onload = function() {
                 //width="1160" height="1008"
                 context.drawImage(imageObj, 0, 0, 1160, 1008);
-                context.font = "40pt Calibri";
+                context.font = FONT_SIZE+"pt Calibri";
                 context.fillText("Name:", 30, 40);
                 //Fill your name
                 context.fillText("__________", 30, 140);
@@ -172,7 +175,7 @@ canvas {
             this.adjust = function (canvas) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
-                var delta =  Number(40*(Math.max(a.length,b.length)));
+                var delta =  Number(Number(FONT_SIZE)*(Math.max(a.length,b.length)));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
                 console.log("canvasBounds.x:"+canvasBounds.x);
@@ -193,9 +196,9 @@ canvas {
                     console.log("to :"+this.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(x)+canvasBounds.left-Number(40))  < canvasBounds.left) {
+                if( (Number(x)+canvasBounds.left-Number(FONT_SIZE))  < canvasBounds.left) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.x = Number(40);
+                    this.x = Number(FONT_SIZE);
                     console.log("to :"+this.x);
                 }
                 //INFO:Basically adjusting for
@@ -203,19 +206,19 @@ canvas {
                 //+44
                 //=76
                 //3 font sizes,3*40=120
-                console.log("( Number(y) + Number(canvasBounds.top) + Number(120) ) > canvasBounds.bottom");
-                console.log(( Number(y) + Number(canvasBounds.top) + Number(120) ) + " > " + canvasBounds.bottom);
-                if( ( Number(y) + Number(canvasBounds.top) + Number(120) ) > canvasBounds.bottom) {
+                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom");
+                console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) + " > " + canvasBounds.bottom);
+                if( ( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.y = canvasBounds.bottom - Number(canvasBounds.top) - Number(120);
+                    this.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(FONT_SIZE));
                     console.log("to :"+this.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
-                console.log("( Number(y) + Number(canvasBounds.top) - Number(40) ) < canvasBounds.top");
-                console.log( ( Number(y) + Number(canvasBounds.top) - Number(40) ) + " < " + canvasBounds.top);
-                if( ( Number(y) + Number(canvasBounds.top) - Number(40) ) < canvasBounds.top) {
+                console.log("( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top");
+                console.log( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) + " < " + canvasBounds.top);
+                if( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top) {
                     console.log("readjusted y for top from y :"+y);
-                    this.y = canvasBounds.top - Number(canvasBounds.top) + Number(40);
+                    this.y = canvasBounds.top - Number(canvasBounds.top) + Number(FONT_SIZE);
                     console.log("to :"+this.y);
                 }
             }
