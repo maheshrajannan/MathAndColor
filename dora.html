@@ -22,7 +22,7 @@ h1 {
    margin-right: 15cm;
 }
 label {
-  width: 150px;
+  width: 100px;
   padding-right: 20px;
   display: inline-block;
 }
@@ -88,6 +88,10 @@ canvas {
         var keyHistory = "";
         var mousePos;
         window.onload = function() {
+            draw();
+        };
+        //INFO: outside of onload
+        function draw() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
             var imageObj = new Image();
@@ -99,22 +103,6 @@ canvas {
                 //Fill your name
                 context.fillText("__________", 30, (3*Number(FONT_SIZE)));
                 context.fillText("_______", 30, (5*Number(FONT_SIZE)));
-            };
-            imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
-        };
-        //INFO: outside of onload
-        function draw() {
-            var canvas = document.getElementById("myCanvas");
-            var context = canvas.getContext("2d");
-            var imageObj = new Image();
-            imageObj.onload = function() {
-                //width="1160" height="1008"
-                context.drawImage(imageObj, 0, 0, 1160, 1008);
-                context.font = FONT_SIZE+"pt Calibri";
-                context.fillText("Name:", 30, 40);
-                //Fill your name
-                context.fillText("__________", 30, 140);
-                context.fillText("_______", 30, 240);
             };
             imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
         }
