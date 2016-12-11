@@ -95,10 +95,10 @@ canvas {
                 //width="1160" height="1008"
                 context.drawImage(imageObj, 10, 10, 1160, 1008);
                 context.font = FONT_SIZE+"pt Calibri";
-                context.fillText("Name:", 30, 40);
+                context.fillText("Name:", 30, FONT_SIZE);
                 //Fill your name
-                context.fillText("__________", 30, 140);
-                context.fillText("_______", 30, 240);
+                context.fillText("__________", 30, (3*Number(FONT_SIZE)));
+                context.fillText("_______", 30, (5*Number(FONT_SIZE)));
             };
             imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
         };
@@ -150,8 +150,8 @@ canvas {
         **/
         function getMousePos(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
-            var x = evt.clientX - rect.left;
-            var y = evt.clientY - rect.top;
+            var x = Math.round(evt.clientX - rect.left);
+            var y = Math.round(evt.clientY - rect.top);
             return {
                 x: x,
                 y: y
@@ -182,7 +182,7 @@ canvas {
                 console.log("canvasBounds.left:"+canvasBounds.left);
                 console.log("canvasBounds.right:"+canvasBounds.right);
                 console.log("Number(x):"+Number(x));
-                console.log("delta: 30*(Math.max(a.length,b.length)):"
+                console.log("delta: "+FONT_SIZE+"*(Math.max(a.length,b.length)):"
                     +delta);
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
@@ -221,6 +221,10 @@ canvas {
                     this.y = canvasBounds.top - Number(canvasBounds.top) + Number(FONT_SIZE);
                     console.log("to :"+this.y);
                 }
+            }
+
+            this.getBCoordinate = function(){
+
             }
 
         }
@@ -273,7 +277,7 @@ canvas {
             $('#xId').val(x1);
             $('#yId').val(y1);
             console.log("y1"+y1);
-            y1 = Number(y1) +Number(50);
+            y1 = Number(y1) +Number(FONT_SIZE);
             console.log("y1"+y1);
             console.log("adding...(x,y)=("+x1+","+y1+")");
             //INFO: write in next line.
@@ -287,8 +291,8 @@ canvas {
             var letter = $('#operatorId').val();
             var x1=$('#xId').val();
             var y1=$('#yId').val();
-            x1 = Number(x1)-Number(25);
-            y1 = Number(y1) +Number(25);
+            x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
+            y1 = Number(y1) +Math.round(Number(FONT_SIZE)/2);
             console.log("adding...(x1,y1)=("+x1+","+y1+")");
             //INFO: write it between 2 numbers, slightly to left
             addletter(canvas, letter, x1, y1);
