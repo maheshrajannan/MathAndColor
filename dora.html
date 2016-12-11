@@ -198,6 +198,11 @@ canvas {
                     this.x = Number(40);
                     console.log("to :"+this.x);
                 }
+                //INFO:Basically adjusting for
+                // 32
+                //+44
+                //=76
+                //3 font sizes,3*40=120
                 console.log("( Number(y) + Number(canvasBounds.top) + Number(120) ) > canvasBounds.bottom");
                 console.log(( Number(y) + Number(canvasBounds.top) + Number(120) ) + " > " + canvasBounds.bottom);
                 if( ( Number(y) + Number(canvasBounds.top) + Number(120) ) > canvasBounds.bottom) {
@@ -205,6 +210,7 @@ canvas {
                     this.y = canvasBounds.bottom - Number(canvasBounds.top) - Number(120);
                     console.log("to :"+this.y);
                 }
+                //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
                 console.log("( Number(y) + Number(canvasBounds.top) - Number(40) ) < canvasBounds.top");
                 console.log( ( Number(y) + Number(canvasBounds.top) - Number(40) ) + " < " + canvasBounds.top);
                 if( ( Number(y) + Number(canvasBounds.top) - Number(40) ) < canvasBounds.top) {
