@@ -257,17 +257,15 @@ canvas {
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA(numberA,textCoordinate) {
+        function addLetterToA(canvas,numberA,textCoordinate) {
             console.log("Adding letter to A");
-            var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             console.log("adding...(x,y)=("+textCoordinate.x+","+textCoordinate.y+")");
             addletter(canvas, numberA, textCoordinate.x, textCoordinate.y);
             console.log("added...");
         }
-        function addLetterToB(numberB,textCoordinate) {
+        function addLetterToB(canvas,numberB,textCoordinate) {
             console.log("Adding letter to B");
-            var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var bCoordinate=textCoordinate.getBCoordinate();
             console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
@@ -275,9 +273,8 @@ canvas {
             addletter(canvas, numberB, bCoordinate.x, bCoordinate.y);
             console.log("added...");            
         }
-        function addLine1(letterA,letterB,textCoordinate) {
+        function addLine1(canvas,letterA,letterB,textCoordinate) {
             console.log("Adding line1");
-            var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var line1Coordinate=textCoordinate.getLine1Coordinate();
             console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
@@ -291,9 +288,8 @@ canvas {
             addletter(canvas, line, line1Coordinate.x, line1Coordinate.y);
             console.log("added...");            
         }       
-        function addLine2(letterA,letterB,textCoordinate) {
+        function addLine2(canvas,letterA,letterB,textCoordinate) {
             console.log("Adding line2");
-            var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var line2Coordinate=textCoordinate.getLine2Coordinate();
             console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
@@ -307,10 +303,9 @@ canvas {
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(operator,textCoordinate){
+        function addLetterToOperator(canvas,operator,textCoordinate){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
-            var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var operatorCoordinate = textCoordinate.getOperatorCoordinate();
             console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
@@ -332,11 +327,11 @@ canvas {
             y=textCoordinate.y;
             $('#xId').val(x);
             $('#yId').val(y);            
-            addLetterToA(letterA,textCoordinate);
-            addLetterToOperator(operator,textCoordinate);
-            addLetterToB(letterB,textCoordinate);
-            addLine1(letterA,letterB,textCoordinate);
-            addLine2(letterA,letterB,textCoordinate);
+            addLetterToA(canvas,letterA,textCoordinate);
+            addLetterToOperator(canvas,operator,textCoordinate);
+            addLetterToB(canvas,letterB,textCoordinate);
+            addLine1(canvas,letterA,letterB,textCoordinate);
+            addLine2(canvas,letterA,letterB,textCoordinate);
         }
         /**
         Capturing keypresse will have a lot of disadvantages.
