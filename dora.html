@@ -231,6 +231,14 @@ canvas {
                     x: this.x,
                     y: (Number(this.y) + (Number(2.5)*Number(FONT_SIZE)))
                 };
+            }
+            this.getOperatorCoordinate = function() {
+                var x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
+                var y1 = Number(y1)+Math.round(Number(FONT_SIZE)/2);
+                return {
+                    x:x1,
+                    y:y1
+                }
             }            
         }
 
@@ -301,16 +309,15 @@ canvas {
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(x1,y1,operator){
+        function addLetterToOperator(textCoordinate,operator){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
-            x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
-            y1 = Number(y1)+Math.round(Number(FONT_SIZE)/2);
-            console.log("adding...(x1,y1)=("+x1+","+y1+")");
+            var operatorCoordinate = textCoordinate.getOperatorCoordinate();
+            console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
             //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, operator, x1, y1);
+            addletter(canvas, operator, operatorCoordinate.x, operatorCoordinate.y);
             console.log("added...");
         }
         function addText() {
@@ -328,7 +335,7 @@ canvas {
             $('#xId').val(x);
             $('#yId').val(y);            
             addLetterToA(textCoordinate);
-            addLetterToOperator(x,y,operator);
+            addLetterToOperator(textCoordinate,operator);
             addLetterToB(textCoordinate);
             addLine1(letterA,letterB,textCoordinate);
             addLine2(letterA,letterB,textCoordinate);
