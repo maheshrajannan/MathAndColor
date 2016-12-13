@@ -249,13 +249,11 @@ canvas {
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA() {
+        function addLetterToA(x,y) {
             console.log("Adding letter to A");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letter = $('#numberAId').val();
-            var x=$('#xId').val();
-            var y=$('#yId').val();
             var textCoordinate = new TextCoordinate(x,y,letter,""," ");
             textCoordinate.adjust(canvas);
             x=textCoordinate.x;
@@ -266,15 +264,13 @@ canvas {
             addletter(canvas, letter, x, y);
             console.log("added...");
         }
-        function addLetterToB() {
+        function addLetterToB(x1,y1) {
             console.log("Adding letter to B");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letterA = $('#numberAId').val();
             var letter = $('#numberBId').val();
             var operator = $('#operatorId').val();
-            var x1=$('#xId').val();
-            var y1=$('#yId').val();
             var textCoordinate = new TextCoordinate(x1,y1,letterA,letter,operator);
             textCoordinate.adjust(canvas);
             x1=textCoordinate.x;
@@ -287,15 +283,13 @@ canvas {
             addletter(canvas, letter, bCoordinate.x, bCoordinate.y);
             console.log("added...");            
         }
-        function addLine1() {
+        function addLine1(x1,y1) {
             console.log("Adding line1");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letterA = $('#numberAId').val();
             var letter = $('#numberBId').val();
             var operator = $('#operatorId').val();
-            var x1=$('#xId').val();
-            var y1=$('#yId').val();
             var textCoordinate = new TextCoordinate(x1,y1,letterA,letter,operator);
             textCoordinate.adjust(canvas);
             x1=textCoordinate.x;
@@ -308,15 +302,13 @@ canvas {
             addletter(canvas, "__", line1Coordinate.x, line1Coordinate.y);
             console.log("added...");            
         }       
-        function addLine2() {
+        function addLine2(x1,y1) {
             console.log("Adding line1");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letterA = $('#numberAId').val();
             var letter = $('#numberBId').val();
             var operator = $('#operatorId').val();
-            var x1=$('#xId').val();
-            var y1=$('#yId').val();
             var textCoordinate = new TextCoordinate(x1,y1,letterA,letter,operator);
             textCoordinate.adjust(canvas);
             x1=textCoordinate.x;
@@ -329,13 +321,11 @@ canvas {
             addletter(canvas, "__", line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(){
+        function addLetterToOperator(x1,y1){
             console.log("Adding letter to Operator");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var letter = $('#operatorId').val();
-            var x1=$('#xId').val();
-            var y1=$('#yId').val();
             x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
             y1 = Number(y1) +Math.round(Number(FONT_SIZE)/2);
             console.log("adding...(x1,y1)=("+x1+","+y1+")");
@@ -344,11 +334,13 @@ canvas {
             console.log("added...");
         }
         function addText() {
-            addLetterToA();
-            addLetterToOperator();
-            addLetterToB();
-            addLine1();
-            addLine2();
+            var x=$('#xId').val();
+            var y=$('#yId').val();
+            addLetterToA(x,y);
+            addLetterToOperator(x,y);
+            addLetterToB(x,y);
+            addLine1(x,y);
+            addLine2(x,y);
         }
         /**
         Capturing keypresse will have a lot of disadvantages.
