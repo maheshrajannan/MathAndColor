@@ -301,17 +301,16 @@ canvas {
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(x1,y1){
+        function addLetterToOperator(x1,y1,operator){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
-            var letter = $('#operatorId').val();
             x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
-            y1 = Number(y1) +Math.round(Number(FONT_SIZE)/2);
+            y1 = Number(y1)+Math.round(Number(FONT_SIZE)/2);
             console.log("adding...(x1,y1)=("+x1+","+y1+")");
             //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, letter, x1, y1);
+            addletter(canvas, operator, x1, y1);
             console.log("added...");
         }
         function addText() {
@@ -329,7 +328,7 @@ canvas {
             $('#xId').val(x);
             $('#yId').val(y);            
             addLetterToA(textCoordinate);
-            addLetterToOperator(x,y);
+            addLetterToOperator(x,y,operator);
             addLetterToB(textCoordinate);
             addLine1(letterA,letterB,textCoordinate);
             addLine2(letterA,letterB,textCoordinate);
@@ -339,7 +338,6 @@ canvas {
         For example, if you press command +/-, then
         those are also captured.
         **/
-
         function getKey(e){
           var keynum;
           var keyPressed;
