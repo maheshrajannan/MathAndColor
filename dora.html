@@ -257,24 +257,22 @@ canvas {
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA(textCoordinate) {
+        function addLetterToA(numberA,textCoordinate) {
             console.log("Adding letter to A");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
-            var letter = $('#numberAId').val();
             console.log("adding...(x,y)=("+textCoordinate.x+","+textCoordinate.y+")");
-            addletter(canvas, letter, textCoordinate.x, textCoordinate.y);
+            addletter(canvas, numberA, textCoordinate.x, textCoordinate.y);
             console.log("added...");
         }
-        function addLetterToB(textCoordinate) {
+        function addLetterToB(numberB,textCoordinate) {
             console.log("Adding letter to B");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
-            var letter = $('#numberBId').val();
             var bCoordinate=textCoordinate.getBCoordinate();
             console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
             //INFO: write in next line.
-            addletter(canvas, letter, bCoordinate.x, bCoordinate.y);
+            addletter(canvas, numberB, bCoordinate.x, bCoordinate.y);
             console.log("added...");            
         }
         function addLine1(letterA,letterB,textCoordinate) {
@@ -309,7 +307,7 @@ canvas {
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(textCoordinate,operator){
+        function addLetterToOperator(operator,textCoordinate){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
             var canvas = document.getElementById("myCanvas");
@@ -334,9 +332,9 @@ canvas {
             y=textCoordinate.y;
             $('#xId').val(x);
             $('#yId').val(y);            
-            addLetterToA(textCoordinate);
-            addLetterToOperator(textCoordinate,operator);
-            addLetterToB(textCoordinate);
+            addLetterToA(letterA,textCoordinate);
+            addLetterToOperator(operator,textCoordinate);
+            addLetterToB(letterB,textCoordinate);
             addLine1(letterA,letterB,textCoordinate);
             addLine2(letterA,letterB,textCoordinate);
         }
