@@ -275,18 +275,30 @@ canvas {
             console.log("canvassing...");
             var line1Coordinate=textCoordinate.getLine1Coordinate();
             console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
+            var lineLength = Math.max(letterA.length,letterB.length);
+            var line="";
+            while(lineLength > 0) {
+                line = line + "_";
+                lineLength = lineLength - 1;
+            }
             //INFO: write in next line.
-            addletter(canvas, "__", line1Coordinate.x, line1Coordinate.y);
+            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y);
             console.log("added...");            
         }       
-        function addLine2(textCoordinate) {
+        function addLine2(letterA,letterB,textCoordinate) {
             console.log("Adding line2");
             var canvas = document.getElementById("myCanvas");
             console.log("canvassing...");
             var line2Coordinate=textCoordinate.getLine2Coordinate();
             console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
             //INFO: write in next line.
-            addletter(canvas, "__", line2Coordinate.x, line2Coordinate.y);
+            var lineLength = Math.max(letterA.length,letterB.length);
+            var line="";
+            while(lineLength > 0) {
+                line = line + "_";
+                lineLength = lineLength - 1;
+            }            
+            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
         function addLetterToOperator(x1,y1){
@@ -319,8 +331,8 @@ canvas {
             addLetterToA(textCoordinate);
             addLetterToOperator(x,y);
             addLetterToB(textCoordinate);
-            addLine1(textCoordinate);
-            addLine2(textCoordinate);
+            addLine1(letterA,letterB,textCoordinate);
+            addLine2(letterA,letterB,textCoordinate);
         }
         /**
         Capturing keypresse will have a lot of disadvantages.
