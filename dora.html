@@ -333,31 +333,6 @@ canvas {
             addLine1(canvas,letterA,letterB,textCoordinate);
             addLine2(canvas,letterA,letterB,textCoordinate);
         }
-        /**
-        Capturing keypresse will have a lot of disadvantages.
-        For example, if you press command +/-, then
-        those are also captured.
-        **/
-        function getKey(e){
-          var keynum;
-          var keyPressed;
-
-          if(window.event) { // IE                    
-            keynum = e.keyCode;
-          } else if(e.which){ // Netscape/Firefox/Opera                   
-            keynum = e.which;
-          }
-
-        if (keynum >= 65 && keynum <= 90) {
-            keyPressed = String.fromCharCode(keynum + 32);
-        } else if (96 <= keynum && keynum <= 105) {
-            keyPressed = String.fromCharCode(keynum - 48);
-        }else {
-            keyPressed = String.fromCharCode(keynum);
-        }
-
-          return keyPressed;
-        }
         function showInputs() {
             $("#inputsId").show();
         }
