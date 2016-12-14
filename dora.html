@@ -107,24 +107,8 @@ canvas {
             imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
         }
 
-        function keyUpHandler(canvas, event) {
-            //alert('hi keyup');
-            //INFO:TODO: mouse position comes only from mouse listener not key listener
-            //http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
-            //http://jsfiddle.net/AustinBrunkhorst/qsULv/
-            //INFO: capture the last position of mouse, by mouse listener.
-            //on key down, write to the last known position of the mouse.
-            //var mousePos = getMousePos(canvas, event);
-            //var letters = "abcdefghijklmnopqrstuvwxyz";
-            //var key = event.keyCode;
-            //if (key > 64 && key < 91) {
-                //var letter = letters.substring(key - 64, key - 65);
-                //INFO: just incase it is hidden by the user.
-                showInputs();
-                var letter = getKey(event);
-                addletter(canvas, letter, mousePos.x, mousePos.y);
-            //}
-        }
+        //INFO: capture the last position of mouse, by mouse listener.
+        //on key down, write to the last known position of the mouse.
 
         function mouseMoveHandler(canvas, event) {
             showInputs();
@@ -263,7 +247,6 @@ canvas {
         //Later this can also be made data driven.
         //canvas.addEventListener("keyup", keyUpHandler, true);
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
-        //alert('hi');
 
         function addletter(canvas, letter, x, y) {
             var context = canvas.getContext("2d");
