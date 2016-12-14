@@ -262,23 +262,23 @@ canvas {
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA(canvas,numberA,textCoordinate) {
+        function addLetterToA(canvas,textCoordinate) {
             console.log("Adding letter to A");
             console.log("canvassing...");
             console.log("adding...(x,y)=("+textCoordinate.x+","+textCoordinate.y+")");
-            addletter(canvas, numberA, textCoordinate.x, textCoordinate.y);
+            addletter(canvas, textCoordinate.a, textCoordinate.x, textCoordinate.y);
             console.log("added...");
         }
-        function addLetterToB(canvas,numberB,textCoordinate) {
+        function addLetterToB(canvas,textCoordinate) {
             console.log("Adding letter to B");
             console.log("canvassing...");
             var bCoordinate=textCoordinate.getBCoordinate();
             console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
             //INFO: write in next line.
-            addletter(canvas, numberB, bCoordinate.x, bCoordinate.y);
+            addletter(canvas, textCoordinate.b, bCoordinate.x, bCoordinate.y);
             console.log("added...");            
         }
-        function addLine1(canvas,letterA,letterB,textCoordinate) {
+        function addLine1(canvas,textCoordinate) {
             console.log("Adding line1");
             console.log("canvassing...");
             var line1Coordinate=textCoordinate.getLine1Coordinate();
@@ -293,7 +293,7 @@ canvas {
             addletter(canvas, line, line1Coordinate.x, line1Coordinate.y);
             console.log("added...");            
         }       
-        function addLine2(canvas,letterA,letterB,textCoordinate) {
+        function addLine2(canvas,textCoordinate) {
             console.log("Adding line2");
             console.log("canvassing...");
             var line2Coordinate=textCoordinate.getLine2Coordinate();
@@ -332,11 +332,11 @@ canvas {
             y=textCoordinate.y;
             $('#xId').val(x);
             $('#yId').val(y);            
-            addLetterToA(canvas,letterA,textCoordinate);
+            addLetterToA(canvas,textCoordinate);
             addLetterToOperator(canvas,operator,textCoordinate);
-            addLetterToB(canvas,letterB,textCoordinate);
-            addLine1(canvas,letterA,letterB,textCoordinate);
-            addLine2(canvas,letterA,letterB,textCoordinate);
+            addLetterToB(canvas,textCoordinate);
+            addLine1(canvas,textCoordinate);
+            addLine2(canvas,textCoordinate);
         }
         function showInputs() {
             $("#inputsId").show();
