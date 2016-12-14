@@ -223,6 +223,17 @@ canvas {
                 console.log("Line Length"+lineLength);
                 return lineLength;
             }
+            this.getLine = function() {
+                //TODO: Note, you may have to bind "this" to correct object instance.
+                //to avoid confusion with in js.
+                var lineLength = this.getLineLength();
+                var line="";
+                while(lineLength > 0) {
+                    line = line + "_";
+                    lineLength = lineLength - 1;
+                }
+                return line;   
+            }
             this.getLine1Coordinate = function(){
                 console.log("Number(FONT_SIZE)"+Number(FONT_SIZE));
                 return {
@@ -283,12 +294,7 @@ canvas {
             console.log("canvassing...");
             var line1Coordinate=textCoordinate.getLine1Coordinate();
             console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
-            var lineLength = textCoordinate.getLineLength();
-            var line="";
-            while(lineLength > 0) {
-                line = line + "_";
-                lineLength = lineLength - 1;
-            }
+            var line=textCoordinate.getLine();
             //INFO: write in next line.
             addletter(canvas, line, line1Coordinate.x, line1Coordinate.y);
             console.log("added...");            
@@ -299,12 +305,7 @@ canvas {
             var line2Coordinate=textCoordinate.getLine2Coordinate();
             console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
             //INFO: write in next line.
-            var lineLength = textCoordinate.getLineLength();
-            var line="";
-            while(lineLength > 0) {
-                line = line + "_";
-                lineLength = lineLength - 1;
-            }            
+            var line=textCoordinate.getLine();
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
