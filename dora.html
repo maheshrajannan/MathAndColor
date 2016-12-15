@@ -81,12 +81,12 @@ canvas {
 
     </div>
     <script type="text/javascript">
-        var keyHistoryCoordinate={keyHistory:"This is at (10,10)", x:10, y:10};
-        var keyCoordinateHistory=[keyHistoryCoordinate];
 
         var FONT_SIZE = $('#fontSizeId').val();
-
         var mousePos;
+        var textCoordinateHistory=[];
+
+
         window.onload = function() {
             draw();
         };
@@ -374,6 +374,17 @@ canvas {
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
             textCoordinate.adjust(canvas);
+
+            for (var j = 0; j < textCoordinateHistory.length; j++){
+                console.log("Checking "
+                 + textCoordinateHistory[j].printValue() +" with "+ textCoordinate.printValue());
+                var withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
+                if(withinLimits) {
+                    console.log("With in limits:" + withinLimits);
+                    return;
+                }
+            }
+
             x=textCoordinate.x;
             y=textCoordinate.y;
             $('#xId').val(x);
@@ -385,12 +396,8 @@ canvas {
             addLine2(canvas,textCoordinate);
             var x1= Number(x) - Number(10);
             var y1=Number(y) - Number(10);
-            var textCoordinate2 = new TextCoordinate(x1,y1,letterA,letterB,operator);
-            textCoordinate2.adjust(canvas);
-            if(textCoordinate.isWithinLimits(textCoordinate2)) {
-                console.log("This "+textCoordinate2.printValue()
-                    +" is with in the limits of "+textCoordinate.printValue());
-            }
+            textCoordinateHistory.push(textCoordinate);
+            console.log("total"+textCoordinateHistory.length);
 
         }
         function showInputs() {
