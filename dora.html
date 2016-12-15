@@ -204,7 +204,7 @@ canvas {
             }
             this.getLineLength = function() {
                 var lineLength = Math.max(a.length,b.length);
-                console.log("Line Length"+lineLength);
+                console.log("Line Length:"+lineLength);
                 return lineLength;
             }
             this.getLine = function() {
@@ -233,12 +233,74 @@ canvas {
                 };
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(x1)-Math.round(Number(FONT_SIZE)/2);
-                var y1 = Number(y1)+Math.round(Number(FONT_SIZE)/2);
+                var x1 = Number(this.x)-Math.round(Number(FONT_SIZE)/2);
+                var y1 = Number(this.y)+Math.round(Number(FONT_SIZE)/2);
                 return {
                     x:x1,
                     y:y1
                 }
+            }
+            this.getMinX=function(padding){
+                var minX=Math.round(Number(this.x) + Number(padding));
+                console.log("Math.round(Number(this.x) - Number(padding))");
+                console.log("Math.round("+
+                    Number(this.x) +"-"+ Number(padding)  +
+                    ")");
+                console.log("Math.round("+
+                    ( Number(this.x) - Number(padding) ) +
+                    ")");
+                return Math.round(Number(this.x) - Number(padding));
+            }
+            this.getMaxX=function(padding){
+                var lineLength = Number(FONT_SIZE)*Number(this.getLineLength());
+                return Math.round(Number(this.x) + Number(padding) + Number(lineLength));                
+            }
+            this.getMinY=function(padding){
+                return Math.round(Number(this.y) - Number(padding));
+            }
+            this.getMaxY=function(padding){
+                var verticalHeight = Number(FONT_SIZE)*Number(3.5);
+                return Math.round(Number(this.x) + Number(padding) + Number(verticalHeight));                
+            }            
+            this.isWithinLimits = function(textCoordinate) {
+                console.log("checking");
+                var minX = this.getMinX(Math.round(Number(FONT_SIZE)/2));
+                var minY = this.getMinY(Math.round(Number(FONT_SIZE)/2));
+                var maxX = this.getMaxX(Math.round(Number(FONT_SIZE)/2));
+                var maxY = this.getMaxY(Math.round(Number(FONT_SIZE)/2));
+                var withinLimits=false;
+                if( 
+                    ( minX <= textCoordinate.x )
+                 && ( maxX >= textCoordinate.x ) 
+                 ) {
+                console.log("(x) Falls with in x coordinates (x1) and (x2)");
+                console.log("("+textCoordinate.x
+                    +") Falls with in x coordinates ("+minX
+                    +") and ("+maxX
+                    +")");
+                    withinLimits=true;
+                }
+                if( 
+                    ( withinLimits && minY <= textCoordinate.y )
+                 && ( maxY >= textCoordinate.y)
+                 ) {
+                    console.log("(y) Falls with in x coordinates (y1) and (y2)");
+                    console.log("("+textCoordinate.y
+                        +") Falls with in y coordinates ("+minY
+                        +") and ("+maxY
+                        +")");
+                }else{
+                    withinLimits=false;                    
+                }
+                if(withinLimits) {
+                    console.log("(x,y) Falls with in x coordinates (x1,y1) and (x2,y2)");
+                    console.log("("+textCoordinate.x+","+textCoordinate.y+") Falls with in ("+minX+","+
+                        minY+") and ("+maxX+","+maxY+")");
+                }
+                return withinLimits;
+            }
+            this.printValue= function() {
+                return "("+x+","+ y+") : "+a+operator+b+"=?";
             }            
         }
 
@@ -321,6 +383,15 @@ canvas {
             addLetterToB(canvas,textCoordinate);
             addLine1(canvas,textCoordinate);
             addLine2(canvas,textCoordinate);
+            var x1= Number(x) - Number(10);
+            var y1=Number(y) - Number(10);
+            var textCoordinate2 = new TextCoordinate(x1,y1,letterA,letterB,operator);
+            textCoordinate2.adjust(canvas);
+            if(textCoordinate.isWithinLimits(textCoordinate2)) {
+                console.log("This "+textCoordinate2.printValue()
+                    +" is with in the limits of "+textCoordinate.printValue());
+            }
+
         }
         function showInputs() {
             $("#inputsId").show();
