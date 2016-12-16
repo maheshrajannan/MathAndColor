@@ -91,6 +91,12 @@ canvas {
             draw();
         };
         //INFO: outside of onload
+
+        function addToHistory(textCoordinate){
+            textCoordinate.setId(Number(textCoordinateHistory.length+1));
+            textCoordinateHistory.push(textCoordinate);
+        }
+
         function draw() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
@@ -144,6 +150,10 @@ canvas {
             this.a = a;
             this.b = b;
             this.operator = operator;
+            this.id=-1;
+            this.setId=function(id){
+                this.id=id;
+            }
             this.adjust = function (canvas) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
@@ -300,7 +310,7 @@ canvas {
                 return withinLimits;
             }
             this.printValue= function() {
-                return "("+x+","+ y+") : "+a+operator+b+"=?";
+                return "id="+this.id+" ("+x+","+ y+") : "+a+operator+b+"=?";
             }            
         }
 
@@ -371,6 +381,7 @@ canvas {
             var letterB = $('#numberBId').val();
             var operator = $('#operatorId').val();
             var canvas = document.getElementById("myCanvas");
+            var textCoordinateWithinLimits;
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
             textCoordinate.adjust(canvas);
@@ -381,24 +392,34 @@ canvas {
                 var withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
                 if(withinLimits) {
                     console.log("With in limits:" + withinLimits);
-                    return;
+                    textCoordinateWithinLimits = textCoordinateHistory[j];
+                    j = textCoordinateHistory.length;
                 }
             }
-
-            x=textCoordinate.x;
-            y=textCoordinate.y;
-            $('#xId').val(x);
-            $('#yId').val(y);            
-            addLetterToA(canvas,textCoordinate);
-            addLetterToOperator(canvas,operator,textCoordinate);
-            addLetterToB(canvas,textCoordinate);
-            addLine1(canvas,textCoordinate);
-            addLine2(canvas,textCoordinate);
-            var x1= Number(x) - Number(10);
-            var y1=Number(y) - Number(10);
-            textCoordinateHistory.push(textCoordinate);
-            console.log("total"+textCoordinateHistory.length);
-
+            if(!withinLimits) {
+                console.log("Adding new values");
+                x=textCoordinate.x;
+                y=textCoordinate.y;
+                $('#xId').val(x);
+                $('#yId').val(y);            
+                addLetterToA(canvas,textCoordinate);
+                addLetterToOperator(canvas,operator,textCoordinate);
+                addLetterToB(canvas,textCoordinate);
+                addLine1(canvas,textCoordinate);
+                addLine2(canvas,textCoordinate);
+                var x1= Number(x) - Number(10);
+                var y1=Number(y) - Number(10);
+                addToHistory(textCoordinate);
+                console.log("total"+textCoordinateHistory.length);                
+            }else {
+                console.log("Populating existing values");
+                //INFO: populate x,y a,b,operator and TODO: id.
+                $('#xId').val(textCoordinateWithinLimits.x);
+                $('#yId').val(textCoordinateWithinLimits.y);            
+                $('#numberAId').val(textCoordinateWithinLimits.a);
+                $('#numberBId').val(textCoordinateWithinLimits.b);
+                $('#operatorId').val(textCoordinateWithinLimits.operator);
+            }
         }
         function showInputs() {
             $("#inputsId").show();
