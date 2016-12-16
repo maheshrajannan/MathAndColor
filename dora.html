@@ -36,10 +36,15 @@ canvas {
     <h1>Learn And Color</h1>
     <div class="form-group"  id="inputsId">
         <fieldset>
+            <label for="textCoordinateId">Text Coordinate Id:</label>
+            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
+            <br/>
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" placeholder="X"/>
+            <br/>
             <label for="yId">Y:</label>
             <input class="form-control" type="name" id="yId" placeholder="Y"/>
+            <br/>
             <label for="fontSizeId">Font Size:</label>
             <input class="form-control" type="name" id="fontSizeId" value="40"/>
         </fieldset>
@@ -381,6 +386,7 @@ canvas {
             var letterB = $('#numberBId').val();
             var operator = $('#operatorId').val();
             var canvas = document.getElementById("myCanvas");
+            var textCoordinateId=$('#textCoordinateId').val();
             var textCoordinateWithinLimits;
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
@@ -419,6 +425,7 @@ canvas {
                 $('#numberAId').val(textCoordinateWithinLimits.a);
                 $('#numberBId').val(textCoordinateWithinLimits.b);
                 $('#operatorId').val(textCoordinateWithinLimits.operator);
+                $('#textCoordinateId').val(textCoordinateWithinLimits.id);
             }
         }
         function showInputs() {
