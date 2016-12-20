@@ -7,15 +7,39 @@
 
 </head>
 <style type="text/css">
+    body{ background-color: ivory; padding:20px;}
+    #wrapper{
+        position:relative;
+        width:1000px;
+        height:1000px;
+        /** 1 cm margin through out the page.
+        **/
+        margin-left: 1cm;
+    }
+    #bkImage{
+        position:absolute; 
+        top:0px; 
+        /**
+        No border on image.
+        border:3px solid green;
+        **/
+        width:100%;
+        height:100%;
+    }
+    #myCanvas{
+        position:absolute; 
+        top:0px; 
+        left:0px;
+        border:1px solid black;
+        width:100%;
+        height:100%;
+        text-align:center;
+    }
 h1 {
    text-align:center;
    margin-left: 1cm;
    /**aligning crudely with canvas**/
    margin-right: 15cm;
-}
-#myCanvas {
-   text-align:center;
-   margin-left: 1cm;
 }
 #inputsId {
    margin-left: 1cm;
@@ -25,9 +49,6 @@ label {
   width: 100px;
   padding-right: 20px;
   display: inline-block;
-}
-canvas {
-   display: inline;
 }
 </style>
 <body>
@@ -76,10 +97,25 @@ canvas {
     focusable by default.
     -->
 
-    <canvas id="myCanvas" width="1000" height="1000" style="border:1px solid #d3d3d3;" tabindex="1" 
+    <!--<canvas id="myCanvas" width="1000" height="1000" style="border:1px solid #d3d3d3;" tabindex="1" 
     onclick="mouseMoveHandler(this,event)">
         Your browser does not support the HTML5 canvas tag.
-    </canvas>
+    </canvas>-->
+
+    <div id="wrapper">
+        <!--
+        http://stackoverflow.com/questions/18431332/delete-only-text-but-not-the-image-using-canvas
+        http://jsfiddle.net/m1erickson/fg5sV/
+        INFO: both canvas and image overlap.Only the text goes on to the canvas.
+        -->
+        <img id="bkImage" src="dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"
+         width=1000 height=1000></canvas>
+        <canvas id="myCanvas" width=1000 height=1000 tabindex="1" 
+    onclick="mouseMoveHandler(this,event)">
+        Your browser does not support the HTML5 canvas tag.
+        </canvas>
+    </div>
+
     <div>
         You can use this space to display (x,y) coordinates,and its text
     </div>
@@ -105,17 +141,11 @@ canvas {
         function draw() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
-            var imageObj = new Image();
-            imageObj.onload = function() {
-                //width="1160" height="1008"
-                context.drawImage(imageObj, 10, 10, 1160, 1008);
-                context.font = FONT_SIZE+"pt Calibri";
-                context.fillText("Name:", 30, FONT_SIZE);
-                //Fill your name
-                context.fillText("__________", 30, (3*Number(FONT_SIZE)));
-                context.fillText("_______", 30, (5*Number(FONT_SIZE)));
-            };
-            imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
+            context.font = FONT_SIZE+"pt Calibri";
+            context.fillText("Name:", 30, FONT_SIZE);
+            //Fill your name
+            context.fillText("__________", 30, (3*Number(FONT_SIZE)));
+            context.fillText("_______", 30, (5*Number(FONT_SIZE)));
         }
 
         //INFO: capture the last position of mouse, by mouse listener.
