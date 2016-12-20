@@ -127,6 +127,7 @@ canvas {
             $("#xId").val(mousePos.x);
             $("#yId").val(mousePos.y);
             $("#numberAId").focus();
+            $("#textCoordinateId").val("-1");
         }
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
@@ -179,7 +180,7 @@ canvas {
                 //INFO: align to right margin.
                 if( (Number(x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+x);
-                    this.x = Number(canvasBounds.right) - Number(delta) - canvasBounds.left;
+                    this.x = Math.round(Number(canvasBounds.right) - Number(delta) - canvasBounds.left);
                     console.log("to :"+this.x);
                 }
                 //INFO: align for the one -/+/* character
