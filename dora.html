@@ -7,6 +7,9 @@
 
 </head>
 <style type="text/css">
+/**
+TODO: move css to a separate file
+**/
     body{ background-color: ivory; padding:20px;}
     #wrapper{
         position:relative;
@@ -138,6 +141,10 @@ label {
             textCoordinateHistory.push(textCoordinate);
         }
 
+        function erase(canvas) {
+            var context = canvas.getContext("2d");
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
         function draw() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
@@ -306,7 +313,7 @@ label {
             }
             this.getMaxY=function(padding){
                 var verticalHeight = Number(FONT_SIZE)*Number(3.5);
-                return Math.round(Number(this.x) + Number(padding) + Number(verticalHeight));                
+                return Math.round(Number(this.y) + Number(padding) + Number(verticalHeight));                
             }            
             this.isWithinLimits = function(textCoordinate) {
                 console.log("checking");
@@ -419,44 +426,72 @@ label {
             var canvas = document.getElementById("myCanvas");
             var textCoordinateId=$('#textCoordinateId').val();
             var textCoordinateWithinLimits;
+            //INFO: Editing existing coordinate.
+            var currentTextCoordinate;
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
             textCoordinate.adjust(canvas);
 
-            for (var j = 0; j < textCoordinateHistory.length; j++){
-                console.log("Checking "
-                 + textCoordinateHistory[j].printValue() +" with "+ textCoordinate.printValue());
-                var withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
-                if(withinLimits) {
-                    console.log("With in limits:" + withinLimits);
-                    textCoordinateWithinLimits = textCoordinateHistory[j];
-                    j = textCoordinateHistory.length;
+            if(textCoordinateId>0) {
+                console.log("Editing textCoordinateId"+textCoordinateId);
+                textCoordinate.setId(textCoordinateId);
+                textCoordinateHistory[textCoordinateId-1]=textCoordinate;
+                //TODO: redraw.
+                console.log("Redrawing");
+                erase(canvas);
+                draw();
+                console.log("total:"+textCoordinateHistory.length);
+                for (var j = 0; j < textCoordinateHistory.length; j++){
+                    currentTextCoordinate = textCoordinateHistory[j];
+                    console.log("currentTextCoordinate:"+currentTextCoordinate.printValue());
+                    addLetterToA(canvas,currentTextCoordinate);
+                    addLetterToOperator(canvas,operator,currentTextCoordinate);
+                    addLetterToB(canvas,currentTextCoordinate);
+                    addLine1(canvas,currentTextCoordinate);
+                    addLine2(canvas,currentTextCoordinate);
                 }
-            }
-            if(!withinLimits) {
-                console.log("Adding new values");
-                x=textCoordinate.x;
-                y=textCoordinate.y;
-                $('#xId').val(x);
-                $('#yId').val(y);            
-                addLetterToA(canvas,textCoordinate);
-                addLetterToOperator(canvas,operator,textCoordinate);
-                addLetterToB(canvas,textCoordinate);
-                addLine1(canvas,textCoordinate);
-                addLine2(canvas,textCoordinate);
-                var x1= Number(x) - Number(10);
-                var y1=Number(y) - Number(10);
-                addToHistory(textCoordinate);
-                console.log("total"+textCoordinateHistory.length);                
-            }else {
-                console.log("Populating existing values");
-                //INFO: populate x,y a,b,operator and TODO: id.
-                $('#xId').val(textCoordinateWithinLimits.x);
-                $('#yId').val(textCoordinateWithinLimits.y);            
-                $('#numberAId').val(textCoordinateWithinLimits.a);
-                $('#numberBId').val(textCoordinateWithinLimits.b);
-                $('#operatorId').val(textCoordinateWithinLimits.operator);
-                $('#textCoordinateId').val(textCoordinateWithinLimits.id);
+                //INFO: End of editing existing coordinate.
+            }else{
+                var withinLimits = false;
+                //INFO: adding a new coordinate.
+                //INFO: End adding a new coordinate.
+                for (var j = 0; j < textCoordinateHistory.length; j++){
+                    console.log("Checking "
+                     + textCoordinateHistory[j].printValue() +" with "+ textCoordinate.printValue());
+                    //TODO: do whether the clicked coordinates are with in limits, on click, instead of
+                    //doing it on click of "Done" button
+                    withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
+                    if(withinLimits) {
+                        console.log("With in limits:" + withinLimits);
+                        textCoordinateWithinLimits = textCoordinateHistory[j];
+                        j = textCoordinateHistory.length;
+                    }
+                }
+                if(!withinLimits) {
+                    console.log("Adding new values");
+                    x=textCoordinate.x;
+                    y=textCoordinate.y;
+                    $('#xId').val(x);
+                    $('#yId').val(y);            
+                    addLetterToA(canvas,textCoordinate);
+                    addLetterToOperator(canvas,operator,textCoordinate);
+                    addLetterToB(canvas,textCoordinate);
+                    addLine1(canvas,textCoordinate);
+                    addLine2(canvas,textCoordinate);
+                    var x1= Number(x) - Number(10);
+                    var y1=Number(y) - Number(10);
+                    addToHistory(textCoordinate);
+                    console.log("total"+textCoordinateHistory.length);                
+                }else {
+                    console.log("New value is existing value, so Populating existing values");
+                    //INFO: populate x,y a,b,operator and TODO: id.
+                    $('#xId').val(textCoordinateWithinLimits.x);
+                    $('#yId').val(textCoordinateWithinLimits.y);            
+                    $('#numberAId').val(textCoordinateWithinLimits.a);
+                    $('#numberBId').val(textCoordinateWithinLimits.b);
+                    $('#operatorId').val(textCoordinateWithinLimits.operator);
+                    $('#textCoordinateId').val(textCoordinateWithinLimits.id);
+                }
             }
         }
         function showInputs() {
