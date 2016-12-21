@@ -53,16 +53,22 @@ label {
   padding-right: 20px;
   display: inline-block;
 }
+/**
+http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
+**/
+fieldset {
+    display:inline;
+    border:none;
+    vertical-align: top;
+}
 </style>
 <body>
 
 <div>
     <h1>Learn And Color</h1>
+    <input class="form-control" type="hidden" id="textCoordinateId" placeholder="-1 or 1,2"/>
     <div class="form-group"  id="inputsId">
         <fieldset>
-            <label for="textCoordinateId">Text Coordinate Id:</label>
-            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
-            <br/>
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" placeholder="X"/>
             <br/>
@@ -72,25 +78,25 @@ label {
             <label for="fontSizeId">Font Size:</label>
             <input class="form-control" type="name" id="fontSizeId" value="40"/>
         </fieldset>
-        <br/>
         <fieldset>
             <label for="numberAId">A:</label>
             <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
             <br/>
-            <br/>
             <label for="operatorId">Operator:</label>
             <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
             <br/>
-            <br/>
             <label for="numberBId">B:</label>
             <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"/>
+        </fieldset>
+        <fieldset>
+            <label for="doneId">See it</label>
+            <button class="form-control" id="doneId" onclick="addText()">Add To Image</button>
             <br/>
-            <br/>
-            <label for="doneId">Numbers will Appear</label>
-            <button class="form-control" id="doneId" onclick="addText()">Done</button>
+            <label for="doneId">Hide</label>
             <button class="form-control" id="hideId" onclick="hideInputs()">Hide</button>
             <br/>
-            <br/>
+            <label for="doneId">More...</label>
+            <button class="form-control" id="configurationId" onclick="showConfiguration()">Show</button>
         </fieldset>
         <br/>
     </div>
