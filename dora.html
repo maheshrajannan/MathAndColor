@@ -15,17 +15,10 @@ TODO: move css to a separate file
         position:relative;
         width:1000px;
         height:1000px;
-        /** 1 cm margin through out the page.
-        **/
-        margin-left: 1cm;
     }
     #bkImage{
         position:absolute; 
         top:0px; 
-        /**
-        No border on image.
-        border:3px solid green;
-        **/
         width:100%;
         height:100%;
     }
@@ -40,18 +33,25 @@ TODO: move css to a separate file
     }
 h1 {
    text-align:center;
-   margin-left: 1cm;
-   /**aligning crudely with canvas**/
-   margin-right: 15cm;
-}
-#inputsId {
-   margin-left: 1cm;
-   margin-right: 15cm;
 }
 label {
   width: 100px;
   padding-right: 20px;
   display: inline-block;
+}
+/**
+http://css-plus.com/2010/11/how-to-horizontally-centre-anything-with-css/
+What this does is, it causes the whole thing to be centere aligned.
+However the field set does not re-align one below the other, if the
+page is re-sized.
+
+My requirement is for the image to be viewed at its best, so this is ok to me.
+If i resize and the x,y a,b becomes visible, still you cannot see the image 
+and all its text.
+**/
+.container{
+    display: table; 
+    margin: 0 auto;
 }
 /**
 http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
@@ -64,7 +64,7 @@ fieldset {
 </style>
 <body>
 
-<div>
+<div class="container">
     <h1>Learn And Color</h1>
     <input class="form-control" type="hidden" id="textCoordinateId" placeholder="-1 or 1,2"/>
     <div class="form-group"  id="inputsId">
