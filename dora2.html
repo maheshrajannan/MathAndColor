@@ -7,69 +7,43 @@
 
 </head>
 <style type="text/css">
-/**
-TODO: move css to a separate file
-**/
-    body{ background-color: ivory; padding:20px;}
-    #wrapper{
-        position:relative;
-        width:1000px;
-        height:1000px;
-    }
-    #bkImage{
-        position:absolute; 
-        top:0px; 
-        width:100%;
-        height:100%;
-    }
-    #myCanvas{
-        position:absolute; 
-        top:0px; 
-        left:0px;
-        border:1px solid black;
-        width:100%;
-        height:100%;
-        text-align:center;
-    }
+#wrapper {
+    position:relative;
+    width:1000px;
+    height:1000px;
+}
 h1 {
    text-align:center;
+   margin-left: 1cm;
+   /**aligning crudely with canvas**/
+   margin-right: 15cm;
+}
+#myCanvas {
+   text-align:center;
+   margin-left: 1cm;
+}
+#inputsId {
+   margin-left: 1cm;
+   margin-right: 15cm;
 }
 label {
   width: 100px;
   padding-right: 20px;
   display: inline-block;
 }
-/**
-http://css-plus.com/2010/11/how-to-horizontally-centre-anything-with-css/
-What this does is, it causes the whole thing to be centere aligned.
-However the field set does not re-align one below the other, if the
-page is re-sized.
-
-My requirement is for the image to be viewed at its best, so this is ok to me.
-If i resize and the x,y a,b becomes visible, still you cannot see the image 
-and all its text.
-**/
-.container{
-    display: table; 
-    margin: 0 auto;
-    font-size: 150%;
-}
-/**
-http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
-**/
-fieldset {
-    display:inline;
-    border:none;
-    vertical-align: top;
+canvas {
+   display: inline;
 }
 </style>
 <body>
 
-<div class="container">
+<div>
     <h1>Learn And Color</h1>
-    <input class="form-control" type="hidden" id="textCoordinateId" placeholder="-1 or 1,2"/>
     <div class="form-group"  id="inputsId">
-        <fieldset class="fieldSet1">
+        <fieldset>
+            <label for="textCoordinateId">Text Coordinate Id:</label>
+            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
+            <br/>
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" placeholder="X"/>
             <br/>
@@ -79,23 +53,25 @@ fieldset {
             <label for="fontSizeId">Font Size:</label>
             <input class="form-control" type="name" id="fontSizeId" value="40"/>
         </fieldset>
-
+        <br/>
         <fieldset>
             <label for="numberAId">A:</label>
             <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
             <br/>
+            <br/>
             <label for="operatorId">Operator:</label>
             <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
             <br/>
+            <br/>
             <label for="numberBId">B:</label>
             <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"/>
-        </fieldset>
-        <fieldset>
-            <button class="form-control" id="doneId" onclick="addText()">Add Number To Image</button>
             <br/>
-            <button class="form-control" id="hideId" onclick="hideInputs()">Hide Inputs</button>
             <br/>
-            <button class="form-control" id="configurationId" onclick="toggleAdvanced()">Advanced</button>
+            <label for="doneId">Numbers will Appear</label>
+            <button class="form-control" id="doneId" onclick="addText()">Done</button>
+            <button class="form-control" id="hideId" onclick="hideInputs()">Hide</button>
+            <br/>
+            <br/>
         </fieldset>
         <br/>
     </div>
@@ -105,23 +81,12 @@ fieldset {
     focusable by default.
     -->
 
-    <!--<canvas id="myCanvas" width="1000" height="1000" style="border:1px solid #d3d3d3;" tabindex="1" 
-    onclick="mouseMoveHandler(this,event)">
-        Your browser does not support the HTML5 canvas tag.
-    </canvas>-->
-
     <div id="wrapper">
-        <!--
-        http://stackoverflow.com/questions/18431332/delete-only-text-but-not-the-image-using-canvas
-        http://jsfiddle.net/m1erickson/fg5sV/
-        INFO: both canvas and image overlap.Only the text goes on to the canvas.
-        -->
-        <img id="bkImage" src="dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"
-         width=1000 height=1000></canvas>
-        <canvas id="myCanvas" width=1000 height=1000 tabindex="1" 
-    onclick="mouseMoveHandler(this,event)">
-        Your browser does not support the HTML5 canvas tag.
-        </canvas>
+        <img id="bkImage" src="dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif" width=1000 height=1000>
+        <canvas id="myCanvas" width="1000" height="1000" style="border:1px solid #d3d3d3;" tabindex="1" 
+        onclick="mouseMoveHandler(this,event)">
+            Your browser does not support the HTML5 canvas tag.
+        </canvas>        
     </div>
 
     <div>
@@ -137,34 +102,43 @@ fieldset {
 
 
         window.onload = function() {
-            draw();
-            toggleAdvanced();
+            //draw();
         };
         //INFO: outside of onload
-
-        function toggleAdvanced(){
-            $(".fieldSet1").toggle(); 
-        }
 
         function addToHistory(textCoordinate){
             textCoordinate.setId(Number(textCoordinateHistory.length+1));
             textCoordinateHistory.push(textCoordinate);
         }
 
-        function erase(canvas) {
-            var context = canvas.getContext("2d");
-            context.clearRect(0, 0, canvas.width, canvas.height);
-        }
         function draw() {
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
+            var imageObj = new Image();
+            imageObj.onload = function() {
+                //width="1160" height="1008"
+                context.drawImage(imageObj, 10, 10, 1160, 1008);
+                context.font = FONT_SIZE+"pt Calibri";
+                context.fillText("Name:", 30, FONT_SIZE);
+                //Fill your name
+                context.fillText("__________", 30, (3*Number(FONT_SIZE)));
+                context.fillText("_______", 30, (5*Number(FONT_SIZE)));
+            };
+            imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
+        }
+        function reDraw() {
+            var canvas = document.getElementById("myCanvas");
+            var context = canvas.getContext("2d");
+            //var imageObj = new Image();
+            //width="1160" height="1008"
+            //context.drawImage(imageObj, 10, 10, 1160, 1008);
             context.font = FONT_SIZE+"pt Calibri";
             context.fillText("Name:", 30, FONT_SIZE);
             //Fill your name
             context.fillText("__________", 30, (3*Number(FONT_SIZE)));
             context.fillText("_______", 30, (5*Number(FONT_SIZE)));
+            //imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
         }
-
         //INFO: capture the last position of mouse, by mouse listener.
         //on key down, write to the last known position of the mouse.
 
@@ -174,7 +148,6 @@ fieldset {
             $("#xId").val(mousePos.x);
             $("#yId").val(mousePos.y);
             $("#numberAId").focus();
-            $("#textCoordinateId").val("-1");
         }
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
@@ -213,21 +186,21 @@ fieldset {
                 var delta =  Number(Number(FONT_SIZE)*(Math.max(a.length,b.length)));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
-                console.log("canvasBounds.x:"+canvasBounds.x);
-                console.log("canvasBounds.left:"+canvasBounds.left);
-                console.log("canvasBounds.right:"+canvasBounds.right);
-                console.log("Number(x):"+Number(x));
-                console.log("delta: "+FONT_SIZE+"*(Math.max(a.length,b.length)):"
-                    +delta);
-                console.log("canvasBounds.top:"+canvasBounds.top);
-                console.log("canvasBounds.bottom:"+canvasBounds.bottom);
-                console.log("canvasBounds.y:"+canvasBounds.y);
-                console.log("Number(y):"+Number(y));
+                //console.log("canvasBounds.x:"+canvasBounds.x);
+                //console.log("canvasBounds.left:"+canvasBounds.left);
+                //console.log("canvasBounds.right:"+canvasBounds.right);
+                //console.log("Number(x):"+Number(x));
+                //console.log("delta: "+FONT_SIZE+"*(Math.max(a.length,b.length)):"
+                //    +delta);
+                //console.log("canvasBounds.top:"+canvasBounds.top);
+                //console.log("canvasBounds.bottom:"+canvasBounds.bottom);
+                //console.log("canvasBounds.y:"+canvasBounds.y);
+                //console.log("Number(y):"+Number(y));
 
                 //INFO: align to right margin.
                 if( (Number(x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+x);
-                    this.x = Math.round(Number(canvasBounds.right) - Number(delta) - canvasBounds.left);
+                    this.x = Number(canvasBounds.right) - Number(delta) - canvasBounds.left;
                     console.log("to :"+this.x);
                 }
                 //INFO: align for the one -/+/* character
@@ -241,16 +214,16 @@ fieldset {
                 //+44
                 //=76
                 //3 font sizes,3*40=120
-                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom");
-                console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) + " > " + canvasBounds.bottom);
+                //console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom");
+                //console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) + " > " + canvasBounds.bottom);
                 if( ( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
                     this.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(FONT_SIZE));
                     console.log("to :"+this.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
-                console.log("( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top");
-                console.log( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) + " < " + canvasBounds.top);
+                //console.log("( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top");
+                //console.log( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) + " < " + canvasBounds.top);
                 if( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top) {
                     console.log("readjusted y for top from y :"+y);
                     this.y = canvasBounds.top - Number(canvasBounds.top) + Number(FONT_SIZE);
@@ -323,7 +296,7 @@ fieldset {
             }
             this.getMaxY=function(padding){
                 var verticalHeight = Number(FONT_SIZE)*Number(3.5);
-                return Math.round(Number(this.y) + Number(padding) + Number(verticalHeight));                
+                return Math.round(Number(this.x) + Number(padding) + Number(verticalHeight));                
             }            
             this.isWithinLimits = function(textCoordinate) {
                 console.log("checking");
@@ -374,10 +347,20 @@ fieldset {
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
 
         function addletter(canvas, letter, x, y) {
+
+            /*
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "123px verdana";
+            ctx.fillStyle = fill;
+            ctx.strokeStyle = stroke;
+            ctx.lineWidth = 4;
+            ctx.fillText(text, 10, 120);
+            ctx.strokeText(text, 10, 120);*/
+
             var context = canvas.getContext("2d");
             //keyHistory += letter;
             //INFO: clears a lot of area so commented.
-            //context.clearRect(x, y, x+20, y+50);
+            context.clearRect(x, y, Number(x+Number(FONT_SIZE)), Number(y+Number(FONT_SIZE)));
             context.fillText(letter, x, y );
         }
 
@@ -436,20 +419,20 @@ fieldset {
             var canvas = document.getElementById("myCanvas");
             var textCoordinateId=$('#textCoordinateId').val();
             var textCoordinateWithinLimits;
-            //INFO: Editing existing coordinate.
-            var currentTextCoordinate;
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
             textCoordinate.adjust(canvas);
-
+            $('#xId').val(textCoordinate.x);
+            $('#yId').val(textCoordinate.y);            
             if(textCoordinateId>0) {
+                //INFO: Editing existing coordinate.
+                var currentTextCoordinate;
                 console.log("Editing textCoordinateId"+textCoordinateId);
                 textCoordinate.setId(textCoordinateId);
                 textCoordinateHistory[textCoordinateId-1]=textCoordinate;
                 //TODO: redraw.
                 console.log("Redrawing");
-                erase(canvas);
-                draw();
+                reDraw();
                 console.log("total:"+textCoordinateHistory.length);
                 for (var j = 0; j < textCoordinateHistory.length; j++){
                     currentTextCoordinate = textCoordinateHistory[j];
@@ -461,15 +444,14 @@ fieldset {
                     addLine2(canvas,currentTextCoordinate);
                 }
                 //INFO: End of editing existing coordinate.
-            }else{
+            }else {
                 var withinLimits = false;
-                //INFO: adding a new coordinate.
-                //INFO: End adding a new coordinate.
+                //INFO: Adding new coordinate.
+                console.log("Adding new textCoordinateId"+textCoordinateId);
+                //INFO: check if an other coordinate is with in its limits.
                 for (var j = 0; j < textCoordinateHistory.length; j++){
                     console.log("Checking "
                      + textCoordinateHistory[j].printValue() +" with "+ textCoordinate.printValue());
-                    //TODO: do whether the clicked coordinates are with in limits, on click, instead of
-                    //doing it on click of "Done" button
                     withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
                     if(withinLimits) {
                         console.log("With in limits:" + withinLimits);
@@ -488,12 +470,13 @@ fieldset {
                     addLetterToB(canvas,textCoordinate);
                     addLine1(canvas,textCoordinate);
                     addLine2(canvas,textCoordinate);
-                    var x1= Number(x) - Number(10);
-                    var y1=Number(y) - Number(10);
                     addToHistory(textCoordinate);
+                    $('#textCoordinateId').val(-1);
                     console.log("total"+textCoordinateHistory.length);                
                 }else {
-                    console.log("New value is existing value, so Populating existing values");
+                    //INFO: if an other coordinate is with in its limits, populate that value and
+                    //ask user to edit it.
+                    console.log("Populating existing values");
                     //INFO: populate x,y a,b,operator and TODO: id.
                     $('#xId').val(textCoordinateWithinLimits.x);
                     $('#yId').val(textCoordinateWithinLimits.y);            
@@ -501,7 +484,7 @@ fieldset {
                     $('#numberBId').val(textCoordinateWithinLimits.b);
                     $('#operatorId').val(textCoordinateWithinLimits.operator);
                     $('#textCoordinateId').val(textCoordinateWithinLimits.id);
-                }
+                }                
             }
         }
         function showInputs() {

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Math And Color</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<style type="text/css">
+#myCanvas,h1 {
+   width: 80%;
+   text-align:center;
+   margin-left: 1cm;
+}
+#inputsId {
+   width: 80%;
+   margin-left: 1cm;
+}
+label {
+  width: 150px;
+  padding-right: 20px;
+  display: inline-block;
+}
+canvas {
+   display: inline;
+}
+</style>
+
+<body>
+
+<div>
+    <h1>Learn And Color</h1>
+    <div class="form-group"  id="inputsId">
+        <fieldset>
+            <label for="xId">X:</label>
+            <input class="form-control" type="name" id="xId" placeholder="X"/>
+            <label for="yId">Y:</label>
+            <input class="form-control" type="name" id="yId" placeholder="Y"/>
+        </fieldset>
+        <br/>
+        <fieldset>
+            <label for="numberAId">A:</label>
+            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A" />
+            <br/>
+            <br/>
+            <label for="operatorId">Operator:</label>
+            <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
+            <br/>
+            <br/>
+            <label for="numberBId">B:</label>
+            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B" />
+            <br/>
+            <br/>
+            <label for="doneId">Numbers will Appear</label>
+            <button class="form-control" id="doneId" onclick="hideInputs()">Done</button>
+            <br/>
+            <br/>
+        </fieldset>
+        <br/>
+    </div>
+
+    <!--http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
+    Added tab index, to make canvas focusable. Unlike other html elements, it is NOT
+    focusable by default.
+
+    TODO: just bring a popup, collect the input, and put it all at once, this way
+    there is no flip flopping to aling the numbers with +s, ___ etc..
+
+    -->
+
+    <!--Inorder to guess keys from event, you would have to implement keypress and NOT key up-->
+    <canvas id="myCanvas" width="960" height="998" text-align="center" style="border:10px solid #d3d3d3;" tabindex="1" 
+    onkeypress="keyUpHandler(this,event)" onclick="showInputs()"
+    onmousemove="mouseMoveHandler(this,event)">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+
+</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var keyHistoryCoordinate={keyHistory:"This is at (10,10)", x:10, y:10};
+        var keyCoordinateHistory=[keyHistoryCoordinate];
+
+        var keyHistory = "";
+        var mousePos;
+        window.onload = function() {
+            var canvas = document.getElementById("myCanvas");
+            var context = canvas.getContext("2d");
+            var imageObj = new Image();
+            imageObj.onload = function() {
+                //width="1160" height="1008"
+                context.drawImage(imageObj, 10, 10, 1160, 1008);
+                context.font = "40pt Calibri";
+                context.fillText("Name:", 30, 40);
+                //Fill your name
+                context.fillText("__________", 30, 140);
+                context.fillText("_______", 30, 240);
+            };
+            imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
+        };
+        //INFO: outside of onload
+        function draw() {
+            var canvas = document.getElementById("myCanvas");
+            var context = canvas.getContext("2d");
+            var imageObj = new Image();
+            imageObj.onload = function() {
+                //width="1160" height="1008"
+                context.drawImage(imageObj, 0, 0, 1160, 1008);
+                context.font = "40pt Calibri";
+                context.fillText("Name:", 30, 40);
+                //Fill your name
+                context.fillText("__________", 30, 140);
+                context.fillText("_______", 30, 240);
+            };
+            imageObj.src = "dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif";
+        }
+
+        function keyUpHandler(canvas, event) {
+            //alert('hi keyup');
+            //INFO:TODO: mouse position comes only from mouse listener not key listener
+            //http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
+            //http://jsfiddle.net/AustinBrunkhorst/qsULv/
+            //INFO: capture the last position of mouse, by mouse listener.
+            //on key down, write to the last known position of the mouse.
+            //var mousePos = getMousePos(canvas, event);
+            var letters = "abcdefghijklmnopqrstuvwxyz";
+            //var key = event.keyCode;
+            //if (key > 64 && key < 91) {
+                //var letter = letters.substring(key - 64, key - 65);
+                var letter = getKey(event);
+                addletter(canvas, letter, mousePos.x, mousePos.y);
+            //}
+        }
+
+        function mouseMoveHandler(canvas, event) {
+            mousePos = getMousePos(canvas, event);
+        }
+        /**
+        http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
+        **/
+        function getMousePos(canvas, evt) {
+            var rect = canvas.getBoundingClientRect();
+            var x = evt.clientX - rect.left;
+            var y = evt.clientY - rect.top;
+            return {
+                x: x,
+                y: y
+            };
+        }
+
+        //INFO:Instead of adding it on load, if we add it as event based on canvas element,
+        //then it can be re-used across pages.
+        //Later this can also be made data driven.
+        //canvas.addEventListener("keyup", keyUpHandler, true);
+        //canvas.addEventListener('mousemove',mouseMoveHandler,true);
+        //alert('hi');
+
+        function addletter(canvas, letter, x, y) {
+            var context = canvas.getContext("2d");
+            keyHistory += letter;
+            //INFO: clears a lot of area so commented.
+            //context.clearRect(x, y, x+20, y+50);
+            context.fillText(keyHistory, x + 20, y + 20);
+        }
+
+        //INFO: this is not working and no longer needed as i changed the approach
+        function getKey(e){
+          var keynum;
+          var keyPressed;
+
+          if(window.event) { // IE                    
+            keynum = e.keyCode;
+          } else if(e.which){ // Netscape/Firefox/Opera                   
+            keynum = e.which;
+          }
+
+        if (keynum >= 65 && keynum <= 90) {
+            keyPressed = String.fromCharCode(keynum + 32);
+        } else if (96 <= keynum && keynum <= 105) {
+            keyPressed = String.fromCharCode(keynum - 48);
+        }else {
+            keyPressed = String.fromCharCode(keynum);
+        }
+
+          return keyPressed;
+        }
+        function showInputs() {
+            $("#inputsId").show();
+        }
+        function hideInputs() {
+            $("#inputsId").hide();
+        }
+    </script>
+
+</body>
+
+</html>
