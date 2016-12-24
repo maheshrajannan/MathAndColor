@@ -82,13 +82,13 @@ fieldset {
 
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
+            <input class="form-control" type="number" id="numberAId" placeholder="Enter Number A"/>
             <br/>
             <label for="operatorId">Operator:</label>
             <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
             <br/>
             <label for="numberBId">B:</label>
-            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"/>
+            <input class="form-control" type="number" id="numberBId" placeholder="Enter Number B"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="addText()">Add Number To Image</button>
@@ -97,9 +97,22 @@ fieldset {
             <br/>
             <button class="form-control" id="configurationId" onclick="toggleAdvanced()">Advanced</button>
         </fieldset>
+        <fieldset>
+            <button class="form-control" id="showOtherImagesId" onclick="showOtherImages()">Show Other Images</button>
+            <br/>
+            <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image With Text</button>
+        </fieldset>
         <br/>
     </div>
-
+    <div id="imageContainer">
+        <input id="image_from_list" name="image_from_list" type="text" value="red"  />
+        <img src="images/butterfly.jpg" col="red" border="0" width="50 px" height="50 px" 
+        />
+        <img src="images/puppy.gif" col="blue" border="0" width="50 px" height="50 px"
+        />
+        <img src="images/teddyBear.jpg" col="yellow" border="0" width="50 px" height="50 px"
+        />
+    </div>
     <!--http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
     Added tab index, to make canvas focusable. Unlike other html elements, it is NOT
     focusable by default.
@@ -141,6 +154,12 @@ fieldset {
             toggleAdvanced();
         };
         //INFO: outside of onload
+
+        $("div#imageContainer img").click(function () {
+            $("div#imageContainer img").attr("border","0");
+            $(this).attr("border","4");
+            $("input#image_from_list").val($(this).attr("col"));
+        }); 
 
         function toggleAdvanced(){
             $(".fieldSet1").toggle(); 
