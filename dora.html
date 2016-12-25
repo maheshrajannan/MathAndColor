@@ -9,6 +9,19 @@
 <style type="text/css">
 /**
 TODO: move css to a separate file
+TODO: my requirement for css;
+
+For any device/browser size smaller than 1000 px(A4), display as 1 column.
+Anything larger than 1000 px, display side by side.
+
+Ideal device is having display resolution of 1200 px.
+
+Kids have to print and do math on the image..so any device smaller than A4, 
+is not ideal way to use this app.
+
+This does NOT stop the user to minimize the view and increase the font size
+of fields.
+
 **/
     body{ background-color: ivory; padding:20px;}
     #wrapper{
@@ -77,13 +90,13 @@ TODO: move css to a separate file
 
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="number" id="numberAId" placeholder="Enter Number A"/>
+            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
             <br/>
             <label for="operatorId">Operator:</label>
             <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
             <br/>
             <label for="numberBId">B:</label>
-            <input class="form-control" type="number" id="numberBId" placeholder="Enter Number B"/>
+            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="addText()">Add Number To Image</button>
