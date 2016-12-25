@@ -73,23 +73,9 @@ of fields.
 </style>
 <body>
 
-<div class="container">
+<div id="containerDivId" class="container">
     <h1>Learn And Color</h1>
-    <div class="form-group"  id="inputsId">
-        <fieldset class="fieldSet1">
-            <label for="textCoordinateId">Text Coordinate#:</label>
-            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
-            <br/>
-            <label for="xId">X:</label>
-            <input class="form-control" type="name" id="xId" placeholder="X"/>
-            <br/>
-            <label for="yId">Y:</label>
-            <input class="form-control" type="name" id="yId" placeholder="Y"/>
-            <br/>
-            <label for="fontSizeId">Font Size:</label>
-            <input class="form-control" type="name" id="fontSizeId" value="40"/>
-        </fieldset>
-
+    <div class="leftdiv"  id="leftDivId">
         <fieldset>
             <label for="numberAId">A:</label>
             <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
@@ -145,8 +131,20 @@ of fields.
         </canvas>
     </div>
 
-    <div>
-        You can use this space to display (x,y) coordinates,and its text
+    <div class="rightdiv" id="rightDivId">
+        <fieldset class="fieldSet1">
+            <label for="textCoordinateId">Text Coordinate#:</label>
+            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
+            <br/>
+            <label for="xId">X:</label>
+            <input class="form-control" type="name" id="xId" placeholder="X"/>
+            <br/>
+            <label for="yId">Y:</label>
+            <input class="form-control" type="name" id="yId" placeholder="Y"/>
+            <br/>
+            <label for="fontSizeId">Font Size:</label>
+            <input class="form-control" type="name" id="fontSizeId" value="40"/>
+        </fieldset>    
     </div>
 
     </div>
@@ -532,10 +530,12 @@ of fields.
             }
         }
         function showInputs() {
-            $("#inputsId").show();
+            $("#leftDivId").show();
+            $("#rightDivId").show();
         }
         function hideInputs() {
-            $("#inputsId").hide();
+            $("#leftDivId").hide();
+            $("#rightDivId").hide();            
         }
     </script>
 
