@@ -22,6 +22,19 @@ is not ideal way to use this app.
 This does NOT stop the user to minimize the view and increase the font size
 of fields.
 
+TODO:
+
+Functionalities to check before each check in.
+
+1. Add text on all 4 corners. Auto-repositioning must happen.
+2. Add text in other areas.
+3. Editing existing text should work seamlessly.
+4. print as pdf must work.
+5. hide inputs.
+6. show inputs.
+7. hide advanced.
+8. show advanced.
+
 **/
     body{ background-color: ivory; padding:20px;}
     #wrapper{
@@ -97,15 +110,19 @@ of fields.
             <button class="form-control" id="showOtherImagesId" onclick="showOtherImages()">Show Other Images</button>
             <br/>
             <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image With Text</button>
+            <br/>
             <input id="image_from_list" name="image_from_list" type="text" value="red"  />
+            <br/>
             <img src="images/butterfly.jpg" col="red" border="0" width="50 px" height="50 px" 
             />
+            <br/>
             <img src="images/puppy.gif" col="blue" border="0" width="50 px" height="50 px"
             />
+            <br/>
             <img src="images/teddyBear.jpg" col="yellow" border="0" width="50 px" height="50 px"
             />
+            <br/>
         </fieldset>
-        <br/>
     </div>
     <!--http://stackoverflow.com/questions/12886286/addeventlistener-for-keydown-on-canvas
     Added tab index, to make canvas focusable. Unlike other html elements, it is NOT
