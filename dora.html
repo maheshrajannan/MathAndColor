@@ -31,39 +31,39 @@ TODO: move css to a separate file
         height:100%;
         text-align:center;
     }
-h1 {
-   text-align:center;
-}
-label {
-  width: 100px;
-  padding-right: 20px;
-  display: inline-block;
-}
-/**
-http://css-plus.com/2010/11/how-to-horizontally-centre-anything-with-css/
-What this does is, it causes the whole thing to be centere aligned.
-However the field set does not re-align one below the other, if the
-page is re-sized.
+    h1 {
+       text-align:center;
+    }
+    label {
+      width: 100px;
+      padding-right: 20px;
+      display: inline-block;
+    }
+    /**
+    http://css-plus.com/2010/11/how-to-horizontally-centre-anything-with-css/
+    What this does is, it causes the whole thing to be centere aligned.
+    However the field set does not re-align one below the other, if the
+    page is re-sized.
 
-My requirement is for the image to be viewed at its best, so this is ok to me.
-If i resize and the x,y a,b becomes visible, still you cannot see the image 
-and all its text.
-**/
-.container{
-    display: table; 
-    margin: 0 auto;
-    font-size: 150%;
-}
-/**
-http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
-**/
+    My requirement is for the image to be viewed at its best, so this is ok to me.
+    If i resize and the x,y a,b becomes visible, still you cannot see the image 
+    and all its text.
+    **/
+    .container{
+        display: table; 
+        margin: 0 auto;
+        font-size: 150%;
+    }
+    /**
+    http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
+    **/
 </style>
 <body>
 
 <div class="container">
     <h1>Learn And Color</h1>
-    <input class="form-control" type="hidden" id="textCoordinateId" placeholder="-1 or 1,2"/>
     <div class="form-group"  id="inputsId">
+        <input class="form-control" type="hidden" id="textCoordinateId" placeholder="-1 or 1,2"/>
         <fieldset class="fieldSet1">
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" placeholder="X"/>
@@ -116,7 +116,7 @@ http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-al
         Your browser does not support the HTML5 canvas tag.
     </canvas>-->
 
-    <div id="wrapper">
+    <div id="wrapper" class="formgroup">
         <!--
         http://stackoverflow.com/questions/18431332/delete-only-text-but-not-the-image-using-canvas
         http://jsfiddle.net/m1erickson/fg5sV/
