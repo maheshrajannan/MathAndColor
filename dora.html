@@ -39,8 +39,12 @@ Functionalities to check before each check in.
     body{ background-color: ivory; padding:20px;}
     #wrapper{
         position:relative;
+        min-width:1000px;
+        min-height:1000px;
         width:1000px;
         height:1000px;
+        max-width:1000px;
+        max-height:1000px;
     }
     #bkImage{
         position:absolute; 
@@ -76,7 +80,7 @@ Functionalities to check before each check in.
     and all its text.
     **/
     .container{
-        display: table; 
+        display: flex; 
         margin: 0 auto;
         font-size: 150%;
     }
@@ -85,9 +89,8 @@ Functionalities to check before each check in.
     **/
 </style>
 <body>
-
-<div id="containerDivId" class="container">
     <h1>Learn And Color</h1>
+<div id="containerDivId" class="container">
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
             <label for="numberAId">A:</label>
