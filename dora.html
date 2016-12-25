@@ -36,7 +36,14 @@ Functionalities to check before each check in.
 8. show advanced.
 
 **/
-    body{ background-color: ivory; padding:20px;}
+    body{ 
+        background-color: ivory; 
+        padding: 20px;
+    }
+    #bannerDivId
+    {
+        text-align:center;
+    }
     #wrapper{
         position:relative;
         min-width:1000px;
@@ -61,12 +68,9 @@ Functionalities to check before each check in.
         height:100%;
         text-align:center;
     }
-    h1 {
-       text-align:center;
-    }
     label {
       width: 100px;
-      padding-right: 20px;
+      /**padding-right: 20px;**/
       display: inline-block;
     }
     /**
@@ -83,16 +87,19 @@ Functionalities to check before each check in.
         display: flex; 
         margin: 0 auto;
         font-size: 150%;
+        /**padding: 25px;**/
     }
     /**
     http://stackoverflow.com/questions/12710799/two-fieldsets-with-display-inline-aligning-on-bottom
     **/
     .leftdiv,.rightdiv{
-        padding: 25px;
+        padding-left: 10px;
     }    
 </style>
 <body>
-    <h1>Learn And Color</h1>
+    <div id="bannerDivId">
+        <h1>Learn And Color</h1>
+    </div>
 <div id="containerDivId" class="container">
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
@@ -156,7 +163,7 @@ Functionalities to check before each check in.
 
     <div class="rightdiv" id="rightDivId">
         <fieldset class="fieldSet1">
-            <label for="textCoordinateId">Text Coordinate#:</label>
+            <label for="textCoordinateId">Coordinate#:</label>
             <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
