@@ -234,10 +234,20 @@ Functionalities to check before each check in.
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mousePos = getMousePos(canvas, event);
-            $("#xId").val(mousePos.x);
-            $("#yId").val(mousePos.y);
-            $("#numberAId").focus();
-            $("#textCoordinateId").val("-1");
+            var textCoordinate = new TextCoordinate(mousePos.x,mousePos.y,"  ","  "," ");
+            textCoordinate.adjust(canvas);
+            var textCoordinateWithinLimits = textCoordinate.isAnyWithinLimits(textCoordinateHistory);
+            if(textCoordinateWithinLimits){
+                console.log("near/on existing position is being clicked");
+                populateExistingCordinate(textCoordinateWithinLimits);
+            }else{
+                console.log("new position is being clicked");
+                $("#xId").val(textCoordinate.x);
+                $("#yId").val(textCoordinate.y);
+                //TODO: check for overlap.
+                $("#numberAId").focus();
+                $("#textCoordinateId").val("-1");                
+            }
         }
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
@@ -387,6 +397,24 @@ Functionalities to check before each check in.
             this.getMaxY=function(padding){
                 var verticalHeight = Number(FONT_SIZE)*Number(3.5);
                 return Math.round(Number(this.y) + Number(padding) + Number(verticalHeight));                
+            }
+            this.isAnyWithinLimits = function(textCoordinateHistory) {
+                var textCoordinateWithinLimits = null;
+                if( (textCoordinateHistory) && textCoordinateHistory.length > 0) {
+                    for (var j = 0; j < textCoordinateHistory.length; j++){
+                        console.log("Checking "
+                         + textCoordinateHistory[j].printValue() +" with "+ this.printValue());
+                        //TODO: do whether the clicked coordinates are with in limits, on click, instead of
+                        //doing it on click of "Done" button
+                        withinLimits = textCoordinateHistory[j].isWithinLimits(this);
+                        if(withinLimits) {
+                            console.log("With in limits:" + withinLimits);
+                            textCoordinateWithinLimits = textCoordinateHistory[j];
+                            j = textCoordinateHistory.length;
+                        }
+                    }
+                }
+                return textCoordinateWithinLimits;
             }            
             this.isWithinLimits = function(textCoordinate) {
                 console.log("checking");
@@ -525,22 +553,10 @@ Functionalities to check before each check in.
                 }
                 //INFO: End of editing existing coordinate.
             }else{
-                var withinLimits = false;
                 //INFO: adding a new coordinate.
-                //INFO: End adding a new coordinate.
-                for (var j = 0; j < textCoordinateHistory.length; j++){
-                    console.log("Checking "
-                     + textCoordinateHistory[j].printValue() +" with "+ textCoordinate.printValue());
-                    //TODO: do whether the clicked coordinates are with in limits, on click, instead of
-                    //doing it on click of "Done" button
-                    withinLimits = textCoordinateHistory[j].isWithinLimits(textCoordinate);
-                    if(withinLimits) {
-                        console.log("With in limits:" + withinLimits);
-                        textCoordinateWithinLimits = textCoordinateHistory[j];
-                        j = textCoordinateHistory.length;
-                    }
-                }
-                if(!withinLimits) {
+                //INFO: checking if new coordinate is with in limits of any of old coordinates.
+                textCoordinateWithinLimits = textCoordinate.isAnyWithinLimits(textCoordinateHistory);
+                if(textCoordinateWithinLimits == null) {
                     console.log("Adding new values");
                     x=textCoordinate.x;
                     y=textCoordinate.y;
@@ -558,14 +574,17 @@ Functionalities to check before each check in.
                 }else {
                     console.log("New value is existing value, so Populating existing values");
                     //INFO: populate x,y a,b,operator and TODO: id.
-                    $('#xId').val(textCoordinateWithinLimits.x);
-                    $('#yId').val(textCoordinateWithinLimits.y);            
-                    $('#numberAId').val(textCoordinateWithinLimits.a);
-                    $('#numberBId').val(textCoordinateWithinLimits.b);
-                    $('#operatorId').val(textCoordinateWithinLimits.operator);
-                    $('#textCoordinateId').val(textCoordinateWithinLimits.id);
+                    populateExistingCordinate(textCoordinateWithinLimits);
                 }
             }
+        }
+        function populateExistingCordinate(textCoordinateWithinLimits) {
+            $('#xId').val(textCoordinateWithinLimits.x);
+            $('#yId').val(textCoordinateWithinLimits.y);            
+            $('#numberAId').val(textCoordinateWithinLimits.a);
+            $('#numberBId').val(textCoordinateWithinLimits.b);
+            $('#operatorId').val(textCoordinateWithinLimits.operator);
+            $('#textCoordinateId').val(textCoordinateWithinLimits.id);            
         }
         function showInputs() {
             $("#leftDivId").show();
