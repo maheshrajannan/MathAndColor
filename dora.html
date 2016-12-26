@@ -171,8 +171,8 @@ Functionalities to check before each check in.
 
     <div class="rightdiv" id="rightDivId">
         <fieldset class="fieldSet1">
-            <label for="textCoordinateId">Coordinate#:</label>
-            <input class="form-control" type="name" id="textCoordinateId" size="4" placeholder="-1 or 1,2"/>
+            <label id="textCoordinateLabelId" for="textCoordinateId">Adding/Editing Coordinate#:</label>
+            <input class="form-control" type="hidden" id="textCoordinateId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" size="4" placeholder="X"/>
@@ -234,19 +234,26 @@ Functionalities to check before each check in.
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mousePos = getMousePos(canvas, event);
-            var textCoordinate = new TextCoordinate(mousePos.x,mousePos.y,"  ","  "," ");
+            var textCoordinate = new TextCoordinate(mousePos.x,mousePos.y," "," "," ");
             textCoordinate.adjust(canvas);
             var textCoordinateWithinLimits = textCoordinate.isAnyWithinLimits(textCoordinateHistory);
+            var nextCoordinateNumber;
             if(textCoordinateWithinLimits){
                 console.log("near/on existing position is being clicked");
                 populateExistingCordinate(textCoordinateWithinLimits);
             }else{
+                if( (textCoordinateHistory) && textCoordinateHistory.length > 0) {
+                    nextCoordinateNumber = Number(textCoordinateHistory.length) + 1;
+                }else{
+                    nextCoordinateNumber = 1;
+                }
                 console.log("new position is being clicked");
                 $("#xId").val(textCoordinate.x);
                 $("#yId").val(textCoordinate.y);
                 //TODO: check for overlap.
                 $("#numberAId").focus();
-                $("#textCoordinateId").val("-1");                
+                $("#textCoordinateId").val("-1");
+                $('#textCoordinateLabelId').text("Adding "+ nextCoordinateNumber + " coordinate");
             }
         }
         /**
@@ -531,10 +538,15 @@ Functionalities to check before each check in.
             var currentTextCoordinate;
 
             var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
+            //INFO: adjust it, just in case x and y are edited.
             textCoordinate.adjust(canvas);
 
             if(textCoordinateId>0) {
                 console.log("Editing textCoordinateId"+textCoordinateId);
+                x=textCoordinate.x;
+                y=textCoordinate.y;
+                $('#xId').val(x);
+                $('#yId').val(y);            
                 textCoordinate.setId(textCoordinateId);
                 textCoordinateHistory[textCoordinateId-1]=textCoordinate;
                 //TODO: redraw.
@@ -584,7 +596,9 @@ Functionalities to check before each check in.
             $('#numberAId').val(textCoordinateWithinLimits.a);
             $('#numberBId').val(textCoordinateWithinLimits.b);
             $('#operatorId').val(textCoordinateWithinLimits.operator);
-            $('#textCoordinateId').val(textCoordinateWithinLimits.id);            
+            $('#textCoordinateId').val(textCoordinateWithinLimits.id);     
+            $('#textCoordinateLabelId').text("Editing #"+textCoordinateWithinLimits.id);     
+
         }
         function showInputs() {
             $("#leftDivId").show();
