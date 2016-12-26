@@ -70,7 +70,7 @@ Functionalities to check before each check in.
         text-align:center;
     }
     label {
-      width: 100px;
+      width: 200px;
       /**padding-right: 20px;**/
       display: inline-block;
     }
@@ -95,7 +95,14 @@ Functionalities to check before each check in.
     **/
     .leftdiv,.rightdiv{
         padding-left: 10px;
-    }    
+    }
+    input,button,label { font-size: 150%;  } 
+    button{
+        min-width: 100px;
+    } 
+    h1{
+        font-size: 300%;
+    }  
 </style>
 <body>
     <div id="bannerDivId">
@@ -105,27 +112,27 @@ Functionalities to check before each check in.
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="name" id="numberAId" placeholder="Enter Number A"/>
+            <input class="form-control" type="name" maxlength="4" size="4" id="numberAId" placeholder="A"/>
             <br/>
             <label for="operatorId">Operator:</label>
-            <input class="form-control" type="name" id="operatorId" placeholder="Operator"/>
+            <input class="form-control" type="name" maxlength="4" size="4" id="operatorId" placeholder="+,-,X,%"/>
             <br/>
             <label for="numberBId">B:</label>
-            <input class="form-control" type="name" id="numberBId" placeholder="Enter Number B"/>
+            <input class="form-control" type="name" maxlength="4" size="4" id="numberBId" placeholder="B"/>
         </fieldset>
         <fieldset>
-            <button class="form-control" id="doneId" onclick="addText()">Add Number To Image</button>
+            <button class="form-control" id="doneId" onclick="addText()">Add To Image</button>
             <br/>
             <button class="form-control" id="hideId" onclick="hideInputs()">Hide Inputs</button>
             <br/>
             <button class="form-control" id="configurationId" onclick="toggleAdvanced()">Advanced</button>
         </fieldset>
         <fieldset>
-            <button class="form-control" id="showOtherImagesId" onclick="showOtherImages()">Show Other Images</button>
+            <button class="form-control" id="showOtherImagesId" onclick="showOtherImages()">Other Images</button>
             <br/>
-            <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image With Text</button>
+            <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
             <br/>
-            <input id="image_from_list" name="image_from_list" type="text" value="red"  />
+            <input id="image_from_list" name="image_from_list" type="text" maxlength="10" size="10" value="red"  />
             <br/>
             <img src="images/butterfly.jpg" col="red" border="0" width="50 px" height="50 px" 
             />
@@ -165,16 +172,16 @@ Functionalities to check before each check in.
     <div class="rightdiv" id="rightDivId">
         <fieldset class="fieldSet1">
             <label for="textCoordinateId">Coordinate#:</label>
-            <input class="form-control" type="name" id="textCoordinateId" placeholder="-1 or 1,2"/>
+            <input class="form-control" type="name" id="textCoordinateId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
-            <input class="form-control" type="name" id="xId" placeholder="X"/>
+            <input class="form-control" type="name" id="xId" size="4" placeholder="X"/>
             <br/>
             <label for="yId">Y:</label>
-            <input class="form-control" type="name" id="yId" placeholder="Y"/>
+            <input class="form-control" type="name" id="yId" size="4" placeholder="Y"/>
             <br/>
             <label for="fontSizeId">Font Size:</label>
-            <input class="form-control" type="name" id="fontSizeId" value="40"/>
+            <input class="form-control" type="name" id="fontSizeId" size="4" value="40"/>
         </fieldset>    
     </div>
 
