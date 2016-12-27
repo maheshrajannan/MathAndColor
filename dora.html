@@ -449,33 +449,32 @@ Functionalities to check before each check in.
                 console.log("maxY1:"+maxY1);
                 
                 var withinLimits=false;
-                console.log("Does (x) Falls with in x coordinates (x1) and (x2) ?");
-                console.log("("+minX1+","+maxX1+
+                console.log("Does minX1,maxX1 Falls with in x coordinates minX and maxX ?");
+                console.log("("+minX1+","+maxX1
                     +") Falls with in x coordinates ("+minX
                     +") and ("+maxX
                     +")");
                 //
                 if( 
-                    ( minX <= textCoordinate.x )
-                 && ( maxX >= textCoordinate.x ) 
+                    ( ( minX <= maxX1 ) && ( maxX >= maxX1 ) ) ||
+                    ( ( minX <= minX1 ) && ( maxX >= minX1 ) )
                  ) {
-                    console.log("(x) Falls with in x coordinates (x1) and (x2)");
+                    console.log("minX1,maxX1 Falls with in x coordinates minX and maxX");
                     withinLimits=true;
                 }
-                console.log("Does (y) Fall with in x coordinates (y1) and (y2) ?");
-                console.log("("+minY1+","+maxY1+
+                console.log("Does minY1,maxY1 Fall with in y coordinates minY and maxY ?");
+                console.log("("+minY1+","+maxY1
                     +") Falls with in y coordinates ("+minY
                     +") and ("+maxY
                     +")");
                 if( 
-                    ( withinLimits && minY <= textCoordinate.y )
-                 && ( maxY >= textCoordinate.y)
+                    ( withinLimits ) && 
+                    (
+                        ( ( minY <= maxY1 ) && ( maxY >= maxY1 ) ) ||
+                        ( ( minY <= minY1 ) && ( maxY >= minY1 ) )
+                    )
                  ) {
-                    console.log("(y) Falls with in x coordinates (y1) and (y2)");
-                    console.log("("+textCoordinate.y
-                        +") Falls with in y coordinates ("+minY
-                        +") and ("+maxY
-                        +")");
+                    console.log("minY1,maxY1 Fall with in y coordinates minY and maxY");
                 }else{
                     withinLimits=false;                    
                 }
