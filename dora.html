@@ -391,7 +391,6 @@ Functionalities to check before each check in.
                 }
             }
             this.getMinX=function(padding){
-                var minX=Math.round(Number(this.x) + Number(padding));
                 console.log("Math.round(Number(this.x) - Number(padding))");
                 console.log("Math.round("+
                     Number(this.x) +"-"+ Number(padding)  +
@@ -431,23 +430,43 @@ Functionalities to check before each check in.
                 return textCoordinateWithinLimits;
             }            
             this.isWithinLimits = function(textCoordinate) {
-                console.log("checking");
+                console.log("checking :"+this.printValue() +
+                    "against textCoordinate:"+textCoordinate.printValue());
                 var minX = this.getMinX(Math.round(Number(FONT_SIZE)/2));
+                var minX1 = textCoordinate.getMinX(Math.round(Number(FONT_SIZE)/2));
+                console.log("minX1:"+minX1);
+
                 var minY = this.getMinY(Math.round(Number(FONT_SIZE)/2));
+                var minY1 = textCoordinate.getMinY(Math.round(Number(FONT_SIZE)/2));
+                console.log("minY1:"+minY1);
+                
                 var maxX = this.getMaxX(Math.round(Number(FONT_SIZE)/2));
+                var maxX1 = textCoordinate.getMaxX(Math.round(Number(FONT_SIZE)/2));
+                console.log("maxX1:"+maxX1);
+                
                 var maxY = this.getMaxY(Math.round(Number(FONT_SIZE)/2));
+                var maxY1 = textCoordinate.getMaxY(Math.round(Number(FONT_SIZE)/2));
+                console.log("maxY1:"+maxY1);
+                
                 var withinLimits=false;
+                console.log("Does (x) Falls with in x coordinates (x1) and (x2) ?");
+                console.log("("+minX1+","+maxX1+
+                    +") Falls with in x coordinates ("+minX
+                    +") and ("+maxX
+                    +")");
+                //
                 if( 
                     ( minX <= textCoordinate.x )
                  && ( maxX >= textCoordinate.x ) 
                  ) {
-                console.log("(x) Falls with in x coordinates (x1) and (x2)");
-                console.log("("+textCoordinate.x
-                    +") Falls with in x coordinates ("+minX
-                    +") and ("+maxX
-                    +")");
+                    console.log("(x) Falls with in x coordinates (x1) and (x2)");
                     withinLimits=true;
                 }
+                console.log("Does (y) Fall with in x coordinates (y1) and (y2) ?");
+                console.log("("+minY1+","+maxY1+
+                    +") Falls with in y coordinates ("+minY
+                    +") and ("+maxY
+                    +")");
                 if( 
                     ( withinLimits && minY <= textCoordinate.y )
                  && ( maxY >= textCoordinate.y)
@@ -522,14 +541,14 @@ Functionalities to check before each check in.
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
             console.log("added...");            
         }           
-        function addLetterToOperator(canvas,operator,textCoordinate){
+        function addLetterToOperator(canvas,textCoordinate){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
             console.log("canvassing...");
             var operatorCoordinate = textCoordinate.getOperatorCoordinate();
             console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
             //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, operator, operatorCoordinate.x, operatorCoordinate.y);
+            addletter(canvas, textCoordinate.operator, operatorCoordinate.x, operatorCoordinate.y);
             console.log("added...");
         }
 		//Validate the input
@@ -581,7 +600,7 @@ Functionalities to check before each check in.
                     currentTextCoordinate = textCoordinateHistory[j];
                     console.log("currentTextCoordinate:"+currentTextCoordinate.printValue());
                     addLetterToA(canvas,currentTextCoordinate);
-                    addLetterToOperator(canvas,operator,currentTextCoordinate);
+                    addLetterToOperator(canvas,currentTextCoordinate);
                     addLetterToB(canvas,currentTextCoordinate);
                     addLine1(canvas,currentTextCoordinate);
                     addLine2(canvas,currentTextCoordinate);
@@ -598,7 +617,7 @@ Functionalities to check before each check in.
                     $('#xId').val(x);
                     $('#yId').val(y);            
                     addLetterToA(canvas,textCoordinate);
-                    addLetterToOperator(canvas,operator,textCoordinate);
+                    addLetterToOperator(canvas,textCoordinate);
                     addLetterToB(canvas,textCoordinate);
                     addLine1(canvas,textCoordinate);
                     addLine2(canvas,textCoordinate);
@@ -630,6 +649,9 @@ Functionalities to check before each check in.
         function hideInputs() {
             $("#leftDivId").hide();
             $("#rightDivId").hide();            
+        }
+        function prefillImage() {
+            console.log("prefillImage");
         }
     </script>
 
