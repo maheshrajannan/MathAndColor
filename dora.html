@@ -114,14 +114,21 @@ Functionalities to check before each check in.
             <label for="numberAId">A:</label>
             <input class="form-control" type="name" maxlength="4" size="4" id="numberAId" placeholder="A"/>
             <br/>
-            <label for="operatorId">Operator:</label>
-            <input class="form-control" type="name" maxlength="4" size="4" id="operatorId" placeholder="+,-,X,%"/>
+         	<label for="operatorId">Operator:</label> 
+            <select
+				class="form-control" type="text" id="operatorId" style="width:128px;">
+				<option>+</option>
+				<option>-</option>
+				<option>x</option>
+				<option>&divide</option>
+                <option>%</option>
+			</select>
             <br/>
             <label for="numberBId">B:</label>
             <input class="form-control" type="name" maxlength="4" size="4" id="numberBId" placeholder="B"/>
         </fieldset>
         <fieldset>
-            <button class="form-control" id="doneId" onclick="addText()">Add To Image</button>
+            <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
             <br/>
             <button class="form-control" id="hideId" onclick="hideInputs()">Hide Inputs</button>
             <br/>
@@ -524,6 +531,22 @@ Functionalities to check before each check in.
             //INFO: write it between 2 numbers, slightly to left
             addletter(canvas, operator, operatorCoordinate.x, operatorCoordinate.y);
             console.log("added...");
+        }
+		//Validate the input
+		function validateInput() {
+            var letterA = $('#numberAId').val();
+             if (/\D/.test(letterA)) {
+				alert( letterA + " is not a number. Please enter a valid number for A." );
+            	letterA.focus() ;
+            	return false; 
+            }
+            var letterB = $('#numberBId').val();                       
+            if (/\D/.test(letterB)) {
+				alert( letterB + " is not a number. Please enter a valid number for B." );
+            	letterB.focus() ;
+            	return false; 
+            }
+            addText();
         }
         function addText() {
             var x=$('#xId').val();
