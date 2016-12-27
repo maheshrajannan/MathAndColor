@@ -555,13 +555,13 @@ Functionalities to check before each check in.
             var letterA = $('#numberAId').val();
              if (/\D/.test(letterA)) {
 				alert( letterA + " is not a number. Please enter a valid number for A." );
-            	letterA.focus() ;
+            	$('#numberAId').focus() ;
             	return false; 
             }
             var letterB = $('#numberBId').val();                       
             if (/\D/.test(letterB)) {
 				alert( letterB + " is not a number. Please enter a valid number for B." );
-            	letterB.focus() ;
+            	$('#numberBId').focus() ;
             	return false; 
             }
             addText();
