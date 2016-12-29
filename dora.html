@@ -432,20 +432,20 @@ Functionalities to check before each check in.
             this.isWithinLimits = function(textCoordinate) {
                 console.log("checking :"+this.printValue() +
                     "against textCoordinate:"+textCoordinate.printValue());
-                var minX = this.getMinX(Math.round(Number(FONT_SIZE)/2));
-                var minX1 = textCoordinate.getMinX(Math.round(Number(FONT_SIZE)/2));
+                var minX = this.getMinX(Math.round(Number(FONT_SIZE)/4));
+                var minX1 = textCoordinate.getMinX(Math.round(Number(FONT_SIZE)/4));
                 console.log("minX1:"+minX1);
 
-                var minY = this.getMinY(Math.round(Number(FONT_SIZE)/2));
-                var minY1 = textCoordinate.getMinY(Math.round(Number(FONT_SIZE)/2));
+                var minY = this.getMinY(Math.round(Number(FONT_SIZE)/4));
+                var minY1 = textCoordinate.getMinY(Math.round(Number(FONT_SIZE)/4));
                 console.log("minY1:"+minY1);
                 
-                var maxX = this.getMaxX(Math.round(Number(FONT_SIZE)/2));
-                var maxX1 = textCoordinate.getMaxX(Math.round(Number(FONT_SIZE)/2));
+                var maxX = this.getMaxX(Math.round(Number(FONT_SIZE)/4));
+                var maxX1 = textCoordinate.getMaxX(Math.round(Number(FONT_SIZE)/4));
                 console.log("maxX1:"+maxX1);
                 
-                var maxY = this.getMaxY(Math.round(Number(FONT_SIZE)/2));
-                var maxY1 = textCoordinate.getMaxY(Math.round(Number(FONT_SIZE)/2));
+                var maxY = this.getMaxY(Math.round(Number(FONT_SIZE)/4));
+                var maxY1 = textCoordinate.getMaxY(Math.round(Number(FONT_SIZE)/4));
                 console.log("maxY1:"+maxY1);
                 
                 var withinLimits=false;
