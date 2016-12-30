@@ -179,6 +179,7 @@ Functionalities to check before each check in.
     <div class="rightdiv" id="rightDivId">
         <fieldset class="fieldSet1">
             <label id="textCoordinateLabelId" for="textCoordinateId" >Add/Edit #:</label>
+            <div id="editMessageDivId"></div>
             <input class="form-control" type="hidden" id="textCoordinateId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
@@ -261,6 +262,7 @@ Functionalities to check before each check in.
                 $("#numberAId").focus();
                 $("#textCoordinateId").val("-1");
                 $('#textCoordinateLabelId').text("Adding "+ nextCoordinateNumber);
+                $("#editMessageDivId").text("");                
             }
         }
         /**
@@ -291,6 +293,7 @@ Functionalities to check before each check in.
             this.b = b;
             this.operator = operator;
             this.id=-1;
+            this.editReason="";
             this.setId=function(id){
                 this.id=id;
             }
@@ -550,14 +553,16 @@ Functionalities to check before each check in.
             addletter(canvas, textCoordinate.operator, operatorCoordinate.x, operatorCoordinate.y);
             console.log("added...");
         }
-		//Validate the input
+		//Validate the input and add text.
 		function validateInput() {
             var letterA = $('#numberAId').val();
+            //TODO: explain the regex.
              if (/\D/.test(letterA)) {
 				alert( letterA + " is not a number. Please enter a valid number for A." );
             	$('#numberAId').focus() ;
             	return false; 
             }
+            //TODO: explain regex.
             var letterB = $('#numberBId').val();                       
             if (/\D/.test(letterB)) {
 				alert( letterB + " is not a number. Please enter a valid number for B." );
@@ -620,12 +625,11 @@ Functionalities to check before each check in.
                     addLetterToB(canvas,textCoordinate);
                     addLine1(canvas,textCoordinate);
                     addLine2(canvas,textCoordinate);
-                    var x1= Number(x) - Number(10);
-                    var y1=Number(y) - Number(10);
                     addToHistory(textCoordinate);
                     console.log("total"+textCoordinateHistory.length);                
                 }else {
                     console.log("New value is existing value, so Populating existing values");
+                    textCoordinateWithinLimits.editReason="Because Space for 1 digit, instead of "+ textCoordinate.getLineLength() + " digits.";
                     //INFO: populate x,y a,b,operator and TODO: id.
                     populateExistingCordinate(textCoordinateWithinLimits);
                 }
@@ -639,7 +643,7 @@ Functionalities to check before each check in.
             $('#operatorId').val(textCoordinateWithinLimits.operator);
             $('#textCoordinateId').val(textCoordinateWithinLimits.id);     
             $('#textCoordinateLabelId').text("Editing #"+textCoordinateWithinLimits.id);     
-
+            $('#editMessageDivId').text(textCoordinateWithinLimits.editReason);     
         }
         function showInputs() {
             $("#leftDivId").show();
