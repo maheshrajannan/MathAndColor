@@ -242,7 +242,8 @@ Functionalities to check before each check in.
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mousePos = getMousePos(canvas, event);
-            var textCoordinate = new TextCoordinate(mousePos.x,mousePos.y," "," "," ");
+            var fontSize=$("#fontSizeId").val();
+            var textCoordinate = new TextCoordinate(mousePos.x,mousePos.y," "," "," ",fontSize);
             textCoordinate.adjust(canvas);
             var textCoordinateWithinLimits = textCoordinate.isAnyWithinLimits(textCoordinateHistory);
             var nextCoordinateNumber;
@@ -286,7 +287,7 @@ Functionalities to check before each check in.
         //do not return the instance.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
-        function TextCoordinate (x, y, a,b,operator) {
+        function TextCoordinate(x, y, a,b,operator,fontSize) {
             this.x = x;
             this.y = y;
             this.a = a;
@@ -294,20 +295,21 @@ Functionalities to check before each check in.
             this.operator = operator;
             this.id=-1;
             this.editReason="";
+            this.fontSize=fontSize;
             this.setId=function(id){
                 this.id=id;
             }
             this.adjust = function (canvas) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
-                var delta =  Number(Number(FONT_SIZE)*(Math.max(a.length,b.length)));
+                var delta =  Number(Number(fontSize)*(Math.max(a.length,b.length)));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
                 console.log("canvasBounds.x:"+canvasBounds.x);
                 console.log("canvasBounds.left:"+canvasBounds.left);
                 console.log("canvasBounds.right:"+canvasBounds.right);
                 console.log("Number(x):"+Number(x));
-                console.log("delta: "+FONT_SIZE+"*(Math.max(a.length,b.length)):"
+                console.log("delta: "+fontSize+"*(Math.max(a.length,b.length)):"
                     +delta);
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
@@ -321,9 +323,9 @@ Functionalities to check before each check in.
                     console.log("to :"+this.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(x)+canvasBounds.left-Number(FONT_SIZE))  < canvasBounds.left) {
+                if( (Number(x)+canvasBounds.left-Number(fontSize))  < canvasBounds.left) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.x = Number(FONT_SIZE);
+                    this.x = Number(fontSize);
                     console.log("to :"+this.x);
                 }
                 //INFO:Basically adjusting for
@@ -331,28 +333,28 @@ Functionalities to check before each check in.
                 //+44
                 //=76
                 //3 font sizes,3*40=120
-                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom");
-                console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) + " > " + canvasBounds.bottom);
-                if( ( Number(y) + Number(canvasBounds.top) + (3*Number(FONT_SIZE)) ) > canvasBounds.bottom) {
+                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom");
+                console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) + " > " + canvasBounds.bottom);
+                if( ( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(FONT_SIZE));
+                    this.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(fontSize));
                     console.log("to :"+this.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
-                console.log("( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top");
-                console.log( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) + " < " + canvasBounds.top);
-                if( ( Number(y) + Number(canvasBounds.top) - Number(FONT_SIZE) ) < canvasBounds.top) {
+                console.log("( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top");
+                console.log( ( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) + " < " + canvasBounds.top);
+                if( ( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top) {
                     console.log("readjusted y for top from y :"+y);
-                    this.y = canvasBounds.top - Number(canvasBounds.top) + Number(FONT_SIZE);
+                    this.y = canvasBounds.top - Number(canvasBounds.top) + Number(fontSize);
                     console.log("to :"+this.y);
                 }
             }
 
             this.getBCoordinate = function(){
-                console.log("Number(FONT_SIZE)"+Number(FONT_SIZE));
+                console.log("Number(fontSize)"+Number(fontSize));
                 return {
                     x: this.x,
-                    y: (Number(this.y) + Number(FONT_SIZE))
+                    y: (Number(this.y) + Number(fontSize))
                 };
             }
             this.getLineLength = function() {
@@ -372,22 +374,22 @@ Functionalities to check before each check in.
                 return line;   
             }
             this.getLine1Coordinate = function(){
-                console.log("Number(FONT_SIZE)"+Number(FONT_SIZE));
+                console.log("Number(fontSize)"+Number(fontSize));
                 return {
                     x: this.x,
-                    y: (Number(this.y) + (Number(1.25)*Number(FONT_SIZE)))
+                    y: (Number(this.y) + (Number(1.25)*Number(fontSize)))
                 };
             }
             this.getLine2Coordinate = function(){
-                console.log("Number(FONT_SIZE)"+Number(FONT_SIZE));
+                console.log("Number(fontSize)"+Number(fontSize));
                 return {
                     x: this.x,
-                    y: (Number(this.y) + (Number(2.5)*Number(FONT_SIZE)))
+                    y: (Number(this.y) + (Number(2.5)*Number(fontSize)))
                 };
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.x)-Math.round(Number(FONT_SIZE)/2);
-                var y1 = Number(this.y)+Math.round(Number(FONT_SIZE)/2);
+                var x1 = Number(this.x)-Math.round(Number(fontSize)/2);
+                var y1 = Number(this.y)+Math.round(Number(fontSize)/2);
                 return {
                     x:x1,
                     y:y1
@@ -404,14 +406,14 @@ Functionalities to check before each check in.
                 return Math.round(Number(this.x) - Number(padding));
             }
             this.getMaxX=function(padding){
-                var lineLength = Number(FONT_SIZE)*Number(this.getLineLength());
+                var lineLength = Number(fontSize)*Number(this.getLineLength());
                 return Math.round(Number(this.x) + Number(padding) + Number(lineLength));                
             }
             this.getMinY=function(padding){
                 return Math.round(Number(this.y) - Number(padding));
             }
             this.getMaxY=function(padding){
-                var verticalHeight = Number(FONT_SIZE)*Number(3.5);
+                var verticalHeight = Number(fontSize)*Number(3.5);
                 return Math.round(Number(this.y) + Number(padding) + Number(verticalHeight));                
             }
             this.isAnyWithinLimits = function(textCoordinateHistory) {
@@ -435,20 +437,20 @@ Functionalities to check before each check in.
             this.isWithinLimits = function(textCoordinate) {
                 console.log("checking :"+this.printValue() +
                     "against textCoordinate:"+textCoordinate.printValue());
-                var minX = this.getMinX(Math.round(Number(FONT_SIZE)/4));
-                var minX1 = textCoordinate.getMinX(Math.round(Number(FONT_SIZE)/4));
+                var minX = this.getMinX(Math.round(Number(fontSize)/4));
+                var minX1 = textCoordinate.getMinX(Math.round(Number(fontSize)/4));
                 console.log("minX1:"+minX1);
 
-                var minY = this.getMinY(Math.round(Number(FONT_SIZE)/4));
-                var minY1 = textCoordinate.getMinY(Math.round(Number(FONT_SIZE)/4));
+                var minY = this.getMinY(Math.round(Number(fontSize)/4));
+                var minY1 = textCoordinate.getMinY(Math.round(Number(fontSize)/4));
                 console.log("minY1:"+minY1);
                 
-                var maxX = this.getMaxX(Math.round(Number(FONT_SIZE)/4));
-                var maxX1 = textCoordinate.getMaxX(Math.round(Number(FONT_SIZE)/4));
+                var maxX = this.getMaxX(Math.round(Number(fontSize)/4));
+                var maxX1 = textCoordinate.getMaxX(Math.round(Number(fontSize)/4));
                 console.log("maxX1:"+maxX1);
                 
-                var maxY = this.getMaxY(Math.round(Number(FONT_SIZE)/4));
-                var maxY1 = textCoordinate.getMaxY(Math.round(Number(FONT_SIZE)/4));
+                var maxY = this.getMaxY(Math.round(Number(fontSize)/4));
+                var maxY1 = textCoordinate.getMaxY(Math.round(Number(fontSize)/4));
                 console.log("maxY1:"+maxY1);
                 
                 var withinLimits=false;
@@ -499,8 +501,9 @@ Functionalities to check before each check in.
         //canvas.addEventListener("keyup", keyUpHandler, true);
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
 
-        function addletter(canvas, letter, x, y) {
+        function addletter(canvas, letter, x, y,fontSize) {
             var context = canvas.getContext("2d");
+            context.font = fontSize+"pt Calibri";
             //keyHistory += letter;
             //INFO: clears a lot of area so commented.
             //context.clearRect(x, y, x+20, y+50);
@@ -511,7 +514,7 @@ Functionalities to check before each check in.
             console.log("Adding letter to A");
             console.log("canvassing...");
             console.log("adding...(x,y)=("+textCoordinate.x+","+textCoordinate.y+")");
-            addletter(canvas, textCoordinate.a, textCoordinate.x, textCoordinate.y);
+            addletter(canvas, textCoordinate.a, textCoordinate.x, textCoordinate.y,textCoordinate.fontSize);
             console.log("added...");
         }
         function addLetterToB(canvas,textCoordinate) {
@@ -520,7 +523,7 @@ Functionalities to check before each check in.
             var bCoordinate=textCoordinate.getBCoordinate();
             console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
             //INFO: write in next line.
-            addletter(canvas, textCoordinate.b, bCoordinate.x, bCoordinate.y);
+            addletter(canvas, textCoordinate.b, bCoordinate.x, bCoordinate.y,textCoordinate.fontSize);
             console.log("added...");            
         }
         function addLine1(canvas,textCoordinate) {
@@ -530,7 +533,7 @@ Functionalities to check before each check in.
             console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
             var line=textCoordinate.getLine();
             //INFO: write in next line.
-            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y);
+            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,textCoordinate.fontSize);
             console.log("added...");            
         }       
         function addLine2(canvas,textCoordinate) {
@@ -540,7 +543,7 @@ Functionalities to check before each check in.
             console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
             //INFO: write in next line.
             var line=textCoordinate.getLine();
-            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y);
+            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,textCoordinate.fontSize);
             console.log("added...");            
         }           
         function addLetterToOperator(canvas,textCoordinate){
@@ -550,7 +553,7 @@ Functionalities to check before each check in.
             var operatorCoordinate = textCoordinate.getOperatorCoordinate();
             console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
             //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, textCoordinate.operator, operatorCoordinate.x, operatorCoordinate.y);
+            addletter(canvas, textCoordinate.operator, operatorCoordinate.x, operatorCoordinate.y,textCoordinate.fontSize);
             console.log("added...");
         }
 		//Validate the input and add text.
@@ -577,13 +580,14 @@ Functionalities to check before each check in.
             var letterA = $('#numberAId').val();
             var letterB = $('#numberBId').val();
             var operator = $('#operatorId').val();
+            var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
             var textCoordinateId=$('#textCoordinateId').val();
             var textCoordinateWithinLimits;
             //INFO: Editing existing coordinate.
             var currentTextCoordinate;
 
-            var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator);
+            var textCoordinate = new TextCoordinate(x,y,letterA,letterB,operator,fontSize);
             //INFO: adjust it, just in case x and y are edited.
             textCoordinate.adjust(canvas);
 
