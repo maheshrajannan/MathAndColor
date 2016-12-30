@@ -139,15 +139,17 @@ Functionalities to check before each check in.
             <br/>
             <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
             <br/>
-            <input id="image_from_list" name="image_from_list" type="text" maxlength="10" size="10" value="red"  />
+            <input id="image_from_list" name="image_from_list" type="text" maxlength="10" size="10" value="none"  />
             <br/>
-            <img src="images/butterfly.jpg" col="red" border="0" width="50 px" height="50 px" 
+            <img src="images/butterfly.jpg" col="images/butterfly.jpg" border="0" width="50 px" height="50 px" 
             />
             <br/>
-            <img src="images/puppy.gif" col="blue" border="0" width="50 px" height="50 px"
+            <img src="images/puppy.gif" col="images/puppy.gif" border="0" width="50 px" height="50 px"
             />
             <br/>
-            <img src="images/teddyBear.jpg" col="yellow" border="0" width="50 px" height="50 px"
+            <img src="images/teddyBear.jpg" col="images/teddyBear.jpg" border="0" width="50 px" height="50 px"
+            />
+            <img src="images/dora.gif" col="images/dora.gif" border="0" width="50 px" height="50 px"
             />
             <br/>
         </fieldset>
@@ -168,7 +170,7 @@ Functionalities to check before each check in.
         http://jsfiddle.net/m1erickson/fg5sV/
         INFO: both canvas and image overlap.Only the text goes on to the canvas.
         -->
-        <img id="bkImage" src="dora-the-explorer-coloring-pages-pdf-coloring-pages-printable-coloring-pages-pdf.gif"
+        <img id="bkImage" src="images/dora.gif"
          width=1000 height=1000></canvas>
         <canvas id="myCanvas" width=1000 height=1000 tabindex="1" 
     onclick="mouseMoveHandler(this,event)">
@@ -211,6 +213,7 @@ Functionalities to check before each check in.
             $("div#leftDivId img").attr("border","0");
             $(this).attr("border","4");
             $("input#image_from_list").val($(this).attr("col"));
+            $('#bkImage').attr('src',$(this).attr("col"));
         }); 
 
         function toggleAdvanced(){
