@@ -198,7 +198,7 @@ Functionalities to check before each check in.
     <script type="text/javascript">
 
         var FONT_SIZE = $('#fontSizeId').val();
-        var mousePos;
+        var mousePosition;
         var contentCoordinateHistory=[];
 
 
@@ -243,9 +243,9 @@ Functionalities to check before each check in.
 
         function mouseMoveHandler(canvas, event) {
             showInputs();
-            mousePos = getMousePos(canvas, event);
+            mousePosition = getMousePosition(canvas, event);
             var fontSize=$("#fontSizeId").val();
-            var contentCoordinate = new ContentCoordinateGroup(mousePos.x,mousePos.y," "," "," ",fontSize);
+            var contentCoordinate = new ContentCoordinateGroup(mousePosition.x,mousePosition.y," "," "," ",fontSize);
             contentCoordinate.adjust(canvas);
             var contentCoordinateWithinLimits = contentCoordinate.isAnyWithinLimits(contentCoordinateHistory);
             var nextCoordinateNumber;
@@ -271,14 +271,12 @@ Functionalities to check before each check in.
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
         **/
-        function getMousePos(canvas, evt) {
+        function getMousePosition(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
             var x = Math.round(evt.clientX - rect.left);
             var y = Math.round(evt.clientY - rect.top);
-            return {
-                x: x,
-                y: y
-            };
+            var position = new Position(x,y);
+            return position;
         }
 
         function Position(x,y) {
