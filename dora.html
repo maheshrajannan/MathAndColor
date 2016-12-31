@@ -179,9 +179,9 @@ Functionalities to check before each check in.
 
     <div class="rightdiv" id="rightDivId">
         <fieldset class="fieldSet1">
-            <label id="contentCoordinateLabelId" for="contentCoordinateId" >Add/Edit #:</label>
+            <label id="contentCoordinateGroupLabelId" for="contentCoordinateGroupId" >Add/Edit #:</label>
             <div id="editMessageDivId"></div>
-            <input class="form-control" type="hidden" id="contentCoordinateId" size="4" placeholder="-1 or 1,2"/>
+            <input class="form-control" type="hidden" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
             <input class="form-control" type="name" id="xId" size="4" placeholder="X"/>
@@ -199,7 +199,7 @@ Functionalities to check before each check in.
 
         var FONT_SIZE = $('#fontSizeId').val();
         var mousePosition;
-        var contentCoordinateHistory=[];
+        var contentCoordinateGroupHistory=[];
 
 
         window.onload = function() {
@@ -219,9 +219,9 @@ Functionalities to check before each check in.
             $(".fieldSet1").toggle(); 
         }
 
-        function addToHistory(contentCoordinate){
-            contentCoordinate.setId(Number(contentCoordinateHistory.length+1));
-            contentCoordinateHistory.push(contentCoordinate);
+        function addToHistory(contentCoordinateGroup){
+            contentCoordinateGroup.setId(Number(contentCoordinateGroupHistory.length+1));
+            contentCoordinateGroupHistory.push(contentCoordinateGroup);
         }
 
         function erase(canvas) {
@@ -245,26 +245,26 @@ Functionalities to check before each check in.
             showInputs();
             mousePosition = getMousePosition(canvas, event);
             var fontSize=$("#fontSizeId").val();
-            var contentCoordinate = new ContentCoordinateGroup(mousePosition.x,mousePosition.y," "," "," ",fontSize);
-            contentCoordinate.adjust(canvas);
-            var contentCoordinateWithinLimits = contentCoordinate.isAnyWithinLimits(contentCoordinateHistory);
+            var contentCoordinateGroup = new ContentCoordinateGroup(mousePosition.x,mousePosition.y," "," "," ",fontSize);
+            contentCoordinateGroup.adjust(canvas);
+            var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
-            if(contentCoordinateWithinLimits){
+            if(contentCoordinateGroupWithinLimits){
                 console.log("near/on existing position is being clicked");
-                populateExistingCordinate(contentCoordinateWithinLimits);
+                populateExistingCordinate(contentCoordinateGroupWithinLimits);
             }else{
-                if( (contentCoordinateHistory) && contentCoordinateHistory.length > 0) {
-                    nextCoordinateNumber = Number(contentCoordinateHistory.length) + 1;
+                if( (contentCoordinateGroupHistory) && contentCoordinateGroupHistory.length > 0) {
+                    nextCoordinateNumber = Number(contentCoordinateGroupHistory.length) + 1;
                 }else{
                     nextCoordinateNumber = 1;
                 }
                 console.log("new position is being clicked");
-                $("#xId").val(contentCoordinate.position.x);
-                $("#yId").val(contentCoordinate.position.y);
+                $("#xId").val(contentCoordinateGroup.position.x);
+                $("#yId").val(contentCoordinateGroup.position.y);
                 //TODO: check for overlap.
                 $("#numberAId").focus();
-                $("#contentCoordinateId").val("-1");
-                $('#contentCoordinateLabelId').text("Adding "+ nextCoordinateNumber);
+                $("#contentCoordinateGroupId").val("-1");
+                $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
                 $("#editMessageDivId").text("");                
             }
         }
@@ -429,41 +429,41 @@ Functionalities to check before each check in.
                 var verticalHeight = Number(fontSize)*Number(3.5);
                 return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));                
             }
-            this.isAnyWithinLimits = function(contentCoordinateHistory) {
-                var contentCoordinateWithinLimits = null;
-                if( (contentCoordinateHistory) && contentCoordinateHistory.length > 0) {
-                    for (var j = 0; j < contentCoordinateHistory.length; j++){
+            this.isAnyWithinLimits = function(contentCoordinateGroupHistory) {
+                var contentCoordinateGroupWithinLimits = null;
+                if( (contentCoordinateGroupHistory) && contentCoordinateGroupHistory.length > 0) {
+                    for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
                         console.log("Checking "
-                         + contentCoordinateHistory[j].printValue() +" with "+ this.printValue());
+                         + contentCoordinateGroupHistory[j].printValue() +" with "+ this.printValue());
                         //TODO: do whether the clicked coordinates are with in limits, on click, instead of
                         //doing it on click of "Done" button
-                        withinLimits = contentCoordinateHistory[j].isWithinLimits(this);
+                        withinLimits = contentCoordinateGroupHistory[j].isWithinLimits(this);
                         if(withinLimits) {
                             console.log("With in limits:" + withinLimits);
-                            contentCoordinateWithinLimits = contentCoordinateHistory[j];
-                            j = contentCoordinateHistory.length;
+                            contentCoordinateGroupWithinLimits = contentCoordinateGroupHistory[j];
+                            j = contentCoordinateGroupHistory.length;
                         }
                     }
                 }
-                return contentCoordinateWithinLimits;
+                return contentCoordinateGroupWithinLimits;
             }            
-            this.isWithinLimits = function(contentCoordinate) {
+            this.isWithinLimits = function(contentCoordinateGroup) {
                 console.log("checking :"+this.printValue() +
-                    "against contentCoordinate:"+contentCoordinate.printValue());
+                    "against contentCoordinateGroup:"+contentCoordinateGroup.printValue());
                 var minX = this.getMinX(Math.round(Number(fontSize)/4));
-                var minX1 = contentCoordinate.getMinX(Math.round(Number(fontSize)/4));
+                var minX1 = contentCoordinateGroup.getMinX(Math.round(Number(fontSize)/4));
                 console.log("minX1:"+minX1);
 
                 var minY = this.getMinY(Math.round(Number(fontSize)/4));
-                var minY1 = contentCoordinate.getMinY(Math.round(Number(fontSize)/4));
+                var minY1 = contentCoordinateGroup.getMinY(Math.round(Number(fontSize)/4));
                 console.log("minY1:"+minY1);
                 
                 var maxX = this.getMaxX(Math.round(Number(fontSize)/4));
-                var maxX1 = contentCoordinate.getMaxX(Math.round(Number(fontSize)/4));
+                var maxX1 = contentCoordinateGroup.getMaxX(Math.round(Number(fontSize)/4));
                 console.log("maxX1:"+maxX1);
                 
                 var maxY = this.getMaxY(Math.round(Number(fontSize)/4));
-                var maxY1 = contentCoordinate.getMaxY(Math.round(Number(fontSize)/4));
+                var maxY1 = contentCoordinateGroup.getMaxY(Math.round(Number(fontSize)/4));
                 console.log("maxY1:"+maxY1);
                 
                 var withinLimits=false;
@@ -498,7 +498,7 @@ Functionalities to check before each check in.
                 }
                 if(withinLimits) {
                     console.log("(x,y) Falls with in x coordinates (x1,y1) and (x2,y2)");
-                    console.log("("+contentCoordinate.position.x+","+contentCoordinate.position.y+") Falls with in ("+minX+","+
+                    console.log("("+contentCoordinateGroup.position.x+","+contentCoordinateGroup.position.y+") Falls with in ("+minX+","+
                         minY+") and ("+maxX+","+maxY+")");
                 }
                 return withinLimits;
@@ -523,50 +523,50 @@ Functionalities to check before each check in.
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA(canvas,contentCoordinate) {
+        function addLetterToA(canvas,contentCoordinateGroup) {
             console.log("Adding letter to A");
             console.log("canvassing...");
-            console.log("adding...(x,y)=("+contentCoordinate.position.x+","+contentCoordinate.position.y+")");
-            addletter(canvas, contentCoordinate.a, contentCoordinate.position.x, contentCoordinate.position.y,contentCoordinate.fontSize);
+            console.log("adding...(x,y)=("+contentCoordinateGroup.position.x+","+contentCoordinateGroup.position.y+")");
+            addletter(canvas, contentCoordinateGroup.a, contentCoordinateGroup.position.x, contentCoordinateGroup.position.y,contentCoordinateGroup.fontSize);
             console.log("added...");
         }
-        function addLetterToB(canvas,contentCoordinate) {
+        function addLetterToB(canvas,contentCoordinateGroup) {
             console.log("Adding letter to B");
             console.log("canvassing...");
-            var bCoordinate=contentCoordinate.getBCoordinate();
+            var bCoordinate=contentCoordinateGroup.getBCoordinate();
             console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
             //INFO: write in next line.
-            addletter(canvas, contentCoordinate.b, bCoordinate.x, bCoordinate.y,contentCoordinate.fontSize);
+            addletter(canvas, contentCoordinateGroup.b, bCoordinate.x, bCoordinate.y,contentCoordinateGroup.fontSize);
             console.log("added...");            
         }
-        function addLine1(canvas,contentCoordinate) {
+        function addLine1(canvas,contentCoordinateGroup) {
             console.log("Adding line1");
             console.log("canvassing...");
-            var line1Coordinate=contentCoordinate.getLine1Coordinate();
+            var line1Coordinate=contentCoordinateGroup.getLine1Coordinate();
             console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
-            var line=contentCoordinate.getLine();
+            var line=contentCoordinateGroup.getLine();
             //INFO: write in next line.
-            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,contentCoordinate.fontSize);
+            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,contentCoordinateGroup.fontSize);
             console.log("added...");            
         }       
-        function addLine2(canvas,contentCoordinate) {
+        function addLine2(canvas,contentCoordinateGroup) {
             console.log("Adding line2");
             console.log("canvassing...");
-            var line2Coordinate=contentCoordinate.getLine2Coordinate();
+            var line2Coordinate=contentCoordinateGroup.getLine2Coordinate();
             console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
             //INFO: write in next line.
-            var line=contentCoordinate.getLine();
-            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,contentCoordinate.fontSize);
+            var line=contentCoordinateGroup.getLine();
+            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,contentCoordinateGroup.fontSize);
             console.log("added...");            
         }           
-        function addLetterToOperator(canvas,contentCoordinate){
+        function addLetterToOperator(canvas,contentCoordinateGroup){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
             console.log("canvassing...");
-            var operatorCoordinate = contentCoordinate.getOperatorCoordinate();
+            var operatorCoordinate = contentCoordinateGroup.getOperatorCoordinate();
             console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
             //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, contentCoordinate.operator, operatorCoordinate.x, operatorCoordinate.y,contentCoordinate.fontSize);
+            addletter(canvas, contentCoordinateGroup.operator, operatorCoordinate.x, operatorCoordinate.y,contentCoordinateGroup.fontSize);
             console.log("added...");
         }
 		//Validate the input and add text.
@@ -595,30 +595,30 @@ Functionalities to check before each check in.
             var operator = $('#operatorId').val();
             var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
-            var contentCoordinateId=$('#contentCoordinateId').val();
-            var contentCoordinateWithinLimits;
+            var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();
+            var contentCoordinateGroupWithinLimits;
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
-            var contentCoordinate = new ContentCoordinateGroup(x,y,letterA,letterB,operator,fontSize);
+            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,letterA,letterB,operator,fontSize);
             //INFO: adjust it, just in case x and y are edited.
-            contentCoordinate.adjust(canvas);
+            contentCoordinateGroup.adjust(canvas);
 
-            if(contentCoordinateId>0) {
-                console.log("Editing contentCoordinateId"+contentCoordinateId);
-                x=contentCoordinate.position.x;
-                y=contentCoordinate.position.y;
+            if(contentCoordinateGroupId>0) {
+                console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
+                x=contentCoordinateGroup.position.x;
+                y=contentCoordinateGroup.position.y;
                 $('#xId').val(x);
                 $('#yId').val(y);            
-                contentCoordinate.setId(contentCoordinateId);
-                contentCoordinateHistory[contentCoordinateId-1]=contentCoordinate;
+                contentCoordinateGroup.setId(contentCoordinateGroupId);
+                contentCoordinateGroupHistory[contentCoordinateGroupId-1]=contentCoordinateGroup;
                 //TODO: redraw.
                 console.log("Redrawing");
                 erase(canvas);
                 draw();
-                console.log("total:"+contentCoordinateHistory.length);
-                for (var j = 0; j < contentCoordinateHistory.length; j++){
-                    currentContentCoordinateGroup = contentCoordinateHistory[j];
+                console.log("total:"+contentCoordinateGroupHistory.length);
+                for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
+                    currentContentCoordinateGroup = contentCoordinateGroupHistory[j];
                     console.log("currentContentCoordinateGroup:"+currentContentCoordinateGroup.printValue());
                     addLetterToA(canvas,currentContentCoordinateGroup);
                     addLetterToOperator(canvas,currentContentCoordinateGroup);
@@ -630,37 +630,37 @@ Functionalities to check before each check in.
             }else{
                 //INFO: adding a new coordinate.
                 //INFO: checking if new coordinate is with in limits of any of old coordinates.
-                contentCoordinateWithinLimits = contentCoordinate.isAnyWithinLimits(contentCoordinateHistory);
-                if(contentCoordinateWithinLimits == null) {
+                contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
+                if(contentCoordinateGroupWithinLimits == null) {
                     console.log("Adding new values");
-                    x=contentCoordinate.position.x;
-                    y=contentCoordinate.position.y;
+                    x=contentCoordinateGroup.position.x;
+                    y=contentCoordinateGroup.position.y;
                     $('#xId').val(x);
                     $('#yId').val(y);            
-                    addLetterToA(canvas,contentCoordinate);
-                    addLetterToOperator(canvas,contentCoordinate);
-                    addLetterToB(canvas,contentCoordinate);
-                    addLine1(canvas,contentCoordinate);
-                    addLine2(canvas,contentCoordinate);
-                    addToHistory(contentCoordinate);
-                    console.log("total"+contentCoordinateHistory.length);                
+                    addLetterToA(canvas,contentCoordinateGroup);
+                    addLetterToOperator(canvas,contentCoordinateGroup);
+                    addLetterToB(canvas,contentCoordinateGroup);
+                    addLine1(canvas,contentCoordinateGroup);
+                    addLine2(canvas,contentCoordinateGroup);
+                    addToHistory(contentCoordinateGroup);
+                    console.log("total"+contentCoordinateGroupHistory.length);                
                 }else {
                     console.log("New value is existing value, so Populating existing values");
-                    contentCoordinateWithinLimits.editReason="Because Space for 1 digit, instead of "+ contentCoordinate.getLineLength() + " digits.";
+                    contentCoordinateGroupWithinLimits.editReason="Because Space for 1 digit, instead of "+ contentCoordinateGroup.getLineLength() + " digits.";
                     //INFO: populate x,y a,b,operator and TODO: id.
-                    populateExistingCordinate(contentCoordinateWithinLimits);
+                    populateExistingCordinate(contentCoordinateGroupWithinLimits);
                 }
             }
         }
-        function populateExistingCordinate(contentCoordinateWithinLimits) {
-            $('#xId').val(contentCoordinateWithinLimits.position.x);
-            $('#yId').val(contentCoordinateWithinLimits.position.y);            
-            $('#numberAId').val(contentCoordinateWithinLimits.a);
-            $('#numberBId').val(contentCoordinateWithinLimits.b);
-            $('#operatorId').val(contentCoordinateWithinLimits.operator);
-            $('#contentCoordinateId').val(contentCoordinateWithinLimits.id);     
-            $('#contentCoordinateLabelId').text("Editing #"+contentCoordinateWithinLimits.id);     
-            $('#editMessageDivId').text(contentCoordinateWithinLimits.editReason);     
+        function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
+            $('#xId').val(contentCoordinateGroupWithinLimits.position.x);
+            $('#yId').val(contentCoordinateGroupWithinLimits.position.y);            
+            $('#numberAId').val(contentCoordinateGroupWithinLimits.a);
+            $('#numberBId').val(contentCoordinateGroupWithinLimits.b);
+            $('#operatorId').val(contentCoordinateGroupWithinLimits.operator);
+            $('#contentCoordinateGroupId').val(contentCoordinateGroupWithinLimits.id);     
+            $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
+            $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
         }
         function showInputs() {
             $("#leftDivId").show();
