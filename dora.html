@@ -245,7 +245,7 @@ Functionalities to check before each check in.
             showInputs();
             mousePos = getMousePos(canvas, event);
             var fontSize=$("#fontSizeId").val();
-            var contentCoordinate = new TextCoordinate(mousePos.x,mousePos.y," "," "," ",fontSize);
+            var contentCoordinate = new ContentCoordinate(mousePos.x,mousePos.y," "," "," ",fontSize);
             contentCoordinate.adjust(canvas);
             var contentCoordinateWithinLimits = contentCoordinate.isAnyWithinLimits(contentCoordinateHistory);
             var nextCoordinateNumber;
@@ -281,7 +281,7 @@ Functionalities to check before each check in.
             };
         }
 
-        //INFO:Class TextCoordinate, group text starting at a particular coordinate.
+        //INFO:Class ContentCoordinate, group text starting at a particular coordinate.
         //Say, starting at x,y display 33+40=__. 
         //Functions:
         //1. Any time it exceeds coordinates of canvas re-adjust.
@@ -289,7 +289,7 @@ Functionalities to check before each check in.
         //do not return the instance.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
-        function TextCoordinate(x, y, a,b,operator,fontSize) {
+        function ContentCoordinate(x, y, a,b,operator,fontSize) {
             this.x = x;
             this.y = y;
             this.a = a;
@@ -587,9 +587,9 @@ Functionalities to check before each check in.
             var contentCoordinateId=$('#contentCoordinateId').val();
             var contentCoordinateWithinLimits;
             //INFO: Editing existing coordinate.
-            var currentTextCoordinate;
+            var currentContentCoordinate;
 
-            var contentCoordinate = new TextCoordinate(x,y,letterA,letterB,operator,fontSize);
+            var contentCoordinate = new ContentCoordinate(x,y,letterA,letterB,operator,fontSize);
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinate.adjust(canvas);
 
@@ -607,13 +607,13 @@ Functionalities to check before each check in.
                 draw();
                 console.log("total:"+contentCoordinateHistory.length);
                 for (var j = 0; j < contentCoordinateHistory.length; j++){
-                    currentTextCoordinate = contentCoordinateHistory[j];
-                    console.log("currentTextCoordinate:"+currentTextCoordinate.printValue());
-                    addLetterToA(canvas,currentTextCoordinate);
-                    addLetterToOperator(canvas,currentTextCoordinate);
-                    addLetterToB(canvas,currentTextCoordinate);
-                    addLine1(canvas,currentTextCoordinate);
-                    addLine2(canvas,currentTextCoordinate);
+                    currentContentCoordinate = contentCoordinateHistory[j];
+                    console.log("currentContentCoordinate:"+currentContentCoordinate.printValue());
+                    addLetterToA(canvas,currentContentCoordinate);
+                    addLetterToOperator(canvas,currentContentCoordinate);
+                    addLetterToB(canvas,currentContentCoordinate);
+                    addLine1(canvas,currentContentCoordinate);
+                    addLine2(canvas,currentContentCoordinate);
                 }
                 //INFO: End of editing existing coordinate.
             }else{
