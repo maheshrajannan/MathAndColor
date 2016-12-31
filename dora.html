@@ -259,8 +259,8 @@ Functionalities to check before each check in.
                     nextCoordinateNumber = 1;
                 }
                 console.log("new position is being clicked");
-                $("#xId").val(contentCoordinate.x);
-                $("#yId").val(contentCoordinate.y);
+                $("#xId").val(contentCoordinate.position.x);
+                $("#yId").val(contentCoordinate.position.y);
                 //TODO: check for overlap.
                 $("#numberAId").focus();
                 $("#contentCoordinateId").val("-1");
@@ -281,6 +281,20 @@ Functionalities to check before each check in.
             };
         }
 
+        function Position(x,y) {
+            this.x=x;
+            this.y=y;
+            this.printValue=function(){
+                return "(x="+this.x+",y="+this.y+")";
+            }
+            this.getNumberX= function() {
+                return Number(x);
+            }
+            this.getNumberY= function() {
+                return Number(y);
+            }
+        }
+
         //INFO:Class ContentCoordinateGroup, group text starting at a particular coordinate.
         //Say, starting at x,y display 33+40=__. 
         //Functions:
@@ -290,8 +304,7 @@ Functionalities to check before each check in.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
         function ContentCoordinateGroup(x, y, a,b,operator,fontSize) {
-            this.x = x;
-            this.y = y;
+            this.position=new Position(x,y);
             this.a = a;
             this.b = b;
             this.operator = operator;
@@ -310,25 +323,25 @@ Functionalities to check before each check in.
                 console.log("canvasBounds.x:"+canvasBounds.x);
                 console.log("canvasBounds.left:"+canvasBounds.left);
                 console.log("canvasBounds.right:"+canvasBounds.right);
-                console.log("Number(x):"+Number(x));
+                console.log("Number(x):"+Number(this.position.x));
                 console.log("delta: "+fontSize+"*(Math.max(a.length,b.length)):"
                     +delta);
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
                 console.log("canvasBounds.y:"+canvasBounds.y);
-                console.log("Number(y):"+Number(y));
+                console.log("Number(y):"+Number(this.position.y));
 
                 //INFO: align to right margin.
-                if( (Number(x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
-                    console.log("readjusted x for right bounds from x :"+x);
-                    this.x = Math.round(Number(canvasBounds.right) - Number(delta) - canvasBounds.left);
-                    console.log("to :"+this.x);
+                if( (Number(this.position.x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
+                    console.log("readjusted x for right bounds from x :"+this.position.x);
+                    this.position.x = Math.round(Number(canvasBounds.right) - Number(delta) - canvasBounds.left);
+                    console.log("to :"+this.position.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(x)+canvasBounds.left-Number(fontSize))  < canvasBounds.left) {
+                if( (Number(this.position.x)+canvasBounds.left-Number(fontSize))  < canvasBounds.left) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.x = Number(fontSize);
-                    console.log("to :"+this.x);
+                    this.position.x = Number(fontSize);
+                    console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
                 // 32
@@ -336,27 +349,27 @@ Functionalities to check before each check in.
                 //=76
                 //3 font sizes,3*40=120
                 console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom");
-                console.log(( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) + " > " + canvasBounds.bottom);
-                if( ( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom) {
+                console.log(( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) + " > " + canvasBounds.bottom);
+                if( ( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(fontSize));
-                    console.log("to :"+this.y);
+                    this.position.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(fontSize));
+                    console.log("to :"+this.position.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
                 console.log("( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top");
-                console.log( ( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) + " < " + canvasBounds.top);
-                if( ( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top) {
-                    console.log("readjusted y for top from y :"+y);
-                    this.y = canvasBounds.top - Number(canvasBounds.top) + Number(fontSize);
-                    console.log("to :"+this.y);
+                console.log( ( Number(this.position.y) + Number(canvasBounds.top) - Number(fontSize) ) + " < " + canvasBounds.top);
+                if( ( Number(this.position.y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top) {
+                    console.log("readjusted y for top from y :"+this.position.y);
+                    this.position.y = canvasBounds.top - Number(canvasBounds.top) + Number(fontSize);
+                    console.log("to :"+this.position.y);
                 }
             }
 
             this.getBCoordinate = function(){
                 console.log("Number(fontSize)"+Number(fontSize));
                 return {
-                    x: this.x,
-                    y: (Number(this.y) + Number(fontSize))
+                    x: this.position.x,
+                    y: (Number(this.position.y) + Number(fontSize))
                 };
             }
             this.getLineLength = function() {
@@ -378,45 +391,45 @@ Functionalities to check before each check in.
             this.getLine1Coordinate = function(){
                 console.log("Number(fontSize)"+Number(fontSize));
                 return {
-                    x: this.x,
-                    y: (Number(this.y) + (Number(1.25)*Number(fontSize)))
+                    x: this.position.x,
+                    y: (Number(this.position.y) + (Number(1.25)*Number(fontSize)))
                 };
             }
             this.getLine2Coordinate = function(){
                 console.log("Number(fontSize)"+Number(fontSize));
                 return {
-                    x: this.x,
-                    y: (Number(this.y) + (Number(2.5)*Number(fontSize)))
+                    x: this.position.x,
+                    y: (Number(this.position.y) + (Number(2.5)*Number(fontSize)))
                 };
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.x)-Math.round(Number(fontSize)/2);
-                var y1 = Number(this.y)+Math.round(Number(fontSize)/2);
+                var x1 = Number(this.position.x)-Math.round(Number(fontSize)/2);
+                var y1 = Number(this.position.y)+Math.round(Number(fontSize)/2);
                 return {
                     x:x1,
                     y:y1
                 }
             }
             this.getMinX=function(padding){
-                console.log("Math.round(Number(this.x) - Number(padding))");
+                console.log("Math.round(Number(this.position.x) - Number(padding))");
                 console.log("Math.round("+
-                    Number(this.x) +"-"+ Number(padding)  +
+                    Number(this.position.x) +"-"+ Number(padding)  +
                     ")");
                 console.log("Math.round("+
-                    ( Number(this.x) - Number(padding) ) +
+                    ( Number(this.position.x) - Number(padding) ) +
                     ")");
-                return Math.round(Number(this.x) - Number(padding));
+                return Math.round(Number(this.position.x) - Number(padding));
             }
             this.getMaxX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
-                return Math.round(Number(this.x) + Number(padding) + Number(lineLength));                
+                return Math.round(Number(this.position.x) + Number(padding) + Number(lineLength));                
             }
             this.getMinY=function(padding){
-                return Math.round(Number(this.y) - Number(padding));
+                return Math.round(Number(this.position.y) - Number(padding));
             }
             this.getMaxY=function(padding){
                 var verticalHeight = Number(fontSize)*Number(3.5);
-                return Math.round(Number(this.y) + Number(padding) + Number(verticalHeight));                
+                return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));                
             }
             this.isAnyWithinLimits = function(contentCoordinateHistory) {
                 var contentCoordinateWithinLimits = null;
@@ -487,7 +500,7 @@ Functionalities to check before each check in.
                 }
                 if(withinLimits) {
                     console.log("(x,y) Falls with in x coordinates (x1,y1) and (x2,y2)");
-                    console.log("("+contentCoordinate.x+","+contentCoordinate.y+") Falls with in ("+minX+","+
+                    console.log("("+contentCoordinate.position.x+","+contentCoordinate.position.y+") Falls with in ("+minX+","+
                         minY+") and ("+maxX+","+maxY+")");
                 }
                 return withinLimits;
@@ -515,8 +528,8 @@ Functionalities to check before each check in.
         function addLetterToA(canvas,contentCoordinate) {
             console.log("Adding letter to A");
             console.log("canvassing...");
-            console.log("adding...(x,y)=("+contentCoordinate.x+","+contentCoordinate.y+")");
-            addletter(canvas, contentCoordinate.a, contentCoordinate.x, contentCoordinate.y,contentCoordinate.fontSize);
+            console.log("adding...(x,y)=("+contentCoordinate.position.x+","+contentCoordinate.position.y+")");
+            addletter(canvas, contentCoordinate.a, contentCoordinate.position.x, contentCoordinate.position.y,contentCoordinate.fontSize);
             console.log("added...");
         }
         function addLetterToB(canvas,contentCoordinate) {
@@ -595,8 +608,8 @@ Functionalities to check before each check in.
 
             if(contentCoordinateId>0) {
                 console.log("Editing contentCoordinateId"+contentCoordinateId);
-                x=contentCoordinate.x;
-                y=contentCoordinate.y;
+                x=contentCoordinate.position.x;
+                y=contentCoordinate.position.y;
                 $('#xId').val(x);
                 $('#yId').val(y);            
                 contentCoordinate.setId(contentCoordinateId);
@@ -622,8 +635,8 @@ Functionalities to check before each check in.
                 contentCoordinateWithinLimits = contentCoordinate.isAnyWithinLimits(contentCoordinateHistory);
                 if(contentCoordinateWithinLimits == null) {
                     console.log("Adding new values");
-                    x=contentCoordinate.x;
-                    y=contentCoordinate.y;
+                    x=contentCoordinate.position.x;
+                    y=contentCoordinate.position.y;
                     $('#xId').val(x);
                     $('#yId').val(y);            
                     addLetterToA(canvas,contentCoordinate);
@@ -642,8 +655,8 @@ Functionalities to check before each check in.
             }
         }
         function populateExistingCordinate(contentCoordinateWithinLimits) {
-            $('#xId').val(contentCoordinateWithinLimits.x);
-            $('#yId').val(contentCoordinateWithinLimits.y);            
+            $('#xId').val(contentCoordinateWithinLimits.position.x);
+            $('#yId').val(contentCoordinateWithinLimits.position.y);            
             $('#numberAId').val(contentCoordinateWithinLimits.a);
             $('#numberBId').val(contentCoordinateWithinLimits.b);
             $('#operatorId').val(contentCoordinateWithinLimits.operator);
