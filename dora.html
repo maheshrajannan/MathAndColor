@@ -221,6 +221,7 @@
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
                 var delta =  Number(Number(fontSize)*(Math.max(a.length,b.length)));
+                var max = Number(Math.max(a.length,b.length));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
                 console.log("canvasBounds.x:"+canvasBounds.x);
@@ -236,7 +237,7 @@
                 //INFO: align to right margin.
                 if( (Number(this.position.x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+this.position.x);
-                    this.position.x = Math.round(Number(canvasBounds.right) - Number(delta) - canvasBounds.left);
+                    this.position.x = Math.round(Number(canvasBounds.right) - Number(delta/(max/1.5)) - canvasBounds.left);
                     console.log("to :"+this.position.x);
                 }
                 //INFO: align for the one -/+/* character
