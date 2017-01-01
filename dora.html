@@ -198,6 +198,66 @@
             }
         }
 
+        function ContentRectangle(minX,minY,maxX,maxY) {
+            //top left coordinate.
+            this.min = new Position(minX,minY);
+            //top right coordinate.
+            this.max = new Position(maxX,maxY);
+            this.isRectangleWithInXLimits=function(newRect) {
+                var withinLimits= false;
+                //TODO: make this part of position.
+                //INFO: The whole graph is on the 4th coordant.
+                //the first condition is nothing but the rectangle being compared
+                //to this(current) is to the left.
+                //The second case is that the rectangle being compared is to the right.
+                if( 
+                    ( ( this.min.x <= newRect.max.x ) && ( this.max.x >= newRect.max.x ) ) ||
+                    ( ( this.min.x <= newRect.min.x ) && ( this.max.x >= newRect.min.x ) )
+                 ) {
+                    console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
+                    withinLimits=true;
+                }
+                return withinLimits;
+            }
+            this.isRectangleWithInXLimits=function(newRect) {
+                var withinLimits= false;
+                //TODO: make this part of position.
+                //INFO: The whole graph is on the 4th coordant.
+                //the first condition is nothing but the rectangle being compared
+                //to this(current) is to the left.
+                //The second case is that the rectangle being compared is to the right.
+                if( 
+                    ( ( this.min.x <= newRect.max.x ) && ( this.max.x >= newRect.max.x ) ) ||
+                    ( ( this.min.x <= newRect.min.x ) && ( this.max.x >= newRect.min.x ) )
+                 ) {
+                    console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
+                    withinLimits=true;
+                }
+                return withinLimits;
+            }
+            this.isRectangleWithInYLimits=function(newRect) {
+                var withinLimits= false;
+                if( 
+                    ( ( this.min.y <= newRect.max.y ) && ( this.max.y >= newRect.max.y ) ) ||
+                    ( ( this.min.y <= newRect.min.y ) && ( this.max.y >= newRect.min.y ) )
+                 ) {
+                    console.log(this.printValue()+" is with in y limits of "+newRect.printValue());
+                    withinLimits=true;
+                }
+                return withinLimits;
+            }            
+            this.isRectangleWithInLimits=function(newRect){
+                var withinLimits = this.isRectangleWithInXLimits(newRect);
+                if(withinLimits){
+                    withinLimits = this.isRectangleWithInYLimits(newRect);
+                }
+                return withinLimits;
+            }
+            this.printValue=function() {
+                return this.min.printValue()+","+this.max.printValue();
+            }
+        }
+
         //INFO:Class ContentCoordinateGroup, group text starting at a particular coordinate.
         //Say, starting at x,y display 33+40=__. 
         //Functions:
@@ -333,7 +393,17 @@
             }
             this.getMaxY=function(padding){
                 var verticalHeight = Number(fontSize)*Number(3.5);
-                return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));                
+                return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));
+            }
+            this.getContentRectangle=function(padding){
+                var contentRectangle=new ContentRectangle(
+                    this.getMinX(padding),
+                    this.getMinY(padding),
+                    this.getMaxX(padding),
+                    this.getMaxY(padding)
+                    );
+                console.log("contentRectangle is "+contentRectangle.printValue());
+                return contentRectangle;
             }
             this.isAnyWithinLimits = function(contentCoordinateGroupHistory) {
                 var contentCoordinateGroupWithinLimits = null;
@@ -357,6 +427,7 @@
                 console.log("checking :"+this.printValue() +
                     "against contentCoordinateGroup:"+contentCoordinateGroup.printValue());
                 var minX = this.getMinX(Math.round(Number(this.fontSize)/4));
+                //TODO: use the maximum of 2 fontsizes, to ensure there is space.
                 var minX1 = contentCoordinateGroup.getMinX(Math.round(Number(this.fontSize)/4));
                 console.log("minX1:"+minX1);
 
@@ -378,35 +449,10 @@
                     +") Falls with in x coordinates ("+minX
                     +") and ("+maxX
                     +")");
-                //TODO: make this part of position.
-                if( 
-                    ( ( minX <= maxX1 ) && ( maxX >= maxX1 ) ) ||
-                    ( ( minX <= minX1 ) && ( maxX >= minX1 ) )
-                 ) {
-                    console.log("minX1,maxX1 Falls with in x coordinates minX and maxX");
-                    withinLimits=true;
-                }
-                console.log("Does minY1,maxY1 Fall with in y coordinates minY and maxY ?");
-                console.log("("+minY1+","+maxY1
-                    +") Falls with in y coordinates ("+minY
-                    +") and ("+maxY
-                    +")");
-                if( 
-                    ( withinLimits ) && 
-                    (
-                        ( ( minY <= maxY1 ) && ( maxY >= maxY1 ) ) ||
-                        ( ( minY <= minY1 ) && ( maxY >= minY1 ) )
-                    )
-                 ) {
-                    console.log("minY1,maxY1 Fall with in y coordinates minY and maxY");
-                }else{
-                    withinLimits=false;                    
-                }
-                if(withinLimits) {
-                    console.log("(x,y) Falls with in x coordinates (x1,y1) and (x2,y2)");
-                    console.log("("+contentCoordinateGroup.position.x+","+contentCoordinateGroup.position.y+") Falls with in ("+minX+","+
-                        minY+") and ("+maxX+","+maxY+")");
-                }
+                var contentRectangle = this.getContentRectangle(Math.round(Number(this.fontSize)/4));
+                var newContentRectagle = contentCoordinateGroup.getContentRectangle(Math.round(Number(contentCoordinateGroup.fontSize)/4));
+                console.log("Comparing this"+contentRectangle.printValue() +"with"+newContentRectagle.printValue());
+                withinLimits=contentRectangle.isRectangleWithInLimits(newContentRectagle);
                 return withinLimits;
             }
             this.printValue= function() {
