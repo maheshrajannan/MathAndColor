@@ -321,13 +321,12 @@ Functionalities to check before each check in.
                 console.log("canvasBounds.x:"+canvasBounds.x);
                 console.log("canvasBounds.left:"+canvasBounds.left);
                 console.log("canvasBounds.right:"+canvasBounds.right);
-                console.log("Number(x):"+Number(this.position.x));
                 console.log("delta: "+fontSize+"*(Math.max(a.length,b.length)):"
                     +delta);
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
                 console.log("canvasBounds.y:"+canvasBounds.y);
-                console.log("Number(y):"+Number(this.position.y));
+                console.log("coordinate position:"+this.position.printValue());
 
                 //INFO: align to right margin.
                 if( (Number(this.position.x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
@@ -346,28 +345,28 @@ Functionalities to check before each check in.
                 //+44
                 //=76
                 //3 font sizes,3*40=120
-                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom");
-                console.log(( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) + " > " + canvasBounds.bottom);
-                if( ( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(fontSize)) ) > canvasBounds.bottom) {
+                console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) > canvasBounds.bottom");
+                console.log(( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) + " > " + canvasBounds.bottom);
+                if( ( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.position.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(fontSize));
+                    this.position.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(this.fontSize));
                     console.log("to :"+this.position.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
-                console.log("( Number(y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top");
-                console.log( ( Number(this.position.y) + Number(canvasBounds.top) - Number(fontSize) ) + " < " + canvasBounds.top);
-                if( ( Number(this.position.y) + Number(canvasBounds.top) - Number(fontSize) ) < canvasBounds.top) {
+                console.log("( Number(y) + Number(canvasBounds.top) - Number(this.fontSize) ) < canvasBounds.top");
+                console.log( ( Number(this.position.y) + Number(canvasBounds.top) - Number(this.fontSize) ) + " < " + canvasBounds.top);
+                if( ( Number(this.position.y) + Number(canvasBounds.top) - Number(this.fontSize) ) < canvasBounds.top) {
                     console.log("readjusted y for top from y :"+this.position.y);
-                    this.position.y = canvasBounds.top - Number(canvasBounds.top) + Number(fontSize);
+                    this.position.y = canvasBounds.top - Number(canvasBounds.top) + Number(this.fontSize);
                     console.log("to :"+this.position.y);
                 }
             }
 
             this.getBCoordinate = function(){
-                console.log("Number(fontSize)"+Number(fontSize));
+                console.log("Number(fontSize)"+Number(this.fontSize));
                 return {
                     x: this.position.x,
-                    y: (Number(this.position.y) + Number(fontSize))
+                    y: (Number(this.position.y) + Number(this.fontSize))
                 };
             }
             this.getLineLength = function() {
@@ -387,22 +386,22 @@ Functionalities to check before each check in.
                 return line;   
             }
             this.getLine1Coordinate = function(){
-                console.log("Number(fontSize)"+Number(fontSize));
+                console.log("Number(fontSize)"+Number(this.fontSize));
                 return {
                     x: this.position.x,
-                    y: (Number(this.position.y) + (Number(1.25)*Number(fontSize)))
+                    y: (Number(this.position.y) + (Number(1.25)*Number(this.fontSize)))
                 };
             }
             this.getLine2Coordinate = function(){
-                console.log("Number(fontSize)"+Number(fontSize));
+                console.log("Number(fontSize)"+Number(this.fontSize));
                 return {
                     x: this.position.x,
-                    y: (Number(this.position.y) + (Number(2.5)*Number(fontSize)))
+                    y: (Number(this.position.y) + (Number(2.5)*Number(this.fontSize)))
                 };
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.position.x)-Math.round(Number(fontSize)/2);
-                var y1 = Number(this.position.y)+Math.round(Number(fontSize)/2);
+                var x1 = Number(this.position.x)-Math.round(Number(this.fontSize)/2);
+                var y1 = Number(this.position.y)+Math.round(Number(this.fontSize)/2);
                 return {
                     x:x1,
                     y:y1
@@ -450,20 +449,20 @@ Functionalities to check before each check in.
             this.isWithinLimits = function(contentCoordinateGroup) {
                 console.log("checking :"+this.printValue() +
                     "against contentCoordinateGroup:"+contentCoordinateGroup.printValue());
-                var minX = this.getMinX(Math.round(Number(fontSize)/4));
-                var minX1 = contentCoordinateGroup.getMinX(Math.round(Number(fontSize)/4));
+                var minX = this.getMinX(Math.round(Number(this.fontSize)/4));
+                var minX1 = contentCoordinateGroup.getMinX(Math.round(Number(this.fontSize)/4));
                 console.log("minX1:"+minX1);
 
-                var minY = this.getMinY(Math.round(Number(fontSize)/4));
-                var minY1 = contentCoordinateGroup.getMinY(Math.round(Number(fontSize)/4));
+                var minY = this.getMinY(Math.round(Number(this.fontSize)/4));
+                var minY1 = contentCoordinateGroup.getMinY(Math.round(Number(this.fontSize)/4));
                 console.log("minY1:"+minY1);
                 
-                var maxX = this.getMaxX(Math.round(Number(fontSize)/4));
-                var maxX1 = contentCoordinateGroup.getMaxX(Math.round(Number(fontSize)/4));
+                var maxX = this.getMaxX(Math.round(Number(this.fontSize)/4));
+                var maxX1 = contentCoordinateGroup.getMaxX(Math.round(Number(this.fontSize)/4));
                 console.log("maxX1:"+maxX1);
                 
-                var maxY = this.getMaxY(Math.round(Number(fontSize)/4));
-                var maxY1 = contentCoordinateGroup.getMaxY(Math.round(Number(fontSize)/4));
+                var maxY = this.getMaxY(Math.round(Number(this.fontSize)/4));
+                var maxY1 = contentCoordinateGroup.getMaxY(Math.round(Number(this.fontSize)/4));
                 console.log("maxY1:"+maxY1);
                 
                 var withinLimits=false;
