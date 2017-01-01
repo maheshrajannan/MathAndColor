@@ -136,7 +136,7 @@
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
             context.font = FONT_SIZE+"pt Calibri";
-            context.textAlign="left";
+            //context.textAlign="left";
             context.fillText("Name:", 30, FONT_SIZE);
             //Fill your name
             context.fillText("__________", 30, (3*Number(FONT_SIZE)));
@@ -219,22 +219,6 @@
                 }
                 return withinLimits;
             }
-            this.isRectangleWithInXLimits=function(newRect) {
-                var withinLimits= false;
-                //TODO: make this part of position.
-                //INFO: The whole graph is on the 4th coordant.
-                //the first condition is nothing but the rectangle being compared
-                //to this(current) is to the left.
-                //The second case is that the rectangle being compared is to the right.
-                if( 
-                    ( ( this.min.x <= newRect.max.x ) && ( this.max.x >= newRect.max.x ) ) ||
-                    ( ( this.min.x <= newRect.min.x ) && ( this.max.x >= newRect.min.x ) )
-                 ) {
-                    console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
-                    withinLimits=true;
-                }
-                return withinLimits;
-            }
             this.isRectangleWithInYLimits=function(newRect) {
                 var withinLimits= false;
                 if( 
@@ -268,15 +252,18 @@
 
         function ContentCoordinateGroup(x, y, a,b,operator,fontSize) {
             this.position=new Position(x,y);
+            this.fontSize=fontSize;
+            this.id=-1;
+            this.editReason="";
+
             this.a = a;
             this.b = b;
             this.operator = operator;
-            this.id=-1;
-            this.editReason="";
-            this.fontSize=fontSize;
+
             this.setId=function(id){
                 this.id=id;
             }
+
             this.adjust = function (canvas) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
@@ -301,9 +288,9 @@
                     console.log("to :"+this.position.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(this.position.x)+canvasBounds.left-Number(delta))  < canvasBounds.left) {
+                if( (Number(this.position.x)+canvasBounds.left-Number(this.fontSize))  < canvasBounds.left) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(delta);
+                    this.position.x = Number(this.fontSize);
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -369,7 +356,7 @@
                 return position;
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.position.x)+Math.round(Number(this.fontSize));
+                var x1 = Number(this.position.x)-Math.round(Number(this.fontSize)/2);
                 var y1 = Number(this.position.y)+Math.round(Number(this.fontSize)/2);
                 var position = new Position(x1,y1);
                 return position;
@@ -426,29 +413,7 @@
             this.isWithinLimits = function(contentCoordinateGroup) {
                 console.log("checking :"+this.printValue() +
                     "against contentCoordinateGroup:"+contentCoordinateGroup.printValue());
-                var minX = this.getMinX(Math.round(Number(this.fontSize)/4));
-                //TODO: use the maximum of 2 fontsizes, to ensure there is space.
-                var minX1 = contentCoordinateGroup.getMinX(Math.round(Number(this.fontSize)/4));
-                console.log("minX1:"+minX1);
-
-                var minY = this.getMinY(Math.round(Number(this.fontSize)/4));
-                var minY1 = contentCoordinateGroup.getMinY(Math.round(Number(this.fontSize)/4));
-                console.log("minY1:"+minY1);
-                
-                var maxX = this.getMaxX(Math.round(Number(this.fontSize)/4));
-                var maxX1 = contentCoordinateGroup.getMaxX(Math.round(Number(this.fontSize)/4));
-                console.log("maxX1:"+maxX1);
-                
-                var maxY = this.getMaxY(Math.round(Number(this.fontSize)/4));
-                var maxY1 = contentCoordinateGroup.getMaxY(Math.round(Number(this.fontSize)/4));
-                console.log("maxY1:"+maxY1);
-                
                 var withinLimits=false;
-                console.log("Does minX1,maxX1 Falls with in x coordinates minX and maxX ?");
-                console.log("("+minX1+","+maxX1
-                    +") Falls with in x coordinates ("+minX
-                    +") and ("+maxX
-                    +")");
                 var contentRectangle = this.getContentRectangle(Math.round(Number(this.fontSize)/4));
                 var newContentRectagle = contentCoordinateGroup.getContentRectangle(Math.round(Number(contentCoordinateGroup.fontSize)/4));
                 console.log("Comparing this"+contentRectangle.printValue() +"with"+newContentRectagle.printValue());
@@ -469,10 +434,7 @@
         function addletter(canvas, letter, x, y,fontSize) {
             var context = canvas.getContext("2d");
             context.font = fontSize+"pt Calibri";
-            //keyHistory += letter;
-            //INFO: clears a lot of area so commented.
-            //context.clearRect(x, y, x+20, y+50);
-            context.textAlign = "right";
+            //context.textAlign = "right";
             context.fillText(letter, x, y );
         }
 
