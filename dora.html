@@ -363,11 +363,12 @@ Functionalities to check before each check in.
             }
 
             this.getBCoordinate = function(){
-                console.log("Number(fontSize)"+Number(this.fontSize));
-                return {
-                    x: this.position.x,
-                    y: (Number(this.position.y) + Number(this.fontSize))
-                };
+                var position = new Position(
+                    this.position.x,
+                    (Number(this.position.y) + Number(this.fontSize))
+                    );
+                console.log("bCoordinate"+position.printValue());
+                return position;
             }
             this.getLineLength = function() {
                 var lineLength = Math.max(a.length,b.length);
@@ -386,26 +387,26 @@ Functionalities to check before each check in.
                 return line;   
             }
             this.getLine1Coordinate = function(){
-                console.log("Number(fontSize)"+Number(this.fontSize));
-                return {
-                    x: this.position.x,
-                    y: (Number(this.position.y) + (Number(1.25)*Number(this.fontSize)))
-                };
+                var position = new Position(
+                    this.position.x,
+                    (Number(this.position.y) + (Number(1.25)*Number(this.fontSize)))
+                    );
+                console.log("getLine1Coordinate"+position.printValue());
+                return position;
             }
             this.getLine2Coordinate = function(){
-                console.log("Number(fontSize)"+Number(this.fontSize));
-                return {
-                    x: this.position.x,
-                    y: (Number(this.position.y) + (Number(2.5)*Number(this.fontSize)))
-                };
+                var position = new Position(
+                    this.position.x,
+                    (Number(this.position.y) + (Number(2.5)*Number(this.fontSize)))
+                    );
+                console.log("getLine2Coordinate"+position.printValue());
+                return position;
             }
             this.getOperatorCoordinate = function() {
                 var x1 = Number(this.position.x)-Math.round(Number(this.fontSize)/2);
                 var y1 = Number(this.position.y)+Math.round(Number(this.fontSize)/2);
-                return {
-                    x:x1,
-                    y:y1
-                }
+                var position = new Position(x1,y1);
+                return position;
             }
             this.getMinX=function(padding){
                 console.log("Math.round(Number(this.position.x) - Number(padding))");
@@ -471,7 +472,7 @@ Functionalities to check before each check in.
                     +") Falls with in x coordinates ("+minX
                     +") and ("+maxX
                     +")");
-                //
+                //TODO: make this part of position.
                 if( 
                     ( ( minX <= maxX1 ) && ( maxX >= maxX1 ) ) ||
                     ( ( minX <= minX1 ) && ( maxX >= minX1 ) )
