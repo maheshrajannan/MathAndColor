@@ -1,0 +1,2 @@
+Best Practices.
+Do not do styling unless a must.

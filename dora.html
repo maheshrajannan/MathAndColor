@@ -15,7 +15,7 @@
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
             <label for="numberAId">A:</label>
-            <input class="form-control" type="name" maxlength="4" size="4" id="numberAId" placeholder="A"/>
+            <input class="form-control" type="name" maxlength="10" size="10" id="numberAId" placeholder="A"/>
             <br/>
          	<label for="operatorId">Operator:</label> 
             <select
@@ -28,7 +28,7 @@
 			</select>
             <br/>
             <label for="numberBId">B:</label>
-            <input class="form-control" type="name" maxlength="4" size="4" id="numberBId" placeholder="B"/>
+            <input class="form-control" type="name" maxlength="10" size="10" id="numberBId" placeholder="B"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
@@ -149,6 +149,7 @@
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mousePosition = getMousePosition(canvas, event);
+            console.log("clicked at "+mousePosition.printValue());
             var fontSize=$("#fontSizeId").val();
             var aValue=$("#numberAId").val();
             var bValue=$("#numberBId").val();
@@ -288,23 +289,51 @@
                 console.log("canvasBounds.y:"+canvasBounds.y);
                 console.log("coordinate position:"+this.position.printValue());
 
+                //INFO: Where i click is where the position of the symbol gets written.
+/**
+                33%
+                44
+                --
+                __
+                this.getMaxX=function(padding){
+                    return Math.round(Number(this.position.x)
+                     + Number(padding)+ (Number(fontSize)/1.5));                
+                }                
+**/
                 //INFO: align to right margin.
-                if( (Number(this.position.x) + Number(padding) +
-                 (Number(lineLength)/2) +
+                if( (Number(this.position.x) + Number(padding)
                  + (Number(fontSize)/1.5) + canvasBounds.left)  > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+this.position.x);
-                    this.position.x = Math.round(Number(canvasBounds.right)
-                     - Number(padding) - (Number(lineLength)/2)
-                      - (Number(fontSize)/1.5) - canvasBounds.left);
+                    console.log("Number(canvasBounds.right)"+
+                     "- Number(padding) -"+
+                      "- (Number(fontSize)/1.5) - canvasBounds.left");
+                    console.log(Number(canvasBounds.right)+
+                     "-"+ Number(padding) +"-"+
+                     (Number(fontSize)/1.5) +"-"+ canvasBounds.left);
+                    this.position.x = Math.round(
+                        Number(canvasBounds.right)
+                     - Number(padding)
+                      - (Number(fontSize)/1.5) - Number(canvasBounds.left));
                     console.log("to :"+this.position.x);
                 }
-                //INFO: align for the one -/+/* character
+                //INFO: align to left margin.
+                //TODO: works correctly for large numbers, but for single digits too much spacing.
+/**
+            this.getMinX=function(padding){
+                var lineLength = Number(fontSize)*Number(this.getLineLength());
+                ///1.5 because modulus operator is bigger.
+                return Math.round(
+                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.60)
+                    - Number(fontSize)
+                    );
+            }
+**/                
                 if(
                  Number(this.position.x)  <
-                 (Number(padding) + Number(lineLength)/2 ) 
+                 (Number(padding) + Number(lineLength)*0.55 + Number(fontSize) ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(padding) + Number(lineLength)/2;
+                    this.position.x = Number(padding) + Number(lineLength)*0.55 + Number(fontSize);
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -379,14 +408,13 @@
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
                 ///1.5 because modulus operator is bigger.
                 return Math.round(
-                    Number(this.position.x) - Number(padding) -Number(lineLength)/2 +
-                    Number(this.fontSize)/1.5
+                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.55)
+                    - Number(fontSize)
                     );
             }
             this.getMaxX=function(padding){
-                var lineLength = Number(fontSize)*Number(this.getLineLength());
                 return Math.round(Number(this.position.x)
-                 + Number(padding) + Number(lineLength)/2) + (Number(fontSize)/1.5);                
+                 + Number(padding) + (Number(fontSize)/1.5) );                
             }
             this.getMinY=function(padding){
                 return Math.round(Number(this.position.y) - Number(padding));
