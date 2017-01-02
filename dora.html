@@ -267,30 +267,41 @@
             this.adjust = function (canvas) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
-                var delta =  Number(Number(fontSize)*(Math.max(a.length,b.length)));
+                var delta =  Number(Number(this.fontSize)*(Math.max(a.length,b.length)));
                 var max = Number(Math.max(a.length,b.length));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
+                var padding = Number(this.fontSize/4);
+                var lineLength = Number(this.fontSize)*Number(this.getLineLength());
+
                 console.log("canvasBounds.x:"+canvasBounds.x);
                 console.log("canvasBounds.left:"+canvasBounds.left);
                 console.log("canvasBounds.right:"+canvasBounds.right);
                 console.log("delta: "+fontSize+"*(Math.max(a.length,b.length)):"
                     +delta);
+                console.log("lineLength:"+lineLength);
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
                 console.log("canvasBounds.y:"+canvasBounds.y);
                 console.log("coordinate position:"+this.position.printValue());
 
                 //INFO: align to right margin.
-                if( (Number(this.position.x)+Number(delta)+canvasBounds.left)  > canvasBounds.right) {
+                if( (Number(this.position.x) + Number(padding) +
+                 (Number(lineLength)/2) +
+                 + (Number(fontSize)/1.5) + canvasBounds.left)  > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+this.position.x);
-                    this.position.x = Math.round(Number(canvasBounds.right) - Number(delta/(max/1.5)) - canvasBounds.left);
+                    this.position.x = Math.round(Number(canvasBounds.right)
+                     - Number(padding) - (Number(lineLength)/2)
+                      - (Number(fontSize)/1.5) - canvasBounds.left);
                     console.log("to :"+this.position.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(this.position.x)+canvasBounds.left-Number(delta))  < canvasBounds.left) {
+                if(
+                 Number(this.position.x)  <
+                 (Number(padding) + Number(lineLength)/2 + Number(fontSize)/1.5 ) 
+                 ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(delta);
+                    this.position.x = Number(padding) + Number(lineLength)/2 + Number(fontSize)/1.5;
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -325,7 +336,7 @@
             }
             this.getLineLength = function() {
                 var lineLength = Math.max(a.length,b.length);
-                console.log("Line Length:"+lineLength);
+                console.log("Line Length a or b:"+lineLength);
                 return lineLength;
             }
             this.getLine = function() {
@@ -362,18 +373,16 @@
                 return position;
             }
             this.getMinX=function(padding){
-                console.log("Math.round(Number(this.position.x) - Number(padding))");
-                console.log("Math.round("+
-                    Number(this.position.x) +"-"+ Number(padding)  +
-                    ")");
-                console.log("Math.round("+
-                    ( Number(this.position.x) - Number(padding) ) +
-                    ")");
-                return Math.round(Number(this.position.x) - Number(padding));
+                var lineLength = Number(fontSize)*Number(this.getLineLength());
+                return Math.round(
+                    Number(this.position.x) - Number(padding) -Number(lineLength)/2 +
+                    Number(this.fontSize)/1.5
+                    );
             }
             this.getMaxX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
-                return Math.round(Number(this.position.x) + Number(padding) + Number(lineLength));                
+                return Math.round(Number(this.position.x)
+                 + Number(padding) + Number(lineLength)/2) + (Number(fontSize)/1.5);                
             }
             this.getMinY=function(padding){
                 return Math.round(Number(this.position.y) - Number(padding));
@@ -503,6 +512,7 @@
             addContent();
         }
         function addContent() {
+            console.log("adding content");
             var x=$('#xId').val();
             var y=$('#yId').val();
             var letterA = $('#numberAId').val();
