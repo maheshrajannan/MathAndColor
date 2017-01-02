@@ -150,7 +150,11 @@
             showInputs();
             mousePosition = getMousePosition(canvas, event);
             var fontSize=$("#fontSizeId").val();
-            var contentCoordinateGroup = new ContentCoordinateGroup(mousePosition.x,mousePosition.y," "," "," ",fontSize);
+            var aValue=$("#numberAId").val();
+            var bValue=$("#numberBId").val();
+            var operatorValue=$("#operatorId").val();
+            var contentCoordinateGroup = new ContentCoordinateGroup(
+                mousePosition.x,mousePosition.y,aValue,bValue,operatorValue,fontSize);
             contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
