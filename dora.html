@@ -151,7 +151,7 @@
             mousePosition = getMousePosition(canvas, event);
             var fontSize=$("#fontSizeId").val();
             var contentCoordinateGroup = new ContentCoordinateGroup(mousePosition.x,mousePosition.y," "," "," ",fontSize);
-            contentCoordinateGroup.adjust(canvas);
+            contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
             if(contentCoordinateGroupWithinLimits){
@@ -264,14 +264,13 @@
                 this.id=id;
             }
 
-            this.adjust = function (canvas) {
+            this.adjust = function (canvas,padding) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
                 var delta =  Number(Number(this.fontSize)*(Math.max(a.length,b.length)));
                 var max = Number(Math.max(a.length,b.length));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
-                var padding = Number(this.fontSize/4);
                 var lineLength = Number(this.fontSize)*Number(this.getLineLength());
 
                 console.log("canvasBounds.x:"+canvasBounds.x);
@@ -298,10 +297,10 @@
                 //INFO: align for the one -/+/* character
                 if(
                  Number(this.position.x)  <
-                 (Number(padding) + Number(lineLength)/2 + Number(fontSize)/1.5 ) 
+                 (Number(padding) + Number(lineLength)/2 ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(padding) + Number(lineLength)/2 + Number(fontSize)/1.5;
+                    this.position.x = Number(padding) + Number(lineLength)/2;
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -374,6 +373,7 @@
             }
             this.getMinX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
+                ///1.5 because modulus operator is bigger.
                 return Math.round(
                     Number(this.position.x) - Number(padding) -Number(lineLength)/2 +
                     Number(this.fontSize)/1.5
