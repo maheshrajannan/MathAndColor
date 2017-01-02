@@ -136,7 +136,7 @@
             var canvas = document.getElementById("myCanvas");
             var context = canvas.getContext("2d");
             context.font = FONT_SIZE+"pt Calibri";
-            //context.textAlign="left";
+            context.textAlign="left";
             context.fillText("Name:", 30, FONT_SIZE);
             //Fill your name
             context.fillText("__________", 30, (3*Number(FONT_SIZE)));
@@ -288,9 +288,9 @@
                     console.log("to :"+this.position.x);
                 }
                 //INFO: align for the one -/+/* character
-                if( (Number(this.position.x)+canvasBounds.left-Number(this.fontSize))  < canvasBounds.left) {
+                if( (Number(this.position.x)+canvasBounds.left-Number(delta))  < canvasBounds.left) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(this.fontSize);
+                    this.position.x = Number(delta);
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -356,7 +356,7 @@
                 return position;
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.position.x)-Math.round(Number(this.fontSize)/2);
+                var x1 = Number(this.position.x)+Math.round(Number(this.fontSize));
                 var y1 = Number(this.position.y)+Math.round(Number(this.fontSize)/2);
                 var position = new Position(x1,y1);
                 return position;
@@ -434,7 +434,7 @@
         function addletter(canvas, letter, x, y,fontSize) {
             var context = canvas.getContext("2d");
             context.font = fontSize+"pt Calibri";
-            //context.textAlign = "right";
+            context.textAlign = "right";
             context.fillText(letter, x, y );
         }
 
