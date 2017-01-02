@@ -1,2 +1,5 @@
-Best Practices.
-Do not do styling unless a must.
+1.Best Practices.
+2.Do not do styling unless a must.
+3.Aligns for 1 to 10. Remember the back up they have of editing x. So Not spend any more time on this.
+4. TODO: next time when A or B is changed , check re-alignment.
+5. PRioritize features before doing anything.
