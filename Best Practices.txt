@@ -7,4 +7,16 @@
 Next Features:
 
 6. Enter text or numbers.
-7. Pre-fill text at specified coordinates.
+7. write legend in the simplest way. 55 = RED.
+8. Write name in the simplest way. <<Your name Here>>
+9. Pre-fill numbers at specified coordinates.
+10. prefill name place holder in simplest way.
+11. prefill legend in simplest way.
+12. Store (default) numbers in index Db.
+13. Store (customized) numbers in index db.
+14. Store (text) in indexDb.
+15. Store customized text in indexDb.
+16. Host this on nodejs.
+17. Put https.
+18. Add a session.
+19. 
