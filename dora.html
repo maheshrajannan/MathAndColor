@@ -388,7 +388,7 @@
                     this.position.x,
                     (Number(this.position.y) + (Number(1.25)*Number(this.fontSize)))
                     );
-                console.log("getLine1Coordinate"+position.printValue());
+                console.log("getLine1Coordinate:"+position.printValue());
                 return position;
             }
             this.getLine2Coordinate = function(){
@@ -396,7 +396,7 @@
                     this.position.x,
                     (Number(this.position.y) + (Number(2.5)*Number(this.fontSize)))
                     );
-                console.log("getLine2Coordinate"+position.printValue());
+                console.log("getLine2Coordinate:"+position.printValue());
                 return position;
             }
             this.getOperatorCoordinate = function() {
@@ -481,50 +481,35 @@
         }
 
         function addLetterToA(canvas,contentCoordinateGroup) {
-            console.log("Adding letter to A");
-            console.log("canvassing...");
-            console.log("adding...(x,y)=("+contentCoordinateGroup.position.x+","+contentCoordinateGroup.position.y+")");
+            console.log("Adding letter to A"+contentCoordinateGroup.printValue());
             addletter(canvas, contentCoordinateGroup.a, contentCoordinateGroup.position.x, contentCoordinateGroup.position.y,contentCoordinateGroup.fontSize);
-            console.log("added...");
         }
         function addLetterToB(canvas,contentCoordinateGroup) {
             console.log("Adding letter to B");
-            console.log("canvassing...");
             var bCoordinate=contentCoordinateGroup.getBCoordinate();
-            console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
             //INFO: write in next line.
             addletter(canvas, contentCoordinateGroup.b, bCoordinate.x, bCoordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
         }
         function addLine1(canvas,contentCoordinateGroup) {
             console.log("Adding line1");
-            console.log("canvassing...");
             var line1Coordinate=contentCoordinateGroup.getLine1Coordinate();
-            console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
             var line=contentCoordinateGroup.getLine();
             //INFO: write in next line.
             addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
         }       
         function addLine2(canvas,contentCoordinateGroup) {
             console.log("Adding line2");
-            console.log("canvassing...");
             var line2Coordinate=contentCoordinateGroup.getLine2Coordinate();
-            console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
             //INFO: write in next line.
             var line=contentCoordinateGroup.getLine();
             addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
         }           
         function addLetterToOperator(canvas,contentCoordinateGroup){
             //TODO: refactor this function.
             console.log("Adding letter to Operator");
-            console.log("canvassing...");
             var operatorCoordinate = contentCoordinateGroup.getOperatorCoordinate();
-            console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
             //INFO: write it between 2 numbers, slightly to left
             addletter(canvas, contentCoordinateGroup.operator, operatorCoordinate.x, operatorCoordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");
         }
 		//Validate the input and add text.
 		function validateInput() {
@@ -546,11 +531,9 @@
         }
         function addContent() {
             console.log("adding content");
+            //INFO: common to both contentCoordinateGroup of type text and numeric.
             var x=$('#xId').val();
             var y=$('#yId').val();
-            var letterA = $('#numberAId').val();
-            var letterB = $('#numberBId').val();
-            var operator = $('#operatorId').val();
             var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
             var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();
@@ -558,7 +541,13 @@
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
-            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,letterA,letterB,operator,fontSize);
+            //INFO: specific to numeric content coordinate group.
+            var letterA = $('#numberAId').val();
+            var letterB = $('#numberBId').val();
+            var operator = $('#operatorId').val();
+
+            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,
+                letterA,letterB,operator,fontSize);
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas);
 
@@ -570,13 +559,14 @@
                 $('#yId').val(y);            
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
                 contentCoordinateGroupHistory[contentCoordinateGroupId-1]=contentCoordinateGroup;
-                //TODO: redraw.
                 console.log("Redrawing");
                 erase(canvas);
+                //TODO: this needs to be written from, javascript array.
                 draw();
                 console.log("total:"+contentCoordinateGroupHistory.length);
                 for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
                     currentContentCoordinateGroup = contentCoordinateGroupHistory[j];
+                    //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
                     console.log("currentContentCoordinateGroup:"+currentContentCoordinateGroup.printValue());
                     addLetterToA(canvas,currentContentCoordinateGroup);
                     addLetterToOperator(canvas,currentContentCoordinateGroup);
@@ -595,6 +585,7 @@
                     y=contentCoordinateGroup.position.y;
                     $('#xId').val(x);
                     $('#yId').val(y);            
+                    //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
                     addLetterToA(canvas,contentCoordinateGroup);
                     addLetterToOperator(canvas,contentCoordinateGroup);
                     addLetterToB(canvas,contentCoordinateGroup);
@@ -612,7 +603,9 @@
         }
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
             $('#xId').val(contentCoordinateGroupWithinLimits.position.x);
-            $('#yId').val(contentCoordinateGroupWithinLimits.position.y);            
+            $('#yId').val(contentCoordinateGroupWithinLimits.position.y);
+            //TODO: repopulate A and B, only if pre-populate existing is selected. 
+            //default is it is NOT selected.            
             $('#numberAId').val(contentCoordinateGroupWithinLimits.a);
             $('#numberBId').val(contentCoordinateGroupWithinLimits.b);
             $('#operatorId').val(contentCoordinateGroupWithinLimits.operator);
@@ -633,6 +626,7 @@
         function onContentChange() {
             var contentType = $("#contentTypeId").val();
             console.log("Content Type is "+contentType);
+            //TODO: good to have, not must have, organize in div or field sets.
             if(contentType==="Text") {
                 $("#numberAId").hide();
                 $("#numberBId").hide();
