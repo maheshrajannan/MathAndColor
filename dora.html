@@ -424,6 +424,14 @@
                 var verticalHeight = Number(fontSize)*Number(3.5);
                 return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));
             }
+            this.draw=function(canvas) {
+                console.log("contentCoordinateGroup:"+this.printValue());
+                addLetterToA(canvas,this);
+                addLetterToOperator(canvas,this);
+                addLetterToB(canvas,this);
+                addLine1(canvas,this);
+                addLine2(canvas,this);                
+            }
             this.getContentRectangle=function(padding){
                 var contentRectangle=new ContentRectangle(
                     this.getMinX(padding),
@@ -566,13 +574,7 @@
                 console.log("total:"+contentCoordinateGroupHistory.length);
                 for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
                     currentContentCoordinateGroup = contentCoordinateGroupHistory[j];
-                    //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
-                    console.log("currentContentCoordinateGroup:"+currentContentCoordinateGroup.printValue());
-                    addLetterToA(canvas,currentContentCoordinateGroup);
-                    addLetterToOperator(canvas,currentContentCoordinateGroup);
-                    addLetterToB(canvas,currentContentCoordinateGroup);
-                    addLine1(canvas,currentContentCoordinateGroup);
-                    addLine2(canvas,currentContentCoordinateGroup);
+                    currentContentCoordinateGroup.draw(canvas);
                 }
                 //INFO: End of editing existing coordinate.
             }else{
@@ -601,14 +603,17 @@
                 }
             }
         }
-        function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
-            $('#xId').val(contentCoordinateGroupWithinLimits.position.x);
-            $('#yId').val(contentCoordinateGroupWithinLimits.position.y);
+        function populateCoordinate(contentCoordinateGroup) {
+            $('#xId').val(contentCoordinateGroup.position.x);
+            $('#yId').val(contentCoordinateGroup.position.y);
             //TODO: repopulate A and B, only if pre-populate existing is selected. 
             //default is it is NOT selected.            
-            $('#numberAId').val(contentCoordinateGroupWithinLimits.a);
-            $('#numberBId').val(contentCoordinateGroupWithinLimits.b);
-            $('#operatorId').val(contentCoordinateGroupWithinLimits.operator);
+            $('#numberAId').val(contentCoordinateGroup.a);
+            $('#numberBId').val(contentCoordinateGroup.b);
+            $('#operatorId').val(contentCoordinateGroup.operator);
+        }
+        function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
+            populateCoordinate(contentCoordinateGroupWithinLimits);
             $('#contentCoordinateGroupId').val(contentCoordinateGroupWithinLimits.id);     
             $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
