@@ -328,23 +328,13 @@
                     console.log("to :"+this.position.x);
                 }
                 //INFO: align to left margin.
-                //TODO: works correctly for large numbers, but for single digits too much spacing.
-/**
-            this.getMinX=function(padding){
-                var lineLength = Number(fontSize)*Number(this.getLineLength());
-                ///1.5 because modulus operator is bigger.
-                return Math.round(
-                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.60)
-                    - Number(fontSize)
-                    );
-            }
-**/                
+                //TODO: works correctly for large numbers, but for single digits too much spacing.                
                 if(
                  Number(this.position.x)  <
-                 (Number(padding) + Number(lineLength)*0.55 + Number(fontSize) ) 
+                 (Number(padding) + Number(lineLength)*0.50 + Number(fontSize) ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(padding) + Number(lineLength)*0.55 + Number(fontSize);
+                    this.position.x = Number(padding) + Number(lineLength)*0.50 + Number(fontSize);
                     console.log("to :"+this.position.x);
                 }
                 //INFO:Basically adjusting for
@@ -419,7 +409,7 @@
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
                 ///1.5 because modulus operator is bigger.
                 return Math.round(
-                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.55)
+                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.50)
                     - Number(fontSize)
                     );
             }
