@@ -14,6 +14,13 @@
 <div id="containerDivId" class="container">
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
+            <label for="contentTypeId">Content Type:</label>
+            <select
+                class="form-control" type="text" id="contentTypeId">
+                <option>Text</option>
+                <option>Numeric</option>
+            </select>
+            <br/>
             <label for="numberAId">A:</label>
             <input class="form-control" type="name" maxlength="10" size="10" id="numberAId" placeholder="A"/>
             <br/>
@@ -107,6 +114,7 @@
 
 
         window.onload = function() {
+            $("#bannerDivId").width(1600);     
             draw();
             toggleAdvanced();
         };
