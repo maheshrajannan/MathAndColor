@@ -16,7 +16,7 @@
         <fieldset>
             <label for="contentTypeId">Content Type:</label>
             <select
-                class="form-control" type="text" id="contentTypeId">
+                class="form-control" type="text" id="contentTypeId" onchange="onContentChange()">
                 <option>Text</option>
                 <option>Numeric</option>
             </select>
@@ -636,6 +636,10 @@
             $("#leftDivId").hide();
             $("#rightDivId").hide();       
             $("#bannerDivId").width(1000);     
+        }
+        function onContentChange() {
+            var contentType = $("#contentTypeId").val();
+            console.log("Content Type is "+contentType);
         }
         function prefillImage() {
             console.log("prefillImage");
