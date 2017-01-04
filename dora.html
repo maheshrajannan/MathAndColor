@@ -21,10 +21,10 @@
                 <option>Numeric</option>
             </select>
             <br/>
-            <label for="numberAId">A:</label>
+            <label id="numberALabelId" for="numberAId">A:</label>
             <input class="form-control" type="name" maxlength="10" size="10" id="numberAId" placeholder="A"/>
             <br/>
-         	<label for="operatorId">Operator:</label> 
+         	<label id="operatorLabelId" for="operatorId">Operator:</label> 
             <select
 				class="form-control" type="text" id="operatorId" style="width:128px;">
 				<option>+</option>
@@ -34,8 +34,11 @@
                 <option>%</option>
 			</select>
             <br/>
-            <label for="numberBId">B:</label>
+            <label id="numberBLabelId" for="numberBId">B:</label>
             <input class="form-control" type="name" maxlength="10" size="10" id="numberBId" placeholder="B"/>
+            <br/>
+            <label id="textLabelId" for="textId">Text:</label>
+            <input class="form-control" type="name" maxlength="10" size="10" id="textId" placeholder="Text To Appear"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
@@ -117,6 +120,7 @@
             $("#bannerDivId").width(1600);     
             draw();
             toggleAdvanced();
+            onContentChange();
         };
         //INFO: outside of onload
 
@@ -640,6 +644,25 @@
         function onContentChange() {
             var contentType = $("#contentTypeId").val();
             console.log("Content Type is "+contentType);
+            if(contentType==="Text") {
+                $("#numberAId").hide();
+                $("#numberBId").hide();
+                $("#operatorId").hide();
+                $("#numberALabelId").hide();
+                $("#numberBLabelId").hide();
+                $("#operatorLabelId").hide();
+                $("#textId").show();
+                $("#textLabelId").show();
+            }else{
+                $("#numberAId").show();
+                $("#numberBId").show();
+                $("#operatorId").show();
+                $("#numberALabelId").show();
+                $("#numberBLabelId").show();
+                $("#operatorLabelId").show();
+                $("#textId").hide();
+                $("#textLabelId").hide();
+            }
         }
         function prefillImage() {
             console.log("prefillImage");
