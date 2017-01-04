@@ -588,11 +588,7 @@
                     $('#xId').val(x);
                     $('#yId').val(y);            
                     //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
-                    addLetterToA(canvas,contentCoordinateGroup);
-                    addLetterToOperator(canvas,contentCoordinateGroup);
-                    addLetterToB(canvas,contentCoordinateGroup);
-                    addLine1(canvas,contentCoordinateGroup);
-                    addLine2(canvas,contentCoordinateGroup);
+                    contentCoordinateGroup.draw(canvas);
                     addToHistory(contentCoordinateGroup);
                     console.log("total"+contentCoordinateGroupHistory.length);                
                 }else {
