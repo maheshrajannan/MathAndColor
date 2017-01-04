@@ -438,36 +438,36 @@
                 var verticalHeight = Number(fontSize)*Number(3.5);
                 return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));
             }
-            this.addLetterToA = function(canvas,contentCoordinateGroup) {
-                console.log("Adding letter to A"+contentCoordinateGroup.printValue());
-                addletter(canvas, contentCoordinateGroup.a, contentCoordinateGroup.position.x, contentCoordinateGroup.position.y,contentCoordinateGroup.fontSize);
+            this.addLetterToA = function(canvas) {
+                console.log("Adding letter to A"+this.printValue());
+                addletter(canvas, this.a, this.position.x, this.position.y,this.fontSize);
             }
-            this.addLetterToB = function(canvas,contentCoordinateGroup) {
+            this.addLetterToB = function(canvas) {
                 console.log("Adding letter to B");
-                var bCoordinate=contentCoordinateGroup.getBCoordinate();
+                var bCoordinate=this.getBCoordinate();
                 //INFO: write in next line.
-                addletter(canvas, contentCoordinateGroup.b, bCoordinate.x, bCoordinate.y,contentCoordinateGroup.fontSize);
+                addletter(canvas, this.b, bCoordinate.x, bCoordinate.y,this.fontSize);
             }
-            this.addLine1 = function(canvas,contentCoordinateGroup) {
+            this.addLine1 = function(canvas) {
                 console.log("Adding line1");
-                var line1Coordinate=contentCoordinateGroup.getLine1Coordinate();
-                var line=contentCoordinateGroup.getLine();
+                var line1Coordinate=this.getLine1Coordinate();
+                var line=this.getLine();
                 //INFO: write in next line.
-                addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,contentCoordinateGroup.fontSize);
+                addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,this.fontSize);
             }       
-            this.addLine2= function(canvas,contentCoordinateGroup) {
+            this.addLine2= function(canvas) {
                 console.log("Adding line2");
-                var line2Coordinate=contentCoordinateGroup.getLine2Coordinate();
+                var line2Coordinate=this.getLine2Coordinate();
                 //INFO: write in next line.
-                var line=contentCoordinateGroup.getLine();
-                addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,contentCoordinateGroup.fontSize);
+                var line=this.getLine();
+                addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,this.fontSize);
             }           
-            this.addLetterToOperator= function(canvas,contentCoordinateGroup){
+            this.addLetterToOperator= function(canvas){
                 //TODO: refactor this function.
                 console.log("Adding letter to Operator");
-                var operatorCoordinate = contentCoordinateGroup.getOperatorCoordinate();
+                var operatorCoordinate = this.getOperatorCoordinate();
                 //INFO: write it between 2 numbers, slightly to left
-                addletter(canvas, contentCoordinateGroup.operator, operatorCoordinate.x, operatorCoordinate.y,contentCoordinateGroup.fontSize);
+                addletter(canvas, this.operator, operatorCoordinate.x, operatorCoordinate.y,this.fontSize);
             }
             this.draw=function(canvas) {
                 console.log("contentCoordinateGroup:"+this.printValue());
