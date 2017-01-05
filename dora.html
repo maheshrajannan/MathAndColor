@@ -166,7 +166,8 @@
             var bValue=$("#numberBId").val();
             var operatorValue=$("#operatorId").val();
             var contentCoordinateGroup = new ContentCoordinateGroup(
-                mousePosition.x,mousePosition.y,aValue,bValue,operatorValue,fontSize);
+                mousePosition.x,mousePosition.y,fontSize);
+            contentCoordinateGroup.setNumericContent(aValue,bValue,operatorValue);            
             contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
@@ -201,6 +202,7 @@
         }
 
         function Position(x,y) {
+            //Will become an attribute of every instance of position.
             this.x=x;
             this.y=y;
             this.printValue=function(){
@@ -280,25 +282,38 @@
         //do not return the instance.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
-        function ContentCoordinateGroup(x, y, a,b,operator,fontSize) {
+        function ContentCoordinateGroup(x, y,fontSize) {
             this.position=new Position(x,y);
             this.fontSize=fontSize;
             this.id=-1;
             this.editReason="";
 
-            this.a = a;
-            this.b = b;
-            this.operator = operator;
+            this.a=-1;
+            this.b=-1;
+            this.operator="";
 
             this.setId=function(id){
                 this.id=id;
             }
-
+            this.setA=function(a){
+                this.a=a;
+            }
+            this.setB=function(b){
+                this.b=b;
+            }
+            this.setOperator=function(operator){
+                this.operator=operator;
+            }
+            this.setNumericContent = function(a,b,operator) {
+                this.setA(a);
+                this.setB(b);
+                this.setOperator(operator);
+            }
             this.adjust = function (canvas,padding) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
-                var delta =  Number(Number(this.fontSize)*(Math.max(a.length,b.length)));
-                var max = Number(Math.max(a.length,b.length));
+                var delta =  Number(Number(this.fontSize)*(Math.max(this.a.length,this.b.length)));
+                var max = Number(Math.max(this.a.length,this.b.length));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
                 var lineLength = Number(this.fontSize)*Number(this.getLineLength());
@@ -382,7 +397,7 @@
                 return position;
             }
             this.getLineLength = function() {
-                var lineLength = Math.max(a.length,b.length);
+                var lineLength = Math.max(this.a.length,this.b.length);
                 console.log("Line Length a or b:"+lineLength);
                 return lineLength;
             }
@@ -516,7 +531,7 @@
                 return withinLimits;
             }
             this.printValue= function() {
-                return "id="+this.id+" ("+x+","+ y+") : "+a+operator+b+"=?";
+                return "id="+this.id+" ("+x+","+ y+") : "+this.a+this.operator+this.b+"=?";
             }            
         }
 
@@ -568,8 +583,8 @@
             var letterB = $('#numberBId').val();
             var operator = $('#operatorId').val();
 
-            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,
-                letterA,letterB,operator,fontSize);
+            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,fontSize);
+            contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas);
 
