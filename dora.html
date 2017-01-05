@@ -111,6 +111,8 @@
     <script type="text/javascript">
 
         var FONT_SIZE = $('#fontSizeId').val();
+        var CONTENT_TYPE_NUMERIC="Numeric";
+        var CONTENT_TYPE_TEXT="Text";
         var mousePosition;
         var contentCoordinateGroupHistory=[];
 
@@ -162,12 +164,18 @@
             mousePosition = getMousePosition(canvas, event);
             console.log("clicked at "+mousePosition.printValue());
             var fontSize=$("#fontSizeId").val();
-            var aValue=$("#numberAId").val();
-            var bValue=$("#numberBId").val();
-            var operatorValue=$("#operatorId").val();
+            var contentType=$("#contentTypeId").val();
             var contentCoordinateGroup = new ContentCoordinateGroup(
-                mousePosition.x,mousePosition.y,fontSize);
-            contentCoordinateGroup.setNumericContent(aValue,bValue,operatorValue);            
+                mousePosition.x,mousePosition.y,fontSize,contentType);
+            if(contentCoordinateGroup.isNumeric()) {
+                var aValue=$("#numberAId").val();
+                var bValue=$("#numberBId").val();
+                var operatorValue=$("#operatorId").val();
+                contentCoordinateGroup.setNumericContent(aValue,bValue,operatorValue);            
+            }else{
+                var contentText = $("#textId").val();
+                contentCoordinateGroup.setContentText(contentText);
+            }
             contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
@@ -219,14 +227,16 @@
         /**
         A content(element) at a given position.
         **/
-        function ContentCoordinate(x,y,content) {
+        function ContentCoordinate(x,y,content,fontSize) {
             this.content = content;
             this.position = new Position(x,y);
+            this.fontSize=fontSize;
             this.draw=function(canvas) {
-                //TODO:
+                addletter(canvas, this.content, position.x, position.y,this.fontSize);
             }
             this.printValue = function() {
-                return "Position:"+position.printValue()+",Content:"+content;
+                return "Position:"+position.printValue()
+                +",Content:"+this.content+" at Size:"+this.fontSize;
             }
         }
 
@@ -282,15 +292,18 @@
         //do not return the instance.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
-        function ContentCoordinateGroup(x, y,fontSize) {
+        function ContentCoordinateGroup(x, y,fontSize,contentType) {
             this.position=new Position(x,y);
             this.fontSize=fontSize;
             this.id=-1;
             this.editReason="";
+            this.contentType=contentType;
 
             this.a=-1;
             this.b=-1;
             this.operator="";
+
+            this.contentText="";
 
             this.setId=function(id){
                 this.id=id;
@@ -304,10 +317,27 @@
             this.setOperator=function(operator){
                 this.operator=operator;
             }
+            this.isNumeric=function(contentType){
+                if(contentType) {
+                    return contentType === CONTENT_TYPE_NUMERIC;
+                } else {
+                    return this.contentType === CONTENT_TYPE_NUMERIC;                    
+                }
+            }
+            this.isText=function(contentType){
+                if(contentType) {
+                    return contentType === CONTENT_TYPE_TEXT;
+                } else {
+                    return this.contentType === CONTENT_TYPE_TEXT;                    
+                }
+            }
             this.setNumericContent = function(a,b,operator) {
                 this.setA(a);
                 this.setB(b);
                 this.setOperator(operator);
+            }
+            this.setContentText=function(contentText) {
+                this.contentText=contentText;
             }
             this.adjust = function (canvas,padding) {
                 console.log("adjust");
@@ -457,6 +487,10 @@
                 console.log("Adding letter to A"+this.printValue());
                 addletter(canvas, this.a, this.position.x, this.position.y,this.fontSize);
             }
+            this.addText = function(canvas) {
+                console.log("Adding text:"+this.printValue());
+                addletter(canvas, this.contentText, this.position.x, this.position.y,this.fontSize);
+            }
             this.addLetterToB = function(canvas) {
                 console.log("Adding letter to B");
                 var bCoordinate=this.getBCoordinate();
@@ -486,11 +520,15 @@
             }
             this.draw=function(canvas) {
                 console.log("contentCoordinateGroup:"+this.printValue());
-                this.addLetterToA(canvas,this);
-                this.addLetterToOperator(canvas,this);
-                this.addLetterToB(canvas,this);
-                this.addLine1(canvas,this);
-                this.addLine2(canvas,this);                
+                if(this.isNumeric()) {
+                    this.addLetterToA(canvas);
+                    this.addLetterToOperator(canvas);
+                    this.addLetterToB(canvas);
+                    this.addLine1(canvas);
+                    this.addLine2(canvas);                
+                }else{
+                    this.addText(canvas);
+                }
             }
             this.getContentRectangle=function(padding){
                 var contentRectangle=new ContentRectangle(
@@ -531,7 +569,11 @@
                 return withinLimits;
             }
             this.printValue= function() {
-                return "id="+this.id+" ("+x+","+ y+") : "+this.a+this.operator+this.b+"=?";
+                if(this.isNumeric()) {
+                    return "id="+this.id+" ("+this.x+","+ this.y+") : "+this.a+this.operator+this.b+"=?";
+                } else{
+                    return "id="+this.id+" ("+this.contentText+")";
+                }
             }            
         }
 
@@ -574,17 +616,23 @@
             var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
             var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();
+            var contentType=$('#contentTypeId').val();
             var contentCoordinateGroupWithinLimits;
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
             //INFO: specific to numeric content coordinate group.
-            var letterA = $('#numberAId').val();
-            var letterB = $('#numberBId').val();
-            var operator = $('#operatorId').val();
 
-            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,fontSize);
-            contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
+            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,fontSize,contentType);
+            if(contentCoordinateGroup.isNumeric()) {
+                var letterA = $('#numberAId').val();
+                var letterB = $('#numberBId').val();
+                var operator = $('#operatorId').val();
+                contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
+            }else{
+                var contentText = $('#textId').val();
+                contentCoordinateGroup.setContentText(contentText,operator);
+            }
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas);
 
@@ -631,11 +679,18 @@
         function populateCoordinate(contentCoordinateGroup) {
             $('#xId').val(contentCoordinateGroup.position.x);
             $('#yId').val(contentCoordinateGroup.position.y);
-            //TODO: repopulate A and B, only if pre-populate existing is selected. 
-            //default is it is NOT selected.            
-            $('#numberAId').val(contentCoordinateGroup.a);
-            $('#numberBId').val(contentCoordinateGroup.b);
-            $('#operatorId').val(contentCoordinateGroup.operator);
+            if(contentCoordinateGroup.isNumeric()) {
+                onContentChange(contentCoordinateGroup.contentType);
+                //TODO: change dropdown and populate values...
+                //TODO: repopulate A and B, only if pre-populate existing is selected. 
+                //default is it is NOT selected.            
+                $('#numberAId').val(contentCoordinateGroup.a);
+                $('#numberBId').val(contentCoordinateGroup.b);
+                $('#operatorId').val(contentCoordinateGroup.operator);
+            } else{
+                onContentChange(contentCoordinateGroup.contentType);
+                $('#textId').val(contentCoordinateGroup.contentText);
+            }
         }
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
             populateCoordinate(contentCoordinateGroupWithinLimits);
@@ -653,8 +708,13 @@
             $("#rightDivId").hide();       
             $("#bannerDivId").width(1000);     
         }
-        function onContentChange() {
-            var contentType = $("#contentTypeId").val();
+        function onContentChange(inContentType) {
+            var contentType = "";
+            if(inContentType) {
+                contentType = inContentType;
+            }else {
+                contentType = $("#contentTypeId").val();
+            }
             console.log("Content Type is "+contentType);
             //TODO: good to have, not must have, organize in div or field sets.
             if(contentType==="Text") {
