@@ -211,8 +211,8 @@
 
         function Coordinate(x,y) {
             //Will become an attribute of every instance of coordinate.
-            this.x=x;
-            this.y=y;
+            this.x=Math.round(x);
+            this.y=Math.round(y);
             this.printValue=function(){
                 return "(x="+this.x+",y="+this.y+")";
             }
@@ -302,6 +302,10 @@
             this.a=-1;
             this.b=-1;
             this.operator="";
+            this.bCoordinate;
+            this.line1Coordinate;
+            this.line2Coordinate;
+            this.operatorCoordinate;
 
             this.contentText="";
 
@@ -416,15 +420,32 @@
                     this.coordinate.y = canvasBounds.top - Number(canvasBounds.top) + Number(this.fontSize);
                     console.log("to :"+this.coordinate.y);
                 }
+                this.initializeCoordinates();
             }
-
-            this.getBCoordinate = function(){
-                var coordinate = new Coordinate(
+            this.initializeCoordinates = function() {
+                this.bCoordinate = new Coordinate(
                     this.coordinate.x,
                     (Number(this.coordinate.y) + Number(this.fontSize))
                     );
-                console.log("bCoordinate"+coordinate.printValue());
-                return coordinate;
+                console.log("bCoordinate"+this.bCoordinate.printValue());
+                this.line1Coordinate = new Coordinate(
+                    this.coordinate.x,
+                    (Number(this.coordinate.y) + (Number(1.25)*Number(this.fontSize)))
+                    );
+                console.log("line1Coordinate"+this.line1Coordinate.printValue());
+                this.line2Coordinate = new Coordinate(
+                    this.coordinate.x,
+                    (Number(this.coordinate.y) + (Number(2.5)*Number(this.fontSize)))
+                    );
+                console.log("line2Coordinate:"+this.line2Coordinate.printValue());
+                var x1 = Number(this.coordinate.x)+Number(this.fontSize);
+                var y1 = Number(this.coordinate.y)+Number(this.fontSize)/2;
+                this.operatorCoordinate = new Coordinate(x1,y1);
+                console.log("operatorCoordinate:"+this.operatorCoordinate.printValue());
+
+            }
+            this.getBCoordinate = function(){
+                return this.bCoordinate;
             }
             this.getLineLength = function() {
                 var lineLength = Math.max(this.a.length,this.b.length);
@@ -441,28 +462,15 @@
                     lineLength = lineLength - 1;
                 }
                 return line;   
-            }
+            }           
             this.getLine1Coordinate = function(){
-                var coordinate = new Coordinate(
-                    this.coordinate.x,
-                    (Number(this.coordinate.y) + (Number(1.25)*Number(this.fontSize)))
-                    );
-                console.log("getLine1Coordinate:"+coordinate.printValue());
-                return coordinate;
+                return this.line1Coordinate;
             }
             this.getLine2Coordinate = function(){
-                var coordinate = new Coordinate(
-                    this.coordinate.x,
-                    (Number(this.coordinate.y) + (Number(2.5)*Number(this.fontSize)))
-                    );
-                console.log("getLine2Coordinate:"+coordinate.printValue());
-                return coordinate;
+                return this.line2Coordinate;
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.coordinate.x)+Math.round(Number(this.fontSize));
-                var y1 = Number(this.coordinate.y)+Math.round(Number(this.fontSize)/2);
-                var coordinate = new Coordinate(x1,y1);
-                return coordinate;
+                return this.operatorCoordinate;
             }
             this.getMinX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
