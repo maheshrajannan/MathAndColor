@@ -235,7 +235,7 @@
                 addletter(canvas, this.content, coordinate.x, coordinate.y,this.fontSize);
             }
             this.printValue = function() {
-                return "Coordinate:"+coordinate.printValue()
+                return "Coordinate:"+this.coordinate.printValue()
                 +",Content:"+this.content+" at Size:"+this.fontSize;
             }
         }
@@ -302,6 +302,8 @@
             this.a=-1;
             this.b=-1;
             this.operator="";
+
+            this.aCoordinate;
             this.bCoordinate;
             this.line1Coordinate;
             this.line2Coordinate;
@@ -423,29 +425,38 @@
                 this.initializeCoordinates();
             }
             this.initializeCoordinates = function() {
-                this.bCoordinate = new Coordinate(
-                    this.coordinate.x,
+                this.aCoordinate = new ContentCoordinate(this.coordinate.x,this.coordinate.y,this.a,this.fontSize);
+                console.log("aCoordinate:"+this.aCoordinate.printValue());
+
+                this.bCoordinate = new ContentCoordinate(this.coordinate.x,
                     (Number(this.coordinate.y) + Number(this.fontSize))
-                    );
-                console.log("bCoordinate"+this.bCoordinate.printValue());
-                this.line1Coordinate = new Coordinate(
+                    ,this.b,this.fontSize);
+                console.log("bCoordinate:"+this.bCoordinate.printValue());
+
+                this.line1Coordinate = new ContentCoordinate(
                     this.coordinate.x,
-                    (Number(this.coordinate.y) + (Number(1.25)*Number(this.fontSize)))
+                    (Number(this.coordinate.y) + (Number(1.25)*Number(this.fontSize))),
+                    this.getLine(),this.fontSize                    
                     );
-                console.log("line1Coordinate"+this.line1Coordinate.printValue());
-                this.line2Coordinate = new Coordinate(
+                console.log("line1Coordinate:"+this.line1Coordinate.printValue());
+
+                this.line2Coordinate = new ContentCoordinate(
                     this.coordinate.x,
-                    (Number(this.coordinate.y) + (Number(2.5)*Number(this.fontSize)))
+                    (Number(this.coordinate.y) + (Number(2.5)*Number(this.fontSize))),
+                    this.getLine(),this.fontSize
                     );
                 console.log("line2Coordinate:"+this.line2Coordinate.printValue());
+
                 var x1 = Number(this.coordinate.x)+Number(this.fontSize);
                 var y1 = Number(this.coordinate.y)+Number(this.fontSize)/2;
-                this.operatorCoordinate = new Coordinate(x1,y1);
+                this.operatorCoordinate = new ContentCoordinate(
+                    x1,y1,
+                    this.operator,this.fontSize
+                    );
                 console.log("operatorCoordinate:"+this.operatorCoordinate.printValue());
-
             }
             this.getBCoordinate = function(){
-                return this.bCoordinate;
+                return this.bCoordinate.coordinate;
             }
             this.getLineLength = function() {
                 var lineLength = Math.max(this.a.length,this.b.length);
@@ -464,13 +475,13 @@
                 return line;   
             }           
             this.getLine1Coordinate = function(){
-                return this.line1Coordinate;
+                return this.line1Coordinate.coordinate;
             }
             this.getLine2Coordinate = function(){
-                return this.line2Coordinate;
+                return this.line2Coordinate.coordinate;
             }
             this.getOperatorCoordinate = function() {
-                return this.operatorCoordinate;
+                return this.operatorCoordinate.coordinate;
             }
             this.getMinX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
@@ -493,7 +504,8 @@
             }
             this.addLetterToA = function(canvas) {
                 console.log("Adding letter to A"+this.printValue());
-                addletter(canvas, this.a, this.coordinate.x, this.coordinate.y,this.fontSize);
+                addletter(canvas, this.aCoordinate.content, this.aCoordinate.coordinate.x,
+                 this.aCoordinate.coordinate.y,this.aCoordinate.fontSize);
             }
             this.addText = function(canvas) {
                 console.log("Adding text:"+this.printValue());
@@ -501,9 +513,9 @@
             }
             this.addLetterToB = function(canvas) {
                 console.log("Adding letter to B");
-                var bCoordinate=this.getBCoordinate();
                 //INFO: write in next line.
-                addletter(canvas, this.b, bCoordinate.x, bCoordinate.y,this.fontSize);
+                addletter(canvas, this.bCoordinate.content, this.bCoordinate.coordinate.x,
+                 this.bCoordinate.coordinate.y,this.bCoordinate.fontSize);
             }
             this.addLine1 = function(canvas) {
                 console.log("Adding line1");
@@ -578,7 +590,7 @@
             }
             this.printValue= function() {
                 if(this.isNumeric()) {
-                    return "id="+this.id+" ("+this.x+","+ this.y+") : "+this.a+this.operator+this.b+"=?";
+                    return "id="+this.id+" ("+this.x+","+ this.y+") : "+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?";
                 } else{
                     return "id="+this.id+" ("+this.contentText+")";
                 }
