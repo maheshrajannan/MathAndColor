@@ -14,10 +14,17 @@
 <div id="containerDivId" class="container">
     <div class="leftdiv"  id="leftDivId">
         <fieldset>
-            <label for="numberAId">A:</label>
-            <input class="form-control" type="name" maxlength="10" size="10" id="numberAId" placeholder="A"/>
+            <label for="contentTypeId">Content Type:</label>
+            <select
+                class="form-control" type="text" id="contentTypeId" onchange="onContentChange()">
+                <option>Text</option>
+                <option>Numeric</option>
+            </select>
             <br/>
-         	<label for="operatorId">Operator:</label> 
+            <label id="numberALabelId" for="numberAId">A:</label>
+            <input class="form-control" type="name" maxlength="5" size="4" id="numberAId" placeholder="A"/>
+            <br/>
+         	<label id="operatorLabelId" for="operatorId">Operator:</label> 
             <select
 				class="form-control" type="text" id="operatorId" style="width:128px;">
 				<option>+</option>
@@ -27,8 +34,10 @@
                 <option>%</option>
 			</select>
             <br/>
-            <label for="numberBId">B:</label>
-            <input class="form-control" type="name" maxlength="10" size="10" id="numberBId" placeholder="B"/>
+            <label id="numberBLabelId" for="numberBId">B:</label>
+            <input class="form-control" type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
+            <label id="textLabelId" for="textId">Text:</label>
+            <input class="form-control" type="name" maxlength="5" size="4" id="textId" placeholder="Text To Appear"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
@@ -42,7 +51,7 @@
             <br/>
             <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
             <br/>
-            <input id="image_from_list" name="image_from_list" type="text" maxlength="10" size="10" value="none"  />
+            <input id="image_from_list" name="image_from_list" type="text" maxlength="5" size="4" value="none"  />
             <br/>
             <img src="images/butterfly.jpg" col="images/butterfly.jpg" border="0" width="50 px" height="50 px" 
             />
@@ -102,13 +111,17 @@
     <script type="text/javascript">
 
         var FONT_SIZE = $('#fontSizeId').val();
-        var mousePosition;
+        var CONTENT_TYPE_NUMERIC="Numeric";
+        var CONTENT_TYPE_TEXT="Text";
+        var mouseCoordinate;
         var contentCoordinateGroupHistory=[];
 
 
         window.onload = function() {
+            $("#bannerDivId").width(1600);     
             draw();
             toggleAdvanced();
+            onContentChange();
         };
         //INFO: outside of onload
 
@@ -143,24 +156,31 @@
             context.fillText("_______", 30, (5*Number(FONT_SIZE)));
         }
 
-        //INFO: capture the last position of mouse, by mouse listener.
-        //on key down, write to the last known position of the mouse.
+        //INFO: capture the last coordinate of mouse, by mouse listener.
+        //on key down, write to the last known coordinate of the mouse.
 
         function mouseMoveHandler(canvas, event) {
             showInputs();
-            mousePosition = getMousePosition(canvas, event);
-            console.log("clicked at "+mousePosition.printValue());
+            mouseCoordinate = getMouseCoordinate(canvas, event);
+            console.log("clicked at "+mouseCoordinate.printValue());
             var fontSize=$("#fontSizeId").val();
-            var aValue=$("#numberAId").val();
-            var bValue=$("#numberBId").val();
-            var operatorValue=$("#operatorId").val();
+            var contentType=$("#contentTypeId").val();
             var contentCoordinateGroup = new ContentCoordinateGroup(
-                mousePosition.x,mousePosition.y,aValue,bValue,operatorValue,fontSize);
+                mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
+            if(contentCoordinateGroup.isNumeric()) {
+                var aValue=$("#numberAId").val();
+                var bValue=$("#numberBId").val();
+                var operatorValue=$("#operatorId").val();
+                contentCoordinateGroup.setNumericContent(aValue,bValue,operatorValue);            
+            }else{
+                var contentText = $("#textId").val();
+                contentCoordinateGroup.setContentText(contentText);
+            }
             contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
             if(contentCoordinateGroupWithinLimits){
-                console.log("near/on existing position is being clicked");
+                console.log("near/on existing coordinate is being clicked");
                 populateExistingCordinate(contentCoordinateGroupWithinLimits);
             }else{
                 if( (contentCoordinateGroupHistory) && contentCoordinateGroupHistory.length > 0) {
@@ -168,9 +188,9 @@
                 }else{
                     nextCoordinateNumber = 1;
                 }
-                console.log("new position is being clicked");
-                $("#xId").val(contentCoordinateGroup.position.x);
-                $("#yId").val(contentCoordinateGroup.position.y);
+                console.log("new coordinate is being clicked");
+                $("#xId").val(contentCoordinateGroup.coordinate.x);
+                $("#yId").val(contentCoordinateGroup.coordinate.y);
                 //TODO: check for overlap.
                 $("#numberAId").focus();
                 $("#contentCoordinateGroupId").val("-1");
@@ -181,17 +201,18 @@
         /**
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
         **/
-        function getMousePosition(canvas, evt) {
+        function getMouseCoordinate(canvas, evt) {
             var rect = canvas.getBoundingClientRect();
             var x = Math.round(evt.clientX - rect.left);
             var y = Math.round(evt.clientY - rect.top);
-            var position = new Position(x,y);
-            return position;
+            var coordinate = new Coordinate(x,y);
+            return coordinate;
         }
 
-        function Position(x,y) {
-            this.x=x;
-            this.y=y;
+        function Coordinate(x,y) {
+            //Will become an attribute of every instance of coordinate.
+            this.x=Math.round(x);
+            this.y=Math.round(y);
             this.printValue=function(){
                 return "(x="+this.x+",y="+this.y+")";
             }
@@ -203,14 +224,30 @@
             }
         }
 
+        /**
+        A content(element) at a given coordinate.
+        **/
+        function ContentCoordinate(x,y,content,fontSize) {
+            this.content = content;
+            this.coordinate = new Coordinate(x,y);
+            this.fontSize=fontSize;
+            this.draw=function(canvas) {
+                addletter(canvas, this.content, coordinate.x, coordinate.y,this.fontSize);
+            }
+            this.printValue = function() {
+                return "Coordinate:"+this.coordinate.printValue()
+                +",Content:"+this.content+" at Size:"+this.fontSize;
+            }
+        }
+
         function ContentRectangle(minX,minY,maxX,maxY) {
             //top left coordinate.
-            this.min = new Position(minX,minY);
+            this.min = new Coordinate(minX,minY);
             //top right coordinate.
-            this.max = new Position(maxX,maxY);
+            this.max = new Coordinate(maxX,maxY);
             this.isRectangleWithInXLimits=function(newRect) {
                 var withinLimits= false;
-                //TODO: make this part of position.
+                //TODO: make this part of coordinate.
                 //INFO: The whole graph is on the 4th coordant.
                 //the first condition is nothing but the rectangle being compared
                 //to this(current) is to the left.
@@ -255,25 +292,64 @@
         //do not return the instance.
         //3. Given x,y , calculate appropriately for A,B,operator and ___ text.
 
-        function ContentCoordinateGroup(x, y, a,b,operator,fontSize) {
-            this.position=new Position(x,y);
+        function ContentCoordinateGroup(x, y,fontSize,contentType) {
+            this.coordinate=new Coordinate(x,y);
             this.fontSize=fontSize;
             this.id=-1;
             this.editReason="";
+            this.contentType=contentType;
 
-            this.a = a;
-            this.b = b;
-            this.operator = operator;
+            this.a=-1;
+            this.b=-1;
+            this.operator="";
+
+            this.aCoordinate;
+            this.bCoordinate;
+            this.line1Coordinate;
+            this.line2Coordinate;
+            this.operatorCoordinate;
+
+            this.contentText="";
 
             this.setId=function(id){
                 this.id=id;
             }
-
+            this.setA=function(a){
+                this.a=a;
+            }
+            this.setB=function(b){
+                this.b=b;
+            }
+            this.setOperator=function(operator){
+                this.operator=operator;
+            }
+            this.isNumeric=function(contentType){
+                if(contentType) {
+                    return contentType === CONTENT_TYPE_NUMERIC;
+                } else {
+                    return this.contentType === CONTENT_TYPE_NUMERIC;                    
+                }
+            }
+            this.isText=function(contentType){
+                if(contentType) {
+                    return contentType === CONTENT_TYPE_TEXT;
+                } else {
+                    return this.contentType === CONTENT_TYPE_TEXT;                    
+                }
+            }
+            this.setNumericContent = function(a,b,operator) {
+                this.setA(a);
+                this.setB(b);
+                this.setOperator(operator);
+            }
+            this.setContentText=function(contentText) {
+                this.contentText=contentText;
+            }
             this.adjust = function (canvas,padding) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
-                var delta =  Number(Number(this.fontSize)*(Math.max(a.length,b.length)));
-                var max = Number(Math.max(a.length,b.length));
+                var delta =  Number(Number(this.fontSize)*(Math.max(this.a.length,this.b.length)));
+                var max = Number(Math.max(this.a.length,this.b.length));
                 //left, top, right, bottom, x, y, width, height
                 var canvasBounds = canvas.getBoundingClientRect();
                 var lineLength = Number(this.fontSize)*Number(this.getLineLength());
@@ -287,54 +363,44 @@
                 console.log("canvasBounds.top:"+canvasBounds.top);
                 console.log("canvasBounds.bottom:"+canvasBounds.bottom);
                 console.log("canvasBounds.y:"+canvasBounds.y);
-                console.log("coordinate position:"+this.position.printValue());
+                console.log("coordinate coordinate:"+this.coordinate.printValue());
 
-                //INFO: Where i click is where the position of the symbol gets written.
+                //INFO: Where i click is where the coordinate of the symbol gets written.
 /**
                 33%
                 44
                 --
                 __
                 this.getMaxX=function(padding){
-                    return Math.round(Number(this.position.x)
+                    return Math.round(Number(this.coordinate.x)
                      + Number(padding)+ (Number(fontSize)/1.5));                
                 }                
 **/
                 //INFO: align to right margin.
-                if( (Number(this.position.x) + Number(padding)
+                if( (Number(this.coordinate.x) + Number(padding)
                  + (Number(fontSize)/1.5) + canvasBounds.left)  > canvasBounds.right) {
-                    console.log("readjusted x for right bounds from x :"+this.position.x);
+                    console.log("readjusted x for right bounds from x :"+this.coordinate.x);
                     console.log("Number(canvasBounds.right)"+
                      "- Number(padding) -"+
                       "- (Number(fontSize)/1.5) - canvasBounds.left");
                     console.log(Number(canvasBounds.right)+
                      "-"+ Number(padding) +"-"+
                      (Number(fontSize)/1.5) +"-"+ canvasBounds.left);
-                    this.position.x = Math.round(
+                    this.coordinate.x = Math.round(
                         Number(canvasBounds.right)
                      - Number(padding)
                       - (Number(fontSize)/1.5) - Number(canvasBounds.left));
-                    console.log("to :"+this.position.x);
+                    console.log("to :"+this.coordinate.x);
                 }
                 //INFO: align to left margin.
-                //TODO: works correctly for large numbers, but for single digits too much spacing.
-/**
-            this.getMinX=function(padding){
-                var lineLength = Number(fontSize)*Number(this.getLineLength());
-                ///1.5 because modulus operator is bigger.
-                return Math.round(
-                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.60)
-                    - Number(fontSize)
-                    );
-            }
-**/                
+                //TODO: works correctly for large numbers, but for single digits too much spacing.                
                 if(
-                 Number(this.position.x)  <
-                 (Number(padding) + Number(lineLength)*0.55 + Number(fontSize) ) 
+                 Number(this.coordinate.x)  <
+                 (Number(padding) + Number(lineLength)*0.50 + Number(fontSize) ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.position.x = Number(padding) + Number(lineLength)*0.55 + Number(fontSize);
-                    console.log("to :"+this.position.x);
+                    this.coordinate.x = Number(padding) + Number(lineLength)*0.50 + Number(fontSize);
+                    console.log("to :"+this.coordinate.x);
                 }
                 //INFO:Basically adjusting for
                 // 32
@@ -342,32 +408,58 @@
                 //=76
                 //3 font sizes,3*40=120
                 console.log("( Number(y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) > canvasBounds.bottom");
-                console.log(( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) + " > " + canvasBounds.bottom);
-                if( ( Number(this.position.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) > canvasBounds.bottom) {
+                console.log(( Number(this.coordinate.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) + " > " + canvasBounds.bottom);
+                if( ( Number(this.coordinate.y) + Number(canvasBounds.top) + (3*Number(this.fontSize)) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.position.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(this.fontSize));
-                    console.log("to :"+this.position.y);
+                    this.coordinate.y = canvasBounds.bottom - Number(canvasBounds.top) - (3*Number(this.fontSize));
+                    console.log("to :"+this.coordinate.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
                 console.log("( Number(y) + Number(canvasBounds.top) - Number(this.fontSize) ) < canvasBounds.top");
-                console.log( ( Number(this.position.y) + Number(canvasBounds.top) - Number(this.fontSize) ) + " < " + canvasBounds.top);
-                if( ( Number(this.position.y) + Number(canvasBounds.top) - Number(this.fontSize) ) < canvasBounds.top) {
-                    console.log("readjusted y for top from y :"+this.position.y);
-                    this.position.y = canvasBounds.top - Number(canvasBounds.top) + Number(this.fontSize);
-                    console.log("to :"+this.position.y);
+                console.log( ( Number(this.coordinate.y) + Number(canvasBounds.top) - Number(this.fontSize) ) + " < " + canvasBounds.top);
+                if( ( Number(this.coordinate.y) + Number(canvasBounds.top) - Number(this.fontSize) ) < canvasBounds.top) {
+                    console.log("readjusted y for top from y :"+this.coordinate.y);
+                    this.coordinate.y = canvasBounds.top - Number(canvasBounds.top) + Number(this.fontSize);
+                    console.log("to :"+this.coordinate.y);
                 }
+                this.initializeCoordinates();
             }
+            this.initializeCoordinates = function() {
+                this.aCoordinate = new ContentCoordinate(this.coordinate.x,this.coordinate.y,this.a,this.fontSize);
+                console.log("aCoordinate:"+this.aCoordinate.printValue());
 
-            this.getBCoordinate = function(){
-                var position = new Position(
-                    this.position.x,
-                    (Number(this.position.y) + Number(this.fontSize))
+                this.bCoordinate = new ContentCoordinate(this.coordinate.x,
+                    (Number(this.coordinate.y) + Number(this.fontSize))
+                    ,this.b,this.fontSize);
+                console.log("bCoordinate:"+this.bCoordinate.printValue());
+
+                this.line1Coordinate = new ContentCoordinate(
+                    this.coordinate.x,
+                    (Number(this.coordinate.y) + (Number(1.25)*Number(this.fontSize))),
+                    this.getLine(),this.fontSize                    
                     );
-                console.log("bCoordinate"+position.printValue());
-                return position;
+                console.log("line1Coordinate:"+this.line1Coordinate.printValue());
+
+                this.line2Coordinate = new ContentCoordinate(
+                    this.coordinate.x,
+                    (Number(this.coordinate.y) + (Number(2.5)*Number(this.fontSize))),
+                    this.getLine(),this.fontSize
+                    );
+                console.log("line2Coordinate:"+this.line2Coordinate.printValue());
+
+                var x1 = Number(this.coordinate.x)+Number(this.fontSize);
+                var y1 = Number(this.coordinate.y)+Number(this.fontSize)/2;
+                this.operatorCoordinate = new ContentCoordinate(
+                    x1,y1,
+                    this.operator,this.fontSize
+                    );
+                console.log("operatorCoordinate:"+this.operatorCoordinate.printValue());
+            }
+            this.getBCoordinate = function(){
+                return this.bCoordinate.coordinate;
             }
             this.getLineLength = function() {
-                var lineLength = Math.max(a.length,b.length);
+                var lineLength = Math.max(this.a.length,this.b.length);
                 console.log("Line Length a or b:"+lineLength);
                 return lineLength;
             }
@@ -381,47 +473,82 @@
                     lineLength = lineLength - 1;
                 }
                 return line;   
-            }
+            }           
             this.getLine1Coordinate = function(){
-                var position = new Position(
-                    this.position.x,
-                    (Number(this.position.y) + (Number(1.25)*Number(this.fontSize)))
-                    );
-                console.log("getLine1Coordinate"+position.printValue());
-                return position;
+                return this.line1Coordinate.coordinate;
             }
             this.getLine2Coordinate = function(){
-                var position = new Position(
-                    this.position.x,
-                    (Number(this.position.y) + (Number(2.5)*Number(this.fontSize)))
-                    );
-                console.log("getLine2Coordinate"+position.printValue());
-                return position;
+                return this.line2Coordinate.coordinate;
             }
             this.getOperatorCoordinate = function() {
-                var x1 = Number(this.position.x)+Math.round(Number(this.fontSize));
-                var y1 = Number(this.position.y)+Math.round(Number(this.fontSize)/2);
-                var position = new Position(x1,y1);
-                return position;
+                return this.operatorCoordinate.coordinate;
             }
             this.getMinX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
                 ///1.5 because modulus operator is bigger.
                 return Math.round(
-                    Number(this.position.x) - Number(padding) - (Number(lineLength)*0.55)
+                    Number(this.coordinate.x) - Number(padding) - (Number(lineLength)*0.50)
                     - Number(fontSize)
                     );
             }
             this.getMaxX=function(padding){
-                return Math.round(Number(this.position.x)
+                return Math.round(Number(this.coordinate.x)
                  + Number(padding) + (Number(fontSize)/1.5) );                
             }
             this.getMinY=function(padding){
-                return Math.round(Number(this.position.y) - Number(padding));
+                return Math.round(Number(this.coordinate.y) - Number(padding));
             }
             this.getMaxY=function(padding){
                 var verticalHeight = Number(fontSize)*Number(3.5);
-                return Math.round(Number(this.position.y) + Number(padding) + Number(verticalHeight));
+                return Math.round(Number(this.coordinate.y) + Number(padding) + Number(verticalHeight));
+            }
+            this.addLetterToA = function(canvas) {
+                console.log("Adding letter to A"+this.printValue());
+                addletter(canvas, this.aCoordinate.content, this.aCoordinate.coordinate.x,
+                 this.aCoordinate.coordinate.y,this.aCoordinate.fontSize);
+            }
+            this.addText = function(canvas) {
+                console.log("Adding text:"+this.printValue());
+                addletter(canvas, this.contentText, this.coordinate.x, this.coordinate.y,this.fontSize);
+            }
+            this.addLetterToB = function(canvas) {
+                console.log("Adding letter to B");
+                //INFO: write in next line.
+                addletter(canvas, this.bCoordinate.content, this.bCoordinate.coordinate.x,
+                 this.bCoordinate.coordinate.y,this.bCoordinate.fontSize);
+            }
+            this.addLine1 = function(canvas) {
+                console.log("Adding line1");
+                var line1Coordinate=this.getLine1Coordinate();
+                var line=this.getLine();
+                //INFO: write in next line.
+                addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,this.fontSize);
+            }       
+            this.addLine2= function(canvas) {
+                console.log("Adding line2");
+                var line2Coordinate=this.getLine2Coordinate();
+                //INFO: write in next line.
+                var line=this.getLine();
+                addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,this.fontSize);
+            }           
+            this.addLetterToOperator= function(canvas){
+                //TODO: refactor this function.
+                console.log("Adding letter to Operator");
+                var operatorCoordinate = this.getOperatorCoordinate();
+                //INFO: write it between 2 numbers, slightly to left
+                addletter(canvas, this.operator, operatorCoordinate.x, operatorCoordinate.y,this.fontSize);
+            }
+            this.draw=function(canvas) {
+                console.log("contentCoordinateGroup:"+this.printValue());
+                if(this.isNumeric()) {
+                    this.addLetterToA(canvas);
+                    this.addLetterToOperator(canvas);
+                    this.addLetterToB(canvas);
+                    this.addLine1(canvas);
+                    this.addLine2(canvas);                
+                }else{
+                    this.addText(canvas);
+                }
             }
             this.getContentRectangle=function(padding){
                 var contentRectangle=new ContentRectangle(
@@ -462,7 +589,11 @@
                 return withinLimits;
             }
             this.printValue= function() {
-                return "id="+this.id+" ("+x+","+ y+") : "+a+operator+b+"=?";
+                if(this.isNumeric()) {
+                    return "id="+this.id+" ("+this.x+","+ this.y+") : "+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?";
+                } else{
+                    return "id="+this.id+" ("+this.contentText+")";
+                }
             }            
         }
 
@@ -479,52 +610,6 @@
             context.fillText(letter, x, y );
         }
 
-        function addLetterToA(canvas,contentCoordinateGroup) {
-            console.log("Adding letter to A");
-            console.log("canvassing...");
-            console.log("adding...(x,y)=("+contentCoordinateGroup.position.x+","+contentCoordinateGroup.position.y+")");
-            addletter(canvas, contentCoordinateGroup.a, contentCoordinateGroup.position.x, contentCoordinateGroup.position.y,contentCoordinateGroup.fontSize);
-            console.log("added...");
-        }
-        function addLetterToB(canvas,contentCoordinateGroup) {
-            console.log("Adding letter to B");
-            console.log("canvassing...");
-            var bCoordinate=contentCoordinateGroup.getBCoordinate();
-            console.log("adding...(x,y)=("+bCoordinate.x+","+bCoordinate.y+")");
-            //INFO: write in next line.
-            addletter(canvas, contentCoordinateGroup.b, bCoordinate.x, bCoordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
-        }
-        function addLine1(canvas,contentCoordinateGroup) {
-            console.log("Adding line1");
-            console.log("canvassing...");
-            var line1Coordinate=contentCoordinateGroup.getLine1Coordinate();
-            console.log("adding...(x,y)=("+line1Coordinate.x+","+line1Coordinate.y+")");
-            var line=contentCoordinateGroup.getLine();
-            //INFO: write in next line.
-            addletter(canvas, line, line1Coordinate.x, line1Coordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
-        }       
-        function addLine2(canvas,contentCoordinateGroup) {
-            console.log("Adding line2");
-            console.log("canvassing...");
-            var line2Coordinate=contentCoordinateGroup.getLine2Coordinate();
-            console.log("adding...(x,y)=("+line2Coordinate.x+","+line2Coordinate.y+")");
-            //INFO: write in next line.
-            var line=contentCoordinateGroup.getLine();
-            addletter(canvas, line, line2Coordinate.x, line2Coordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");            
-        }           
-        function addLetterToOperator(canvas,contentCoordinateGroup){
-            //TODO: refactor this function.
-            console.log("Adding letter to Operator");
-            console.log("canvassing...");
-            var operatorCoordinate = contentCoordinateGroup.getOperatorCoordinate();
-            console.log("adding...(x1,y1)=("+operatorCoordinate.x+","+operatorCoordinate.y+")");
-            //INFO: write it between 2 numbers, slightly to left
-            addletter(canvas, contentCoordinateGroup.operator, operatorCoordinate.x, operatorCoordinate.y,contentCoordinateGroup.fontSize);
-            console.log("added...");
-        }
 		//Validate the input and add text.
 		function validateInput() {
             var letterA = $('#numberAId').val();
@@ -545,43 +630,48 @@
         }
         function addContent() {
             console.log("adding content");
+            //INFO: common to both contentCoordinateGroup of type text and numeric.
             var x=$('#xId').val();
             var y=$('#yId').val();
-            var letterA = $('#numberAId').val();
-            var letterB = $('#numberBId').val();
-            var operator = $('#operatorId').val();
             var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
             var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();
+            var contentType=$('#contentTypeId').val();
             var contentCoordinateGroupWithinLimits;
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
-            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,letterA,letterB,operator,fontSize);
+            //INFO: specific to numeric content coordinate group.
+
+            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,fontSize,contentType);
+            if(contentCoordinateGroup.isNumeric()) {
+                var letterA = $('#numberAId').val();
+                var letterB = $('#numberBId').val();
+                var operator = $('#operatorId').val();
+                contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
+            }else{
+                var contentText = $('#textId').val();
+                contentCoordinateGroup.setContentText(contentText,operator);
+            }
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas);
 
             if(contentCoordinateGroupId>0) {
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
-                x=contentCoordinateGroup.position.x;
-                y=contentCoordinateGroup.position.y;
+                x=contentCoordinateGroup.coordinate.x;
+                y=contentCoordinateGroup.coordinate.y;
                 $('#xId').val(x);
                 $('#yId').val(y);            
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
                 contentCoordinateGroupHistory[contentCoordinateGroupId-1]=contentCoordinateGroup;
-                //TODO: redraw.
                 console.log("Redrawing");
                 erase(canvas);
+                //TODO: this needs to be written from, javascript array.
                 draw();
                 console.log("total:"+contentCoordinateGroupHistory.length);
                 for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
                     currentContentCoordinateGroup = contentCoordinateGroupHistory[j];
-                    console.log("currentContentCoordinateGroup:"+currentContentCoordinateGroup.printValue());
-                    addLetterToA(canvas,currentContentCoordinateGroup);
-                    addLetterToOperator(canvas,currentContentCoordinateGroup);
-                    addLetterToB(canvas,currentContentCoordinateGroup);
-                    addLine1(canvas,currentContentCoordinateGroup);
-                    addLine2(canvas,currentContentCoordinateGroup);
+                    currentContentCoordinateGroup.draw(canvas);
                 }
                 //INFO: End of editing existing coordinate.
             }else{
@@ -590,15 +680,12 @@
                 contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
                 if(contentCoordinateGroupWithinLimits == null) {
                     console.log("Adding new values");
-                    x=contentCoordinateGroup.position.x;
-                    y=contentCoordinateGroup.position.y;
+                    x=contentCoordinateGroup.coordinate.x;
+                    y=contentCoordinateGroup.coordinate.y;
                     $('#xId').val(x);
                     $('#yId').val(y);            
-                    addLetterToA(canvas,contentCoordinateGroup);
-                    addLetterToOperator(canvas,contentCoordinateGroup);
-                    addLetterToB(canvas,contentCoordinateGroup);
-                    addLine1(canvas,contentCoordinateGroup);
-                    addLine2(canvas,contentCoordinateGroup);
+                    //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
+                    contentCoordinateGroup.draw(canvas);
                     addToHistory(contentCoordinateGroup);
                     console.log("total"+contentCoordinateGroupHistory.length);                
                 }else {
@@ -609,12 +696,24 @@
                 }
             }
         }
+        function populateCoordinate(contentCoordinateGroup) {
+            $('#xId').val(contentCoordinateGroup.coordinate.x);
+            $('#yId').val(contentCoordinateGroup.coordinate.y);
+            if(contentCoordinateGroup.isNumeric()) {
+                onContentChange(contentCoordinateGroup.contentType);
+                //TODO: change dropdown and populate values...
+                //TODO: repopulate A and B, only if pre-populate existing is selected. 
+                //default is it is NOT selected.            
+                $('#numberAId').val(contentCoordinateGroup.a);
+                $('#numberBId').val(contentCoordinateGroup.b);
+                $('#operatorId').val(contentCoordinateGroup.operator);
+            } else{
+                onContentChange(contentCoordinateGroup.contentType);
+                $('#textId').val(contentCoordinateGroup.contentText);
+            }
+        }
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
-            $('#xId').val(contentCoordinateGroupWithinLimits.position.x);
-            $('#yId').val(contentCoordinateGroupWithinLimits.position.y);            
-            $('#numberAId').val(contentCoordinateGroupWithinLimits.a);
-            $('#numberBId').val(contentCoordinateGroupWithinLimits.b);
-            $('#operatorId').val(contentCoordinateGroupWithinLimits.operator);
+            populateCoordinate(contentCoordinateGroupWithinLimits);
             $('#contentCoordinateGroupId').val(contentCoordinateGroupWithinLimits.id);     
             $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
@@ -628,6 +727,35 @@
             $("#leftDivId").hide();
             $("#rightDivId").hide();       
             $("#bannerDivId").width(1000);     
+        }
+        function onContentChange(inContentType) {
+            var contentType = "";
+            if(inContentType) {
+                contentType = inContentType;
+            }else {
+                contentType = $("#contentTypeId").val();
+            }
+            console.log("Content Type is "+contentType);
+            //TODO: good to have, not must have, organize in div or field sets.
+            if(contentType==="Text") {
+                $("#numberAId").hide();
+                $("#numberBId").hide();
+                $("#operatorId").hide();
+                $("#numberALabelId").hide();
+                $("#numberBLabelId").hide();
+                $("#operatorLabelId").hide();
+                $("#textId").show();
+                $("#textLabelId").show();
+            }else{
+                $("#numberAId").show();
+                $("#numberBId").show();
+                $("#operatorId").show();
+                $("#numberALabelId").show();
+                $("#numberBLabelId").show();
+                $("#operatorLabelId").show();
+                $("#textId").hide();
+                $("#textLabelId").hide();
+            }
         }
         function prefillImage() {
             console.log("prefillImage");

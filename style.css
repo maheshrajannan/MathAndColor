@@ -86,7 +86,7 @@ Functionalities to check before each check in.
     .leftdiv,.rightdiv{
         padding-left: 10px;
     }
-    input,button,label { font-size: 150%;  } 
+    input,button,label,select { font-size: 150%;  } 
     button{
         min-width: 100px;
     } 
