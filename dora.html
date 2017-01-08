@@ -426,7 +426,8 @@
                 this.initializeCoordinates();
             }
             this.initializeCoordinates = function() {
-                this.aCoordinate = new ContentCoordinate(this.coordinate.x,this.coordinate.y,this.a,this.fontSize);
+                this.aCoordinate = new ContentCoordinate(this.coordinate.x,
+                    this.coordinate.y,this.a,this.fontSize);
                 console.log("aCoordinate:"+this.aCoordinate.printValue());
 
                 this.bCoordinate = new ContentCoordinate(this.coordinate.x,
@@ -493,7 +494,8 @@
             }
             this.addText = function(canvas) {
                 console.log("Adding text:"+this.printValue());
-                addletter(canvas, this.contentText, this.coordinate.x, this.coordinate.y,this.fontSize);
+                //TODO: use textCoordinate.draw()
+                addletter(canvas, this.contentText, this.coordinate.x, this.coordinate.y,this.fontSize,"left");
             }
             this.draw=function(canvas) {
                 console.log("contentCoordinateGroup:"+this.printValue());
@@ -560,10 +562,19 @@
         //canvas.addEventListener("keyup", keyUpHandler, true);
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
 
-        function addletter(canvas, letter, x, y,fontSize) {
+        function addletter(canvas, letter, x, y,fontSize,align) {
             var context = canvas.getContext("2d");
             context.font = fontSize+"pt Calibri";
-            context.textAlign = "right";
+            if(align && 
+                ( align === "left" || align === "right" ||
+                    align === "center" || align === "justify" ||
+                     align ==="initial")
+                ) {
+                context.textAlign=align;
+            } else {
+                console.log("align:"+align);
+                context.textAlign = "right";
+            }
             context.fillText(letter, x, y );
         }
 
