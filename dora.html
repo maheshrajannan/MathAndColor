@@ -456,9 +456,6 @@
                     );
                 console.log("operatorCoordinate:"+this.operatorCoordinate.printValue());
             }
-            this.getBCoordinate = function(){
-                return this.bCoordinate.coordinate;
-            }
             this.getLineLength = function() {
                 var lineLength = Math.max(this.a.length,this.b.length);
                 console.log("Line Length a or b:"+lineLength);
@@ -474,15 +471,6 @@
                     lineLength = lineLength - 1;
                 }
                 return line;   
-            }           
-            this.getLine1Coordinate = function(){
-                return this.line1Coordinate.coordinate;
-            }
-            this.getLine2Coordinate = function(){
-                return this.line2Coordinate.coordinate;
-            }
-            this.getOperatorCoordinate = function() {
-                return this.operatorCoordinate.coordinate;
             }
             this.getMinX=function(padding){
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
@@ -507,35 +495,14 @@
                 console.log("Adding text:"+this.printValue());
                 addletter(canvas, this.contentText, this.coordinate.x, this.coordinate.y,this.fontSize);
             }
-            this.addLetterToA = function(canvas) {
-                console.log("Adding letter to A"+this.aCoordinate.printValue());
-                this.aCoordinate.draw(canvas);
-            }
-            this.addLetterToB = function(canvas) {
-                console.log("Adding letter to B"+this.bCoordinate.printValue());
-                this.bCoordinate.draw(canvas);
-            }
-            this.addLine1 = function(canvas) {
-                console.log("Adding line1"+this.line1Coordinate.printValue());
-                this.line1Coordinate.draw(canvas);
-            }       
-            this.addLine2= function(canvas) {
-                console.log("Adding line2"+this.line2Coordinate.printValue());
-                this.line2Coordinate.draw(canvas);
-            }           
-            this.addLetterToOperator= function(canvas){
-                //TODO: refactor this function.
-                console.log("Adding letter to Operator"+this.operatorCoordinate.printValue());
-                this.operatorCoordinate.draw(canvas);
-            }
             this.draw=function(canvas) {
                 console.log("contentCoordinateGroup:"+this.printValue());
                 if(this.isNumeric()) {
-                    this.addLetterToA(canvas);
-                    this.addLetterToOperator(canvas);
-                    this.addLetterToB(canvas);
-                    this.addLine1(canvas);
-                    this.addLine2(canvas);                
+                    this.aCoordinate.draw(canvas);
+                    this.bCoordinate.draw(canvas);
+                    this.operatorCoordinate.draw(canvas);
+                    this.line1Coordinate.draw(canvas);
+                    this.line2Coordinate.draw(canvas);
                 }else{
                     this.addText(canvas);
                 }
