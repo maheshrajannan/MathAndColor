@@ -641,7 +641,9 @@
                     }
                 }
                 return contentCoordinateGroupWithinLimits;
-            }            
+            }
+            //TODO:Bug, texts are too far spaced from each other.
+            //TODO:Bug: When clicking on right most corner, it exceeds.            
             this.isWithinLimits = function(contentCoordinateGroup) {
                 console.log("checking :"+this.printValue() +
                     "against contentCoordinateGroup:"+contentCoordinateGroup.printValue());
