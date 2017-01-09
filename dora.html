@@ -37,7 +37,7 @@
             <label id="numberBLabelId" for="numberBId">B:</label>
             <input class="form-control" type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
             <label id="textLabelId" for="textId">Text:</label>
-            <input class="form-control" type="name" maxlength="5" size="4" id="textId" placeholder="Text To Appear"/>
+            <input class="form-control" type="name" maxlength="10" size="10" id="textId" placeholder="Text To Appear"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
@@ -311,6 +311,7 @@
             this.operatorCoordinate;
 
             this.contentText="";
+            this.textCoordinate;
 
             this.setId=function(id){
                 this.id=id;
@@ -347,6 +348,61 @@
                 this.contentText=contentText;
             }
             this.adjust = function (canvas,padding) {
+                if(this.isNumeric()) {
+                    this.numericAdjust(canvas,padding);
+                }else{
+                    this.textAdjust(canvas,padding);
+                }
+            }
+            this.textAdjust = function (canvas,padding) {
+                console.log("text adjust");
+                //left, top, right, bottom, x, y, width, height
+                var canvasBounds = canvas.getBoundingClientRect();
+
+                console.log("canvasBounds.x:"+canvasBounds.x);
+                console.log("canvasBounds.left:"+canvasBounds.left);
+                console.log("canvasBounds.right:"+canvasBounds.right);
+                console.log("canvasBounds.top:"+canvasBounds.top);
+                console.log("canvasBounds.bottom:"+canvasBounds.bottom);
+                console.log("canvasBounds.y:"+canvasBounds.y);
+                console.log("coordinate coordinate:"+this.coordinate.printValue());
+                if( (Number(this.coordinate.x) + Number(padding)
+                 + canvasBounds.left)  > canvasBounds.right) {
+                    console.log("readjusted x for right bounds from x :"+this.coordinate.x);
+                    this.coordinate.x = Math.round(
+                        Number(canvasBounds.right)
+                     - Number(padding)
+                      - (Number(fontSize)/1.5) - Number(canvasBounds.left));
+                    console.log("to :"+this.coordinate.x);
+                }
+                //INFO: align to left margin.
+                //TODO: works correctly for large numbers, but for single digits too much spacing.                
+                if(
+                 Number(this.coordinate.x)  <
+                 (Number(padding) + Number(this.contentText.length)*0.50*Number(fontSize) ) 
+                 ) {
+                    console.log("readjusted x for left bounds from x :"+x);
+                    this.coordinate.x = Number(padding)
+                     + Number(this.contentText.length)*0.50*Number(fontSize) + Number(fontSize);
+                    console.log("to :"+this.coordinate.x);
+                }
+                console.log("( Number(y) + Number(canvasBounds.top) + Number(this.fontSize) ) > canvasBounds.bottom");
+                console.log(( Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize) ) + " > " + canvasBounds.bottom);
+                if( ( Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize) ) > canvasBounds.bottom) {
+                    console.log("readjusted y for bottom from y :"+y);
+                    this.coordinate.y = canvasBounds.bottom - Number(canvasBounds.top) - Number(this.fontSize);
+                    console.log("to :"+this.coordinate.y);
+                }
+                //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
+                console.log("Number(y) < Number(this.fontSize)");
+                if( Number(this.coordinate.y) < Number(this.fontSize)) {
+                    console.log("readjusted y for top from y :"+this.coordinate.y);
+                    this.coordinate.y = Number(this.fontSize);
+                    console.log("to :"+this.coordinate.y);
+                }
+                this.initializeCoordinates();
+            }
+            this.numericAdjust = function (canvas,padding) {
                 console.log("adjust");
                 //INFO: Calculate space taken by 40 px character.
                 var delta =  Number(Number(this.fontSize)*(Math.max(this.a.length,this.b.length)));
@@ -426,6 +482,13 @@
                 this.initializeCoordinates();
             }
             this.initializeCoordinates = function() {
+                if(this.isNumeric()) {
+                    this.initializeNumericCoordinates();
+                }else {
+                    this.initializeTextCoordinates();
+                }
+            }
+            this.initializeNumericCoordinates = function() {
                 this.aCoordinate = new ContentCoordinate(this.coordinate.x,
                     this.coordinate.y,this.a,this.fontSize);
                 console.log("aCoordinate:"+this.aCoordinate.printValue());
@@ -457,6 +520,11 @@
                     );
                 console.log("operatorCoordinate:"+this.operatorCoordinate.printValue());
             }
+            this.initializeTextCoordinates = function() {
+                this.textCoordinate = new ContentCoordinate(this.coordinate.x,
+                    this.coordinate.y,this.contentText,this.fontSize);
+                console.log("textCoordinate:"+this.textCoordinate.printValue());
+            }            
             this.getLineLength = function() {
                 var lineLength = Math.max(this.a.length,this.b.length);
                 console.log("Line Length a or b:"+lineLength);
@@ -495,7 +563,7 @@
             this.addText = function(canvas) {
                 console.log("Adding text:"+this.printValue());
                 //TODO: use textCoordinate.draw()
-                addletter(canvas, this.contentText, this.coordinate.x, this.coordinate.y,this.fontSize,"left");
+                this.textCoordinate.draw(canvas,"left");
             }
             this.draw=function(canvas) {
                 console.log("contentCoordinateGroup:"+this.printValue());
@@ -619,7 +687,7 @@
                 contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
             }else{
                 var contentText = $('#textId').val();
-                contentCoordinateGroup.setContentText(contentText,operator);
+                contentCoordinateGroup.setContentText(contentText);
             }
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas);
