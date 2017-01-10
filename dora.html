@@ -37,7 +37,7 @@
             <label id="numberBLabelId" for="numberBId">B:</label>
             <input class="form-control" type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
             <label id="textLabelId" for="textId">Text:</label>
-            <input class="form-control" type="name" maxlength="10" size="10" id="textId" placeholder="Text To Appear"/>
+            <input class="form-control" type="name" maxlength="10" size="4" id="textId" placeholder="Text To Appear"/>
         </fieldset>
         <fieldset>
             <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
@@ -371,10 +371,18 @@
                     + Number(this.contentText.length)*0.50*Number(fontSize)
                      > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+this.coordinate.x);
+                    console.log("Number(canvasBounds.right)"+
+                     "- Number(padding)"+
+                     "- Number(canvasBounds.left)"+
+                      "- Number(this.contentText.length)*0.50*Number(fontSize)");
+                    console.log(Number(canvasBounds.right)+
+                     "-" + Number(padding)+
+                     "-" + Number(canvasBounds.left)+
+                     "-" + Number(this.contentText.length)*0.50*Number(fontSize));
                     this.coordinate.x = Math.round(
                         Number(canvasBounds.right)
                      - Number(padding)
-                      - (Number(fontSize)/1.5) - Number(canvasBounds.left)
+                     - Number(canvasBounds.left)
                       - Number(this.contentText.length)*0.50*Number(fontSize)
                       );
                     console.log("to :"+this.coordinate.x);
@@ -386,8 +394,7 @@
                  (Number(padding) ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.coordinate.x = Number(padding)
-                     + Number(fontSize);
+                    this.coordinate.x = Number(padding);
                     console.log("to :"+this.coordinate.x);
                 }
                 console.log("( Number(y) + Number(canvasBounds.top) + Number(this.fontSize) ) > canvasBounds.bottom");
@@ -554,9 +561,11 @@
                     );
             }
             this.getTextMinX=function(padding){
+                console.log("Number(this.coordinate.x) - Number(padding)");
+                console.log(Number(this.coordinate.x) +"-"+ Number(padding));
+                console.log(Number(this.coordinate.x) - Number(padding));
                 return Math.round(
                     Number(this.coordinate.x) - Number(padding)
-                    - Number(fontSize)
                     );
             }
             this.getMinX=function(padding){
@@ -571,9 +580,15 @@
                  + Number(padding) + (Number(fontSize)/1.5) );                
             }
             this.getTextMaxX=function(padding){
+                console.log("Math.round(Number(this.coordinate.x)"
+                 + "Number(padding)+" 
+                 + "Number(fontSize)*this.contentText.length*0.50");
+                console.log(Number(this.coordinate.x)+ 
+                 "+" + Number(padding) +
+                 "+" + Number(fontSize)*this.contentText.length*0.50);
                 return Math.round(Number(this.coordinate.x)
-                 + Number(padding) + (Number(fontSize)/1.5) 
-                 + Number(fontSize)*this.contentText.length
+                 + Number(padding)
+                 + Number(fontSize)*this.contentText.length*0.50
                  );                
             }
             this.getMaxX=function(padding){
@@ -621,7 +636,7 @@
                     this.getMaxX(padding),
                     this.getMaxY(padding)
                     );
-                console.log("contentRectangle is "+contentRectangle.printValue());
+                console.log(this.printValue() + " has contentRectangle: "+contentRectangle.printValue());
                 return contentRectangle;
             }
             this.isAnyWithinLimits = function(contentCoordinateGroupHistory) {
