@@ -746,7 +746,7 @@
                 contentCoordinateGroup.setContentText(contentText);
             }
             //INFO: adjust it, just in case x and y are edited.
-            contentCoordinateGroup.adjust(canvas);
+            contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
 
             if(contentCoordinateGroupId>0) {
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
