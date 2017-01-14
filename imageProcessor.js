@@ -7,7 +7,6 @@
 
         window.onload = function() {
             $("#bannerDivId").width(1600);     
-            draw();
             toggleAdvanced();
             onContentChange();
         };
@@ -33,20 +32,8 @@
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
-        function draw() {
-            var canvas = document.getElementById("myCanvas");
-            var context = canvas.getContext("2d");
-            context.font = FONT_SIZE+"pt Calibri";
-            context.textAlign="left";
-            context.fillText("Name:", 30, FONT_SIZE);
-            //Fill your name
-            context.fillText("__________", 30, (3*Number(FONT_SIZE)));
-            context.fillText("_______", 30, (5*Number(FONT_SIZE)));
-        }
-
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
-
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mouseCoordinate = getMouseCoordinate(canvas, event);
@@ -648,8 +635,6 @@
                 contentCoordinateGroupHistory[contentCoordinateGroupId-1]=contentCoordinateGroup;
                 console.log("Redrawing");
                 erase(canvas);
-                //TODO: this needs to be written from, javascript array.
-                draw();
                 console.log("total:"+contentCoordinateGroupHistory.length);
                 for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
                     currentContentCoordinateGroup = contentCoordinateGroupHistory[j];

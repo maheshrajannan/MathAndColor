@@ -6,8 +6,8 @@
 
 Next Features:
 
-6. Enter text or numbers.
-7. write legend in the simplest way. 55 = RED.
+6. Enter text or numbers.DONE
+7. write legend in the simplest way. 55 = RED.DONE
 8. Write name in the simplest way. <<Your name Here>>
 9. Pre-fill numbers at specified coordinates.
 10. prefill name place holder in simplest way.
