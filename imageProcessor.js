@@ -132,31 +132,36 @@
         function ContentRectangle(minX,minY,maxX,maxY) {
             //top left coordinate.
             this.min = new Coordinate(minX,minY);
-            //top right coordinate.
+            //bottom right coordinate.
             this.max = new Coordinate(maxX,maxY);
             this.isRectangleWithInXLimits=function(newRect) {
-                var withinLimits= false;
+                var withinLimits= true;
                 //TODO: make this part of coordinate.
                 //INFO: The whole graph is on the 4th coordant.
                 //the first condition is nothing but the rectangle being compared
                 //to this(current) is to the left.
                 //The second case is that the rectangle being compared is to the right.
+                //Comparing this(x=1,y=953),(x=101,y=1013)with(x=0,y=873),(x=147,y=1033)
+                // this 1,101 new 0,147
+                //101<147 && 101 || 
+                console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
+                console.log(" ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) ) "+
+                    ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) ) );
                 if( 
-                    ( ( this.min.x <= newRect.max.x ) && ( this.max.x >= newRect.max.x ) ) ||
-                    ( ( this.min.x <= newRect.min.x ) && ( this.max.x >= newRect.min.x ) )
+                    ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) )                     
                  ) {
-                    console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
-                    withinLimits=true;
+                    withinLimits=false;
                 }
                 return withinLimits;
             }
             this.isRectangleWithInYLimits=function(newRect) {
-                var withinLimits= false;
+                var withinLimits= true;
+                console.log(this.printValue()+" is with in y limits of "+newRect.printValue());
+                console.log("  ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y ) "+
+                     ( ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y ) ) );
                 if( 
-                    ( ( this.min.y <= newRect.max.y ) && ( this.max.y >= newRect.max.y ) ) ||
-                    ( ( this.min.y <= newRect.min.y ) && ( this.max.y >= newRect.min.y ) )
+                    ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y )
                  ) {
-                    console.log(this.printValue()+" is with in y limits of "+newRect.printValue());
                     withinLimits=true;
                 }
                 return withinLimits;
@@ -559,7 +564,7 @@
             }
             this.printValue= function() {
                 if(this.isNumeric()) {
-                    return "id="+this.id+" ("+this.x+","+ this.y+") : "+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?";
+                    return "id="+this.id+this.coordinate.printValue()+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?";
                 } else{
                     return "id="+this.id+" ("+this.contentText+")";
                 }
@@ -677,8 +682,8 @@
         function populateCoordinate(contentCoordinateGroup) {
             $('#xId').val(contentCoordinateGroup.coordinate.x);
             $('#yId').val(contentCoordinateGroup.coordinate.y);
+            onContentChange(contentCoordinateGroup.contentType);
             if(contentCoordinateGroup.isNumeric()) {
-                onContentChange(contentCoordinateGroup.contentType);
                 //TODO: change dropdown and populate values...
                 //TODO: repopulate A and B, only if pre-populate existing is selected. 
                 //default is it is NOT selected.            
@@ -687,7 +692,6 @@
                 $('#operatorId').val(contentCoordinateGroup.operator);
                 $('#contentTypeId').val(contentCoordinateGroup.contentType);
             } else{
-                onContentChange(contentCoordinateGroup.contentType);
                 $('#textId').val(contentCoordinateGroup.contentText);
                 $('#contentTypeId').val(contentCoordinateGroup.contentType);
             }
