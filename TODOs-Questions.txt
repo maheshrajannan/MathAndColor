@@ -1,0 +1,35 @@
+TODOS
+-----
+1) Remove all class="form-control". They are never used. Were needed only when bootstrap form was involved. 
+
+2) Move styling of img from html file to css. 
+border="0" width="50 px" height="50 px" 
+
+3) Is col attribute needed? If not remove it.
+col="images/butterfly.jpg
+
+4) Move Javascript to external js file
+
+5) Remove all onclick from html file. Move to js file. Example as below 
+current dora.html
+------------------
+<button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
+function validateInput() { blah blah blah }
+
+dora.html
+---------
+<button id="doneId">Add To Image</button>
+
+External script file
+---------------------
+function validateInput() { blah blah blah }
+$('#doneId').click(validateInput);
+
+6) To get canvas using jQuery, use var canvas = $('#myCanvas').get(0) instead of  var canvas = document.getElementById("myCanvas");
+
+Questions
+----------
+1) What is the use of object ContentCoordinate(x,y,content,fontSize)? 
+Why a separate object when all it is doing is calling addletter(canvas, this.content, this.coordinate.x, this.coordinate.y,this.fontSize);} by passing canvas.
+
+2) Anytime we need canvas, we can directly get it using DOM eg. var canvas = $('#myCanvas').get(0)
