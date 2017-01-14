@@ -135,40 +135,38 @@
             //bottom right coordinate.
             this.max = new Coordinate(maxX,maxY);
             this.isRectangleWithInXLimits=function(newRect) {
-                var withinLimits= true;
-                //TODO: make this part of coordinate.
-                //INFO: The whole graph is on the 4th coordant.
-                //the first condition is nothing but the rectangle being compared
-                //to this(current) is to the left.
-                //The second case is that the rectangle being compared is to the right.
-                //Comparing this(x=1,y=953),(x=101,y=1013)with(x=0,y=873),(x=147,y=1033)
-                // this 1,101 new 0,147
-                //101<147 && 101 || 
-                console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
-                console.log(" ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) ) "+
-                    ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) ) );
+                var withinLimits= false;
+                /**
+                this.minx.x<=new.min.x<=this.max.x . New rectangle is to the right
+                new.minx.x<=this.min.x<=new.max.x . New rectangle is to the left.
+                **/
                 if( 
-                    ( ( this.min.x > newRect.max.x ) || ( this.max.x < newRect.min.x ) )                     
+                    ( ( this.min.x <= newRect.min.x ) && ( this.max.x >= newRect.min.x ) ) ||
+                    ( ( this.min.x <= newRect.max.x ) && ( this.min.x >= newRect.min.x ) )
                  ) {
-                    withinLimits=false;
+                    console.log(this.printValue()+" is with in x limits of "+newRect.printValue());
+                    withinLimits=true;
                 }
                 return withinLimits;
             }
             this.isRectangleWithInYLimits=function(newRect) {
-                var withinLimits= true;
-                console.log(this.printValue()+" is with in y limits of "+newRect.printValue());
-                console.log("  ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y ) "+
-                     ( ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y ) ) );
+                var withinLimits= false;
+                /**
+                new.min.y <= this.min.y <= new.max.y. new rectangle is on top.
+                this.min.y <= new.min.y <= this.max.y.new rectangle is on bottom.
+                **/
                 if( 
-                    ( this.min.y < newRect.max.y ) && ( this.max.y <= newRect.min.y )
+                    ( ( this.min.y >= newRect.min.y ) && ( this.min.y <= newRect.max.y ) ) ||
+                    ( ( this.min.y <= newRect.min.y ) && ( this.max.y >= newRect.min.y ) )
                  ) {
+                    console.log(this.printValue()+" is with in y limits of "+newRect.printValue());
                     withinLimits=true;
                 }
                 return withinLimits;
             }            
             this.isRectangleWithInLimits=function(newRect){
                 var withinLimits = this.isRectangleWithInXLimits(newRect);
-                if(withinLimits){
+                if(withinLimits && withinLimits===true){
                     withinLimits = this.isRectangleWithInYLimits(newRect);
                 }
                 return withinLimits;
@@ -294,7 +292,8 @@
                 console.log(( Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize) ) + " > " + canvasBounds.bottom);
                 if( ( Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize) ) > canvasBounds.bottom) {
                     console.log("readjusted y for bottom from y :"+y);
-                    this.coordinate.y = canvasBounds.bottom - Number(canvasBounds.top) - Number(this.fontSize);
+                    this.coordinate.y = Math.round(
+                        canvasBounds.bottom - Number(canvasBounds.top) - Number(this.fontSize));
                     console.log("to :"+this.coordinate.y);
                 }
                 //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
