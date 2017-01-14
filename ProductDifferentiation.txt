@@ -30,3 +30,5 @@ Say a basic dora diagram with numbers filled. Users can click on existing number
  On Shoe, 11+44=?, on hair 22+33=? 
 
  If the numbers are edited to 11*3, then the legend automatically changes to 33=black.
+
+6. TODO: why
