@@ -89,7 +89,7 @@
             this.x=Math.round(x);
             this.y=Math.round(y);
             this.printValue=function(){
-                return "(x="+this.x+",y="+this.y+")";
+                return "Coordinate=[x="+this.x+",y="+this.y+"]";
             }
             this.getNumberX= function() {
                 return Number(x);
@@ -111,8 +111,8 @@
                  this.coordinate.x, this.coordinate.y,this.fontSize,align);
             }
             this.printValue = function() {
-                return "Coordinate:"+this.coordinate.printValue()
-                +",Content:"+this.content+" at Size:"+this.fontSize;
+                return "ContentCoordinate["+this.coordinate.printValue()
+                +",Content:"+this.content+" at Size:"+this.fontSize+"]";
             }
         }
 
@@ -159,7 +159,7 @@
                 return withinLimits;
             }
             this.printValue=function() {
-                return this.min.printValue()+","+this.max.printValue();
+                return "ContentRectangle[Min="+this.min.printValue()+",Max="+this.max.printValue()+"]";
             }
         }
 
@@ -550,9 +550,12 @@
             }
             this.printValue= function() {
                 if(this.isNumeric()) {
-                    return "id="+this.id+this.coordinate.printValue()+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?";
+                    return "ContentCoordinateGroup [id="
+                    +this.id+","+this.coordinate.printValue()
+                    +","+this.aCoordinate.content+this.operatorCoordinate.content+this.bCoordinate.content+"=?]";
                 } else{
-                    return "id="+this.id+" ("+this.contentText+")";
+                    return "ContentCoordinateGroup [id="
+                    +this.id+","+this.coordinate.printValue()+","+this.contentText+"]";
                 }
             }            
         }
