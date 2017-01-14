@@ -259,22 +259,22 @@
                 console.log("coordinate coordinate:"+this.coordinate.printValue());
                 if( (Number(this.coordinate.x) + Number(padding)
                  + canvasBounds.left) 
-                    + Number(this.contentText.length)*0.50*Number(fontSize)
+                    + Number(this.contentText.length)*0.90*Number(fontSize)
                      > canvasBounds.right) {
                     console.log("readjusted x for right bounds from x :"+this.coordinate.x);
                     console.log("Number(canvasBounds.right)"+
                      "- Number(padding)"+
                      "- Number(canvasBounds.left)"+
-                      "- Number(this.contentText.length)*0.50*Number(fontSize)");
+                      "- Number(this.contentText.length)*0.90*Number(fontSize)");
                     console.log(Number(canvasBounds.right)+
                      "-" + Number(padding)+
                      "-" + Number(canvasBounds.left)+
-                     "-" + Number(this.contentText.length)*0.50*Number(fontSize));
+                     "-" + Number(this.contentText.length)*0.90*Number(fontSize));
                     this.coordinate.x = Math.round(
                         Number(canvasBounds.right)
                      - Number(padding)
                      - Number(canvasBounds.left)
-                      - Number(this.contentText.length)*0.50*Number(fontSize)
+                      - Number(this.contentText.length)*0.90*Number(fontSize)
                       );
                     console.log("to :"+this.coordinate.x);
                 }
@@ -356,10 +356,10 @@
                 //TODO: works correctly for large numbers, but for single digits too much spacing.                
                 if(
                  Number(this.coordinate.x)  <
-                 (Number(padding) + Number(lineLength)*0.50 + Number(fontSize) ) 
+                 (Number(padding) + Number(lineLength)*0.70 + Number(fontSize) ) 
                  ) {
                     console.log("readjusted x for left bounds from x :"+x);
-                    this.coordinate.x = Number(padding) + Number(lineLength)*0.50 + Number(fontSize);
+                    this.coordinate.x = Number(padding) + Number(lineLength)*0.70 + Number(fontSize);
                     console.log("to :"+this.coordinate.x);
                 }
                 //INFO:Basically adjusting for
@@ -448,7 +448,7 @@
                 var lineLength = Number(fontSize)*Number(this.getLineLength());
                 ///1.5 because modulus operator is bigger.
                 return Math.round(
-                    Number(this.coordinate.x) - Number(padding) - (Number(lineLength)*0.50)
+                    Number(this.coordinate.x) - Number(padding) - (Number(lineLength)*0.70)
                     - Number(this.fontSize)
                     );
             }
@@ -474,13 +474,13 @@
             this.getTextMaxX=function(padding){
                 console.log("Math.round(Number(this.coordinate.x)"
                  + "Number(padding)+" 
-                 + "Number(fontSize)*this.contentText.length*0.50");
+                 + "Number(fontSize)*this.contentText.length*0.80");
                 console.log(Number(this.coordinate.x)+ 
                  "+" + Number(padding) +
-                 "+" + Number(fontSize)*this.contentText.length*0.50);
+                 "+" + Number(fontSize)*this.contentText.length*0.90);
                 return Math.round(Number(this.coordinate.x)
                  + Number(padding)
-                 + Number(fontSize)*this.contentText.length*0.50
+                 + Number(fontSize)*this.contentText.length*0.90
                  );                
             }
             this.getMaxX=function(padding){
