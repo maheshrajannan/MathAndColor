@@ -97,6 +97,12 @@
             this.getNumberY= function() {
                 return Number(y);
             }
+            this.setX=function(x1) {
+                this.x=Math.round(x1);
+            }
+            this.setY=function(y1) {
+                this.y=Math.round(y1);
+            }
         }
 
         /**
