@@ -19,4 +19,4 @@ Next Features:
 16. Host this on nodejs.
 17. Put https.
 18. Add a session.
-19. 
+19. Show in mobile as overlay..Though meant for laptops, people will most likely have first look in their mobile.
