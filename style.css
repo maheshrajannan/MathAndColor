@@ -33,7 +33,7 @@ Functionalities to check before each check in.
     #bannerDivId
     {
         text-align: center;
-        width:1600px;
+        width: 80%;
     }
     #wrapper{
         position:relative;
