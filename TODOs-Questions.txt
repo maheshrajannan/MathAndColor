@@ -2,7 +2,7 @@ TODOS
 -----
 1) Remove all class="form-control". They are never used. Were needed only when bootstrap form was involved. 
 
-[Mahesh]:Ok good exercise for you. Please do it.
+[Mahesh]:Ok good exercise for you. Please do it. DONE. 22d4ee6.b72e775
 
 2) Move styling of img from html file to css. 
 border="0" width="50 px" height="50 px" 
