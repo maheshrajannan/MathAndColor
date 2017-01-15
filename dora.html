@@ -16,17 +16,17 @@
         <fieldset>
             <label for="contentTypeId">Content Type:</label>
             <select
-                class="form-control" type="text" id="contentTypeId" onchange="onContentChange()">
+                type="text" id="contentTypeId" onchange="onContentChange()">
                 <option>Text</option>
                 <option>Numeric</option>
             </select>
             <br/>
             <label id="numberALabelId" for="numberAId">A:</label>
-            <input class="form-control" type="name" maxlength="5" size="4" id="numberAId" placeholder="A"/>
+            <input type="name" maxlength="5" size="4" id="numberAId" placeholder="A"/>
             <br/>
          	<label id="operatorLabelId" for="operatorId">Operator:</label> 
             <select
-				class="form-control" type="text" id="operatorId" style="width:128px;">
+				type="text" id="operatorId" style="width:128px;">
 				<option>+</option>
 				<option>-</option>
 				<option>x</option>
@@ -35,23 +35,23 @@
 			</select>
             <br/>
             <label id="numberBLabelId" for="numberBId">B:</label>
-            <input class="form-control" type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
+            <input type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
             <!--TODO: Change to text area.-->
             <label id="textLabelId" for="textId">Text:</label>
             <br/>
             <textarea id="textId">Text</textarea>
         </fieldset>
         <fieldset>
-            <button class="form-control" id="doneId" onclick="validateInput()">Add To Image</button>
+            <button id="doneId" onclick="validateInput()">Add To Image</button>
             <br/>
-            <button class="form-control" id="hideId" onclick="hideInputs()">Hide Inputs</button>
+            <button id="hideId" onclick="hideInputs()">Hide Inputs</button>
             <br/>
-            <button class="form-control" id="configurationId" onclick="toggleAdvanced()">Advanced</button>
+            <button id="configurationId" onclick="toggleAdvanced()">Advanced</button>
         </fieldset>
         <fieldset>
-            <button class="form-control" id="showOtherImagesId" onclick="showOtherImages()">Other Images</button>
+            <button id="showOtherImagesId" onclick="showOtherImages()">Other Images</button>
             <br/>
-            <button class="form-control" id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
+            <button id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
             <br/>
             <input id="image_from_list" name="image_from_list" type="text" maxlength="5" size="4" value="none"  />
             <br/>
@@ -97,16 +97,16 @@
         <fieldset class="fieldSet1">
             <label id="contentCoordinateGroupLabelId" for="contentCoordinateGroupId" >Add/Edit #:</label>
             <div id="editMessageDivId"></div>
-            <input class="form-control" type="hidden" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
+            <input type="hidden" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
-            <input class="form-control" type="name" id="xId" size="4" placeholder="X"/>
+            <input type="name" id="xId" size="4" placeholder="X"/>
             <br/>
             <label for="yId">Y:</label>
-            <input class="form-control" type="name" id="yId" size="4" placeholder="Y"/>
+            <input type="name" id="yId" size="4" placeholder="Y"/>
             <br/>
             <label for="fontSizeId">Font Size:</label>
-            <input class="form-control" type="name" id="fontSizeId" size="4" value="40"/>
+            <input type="name" id="fontSizeId" size="4" value="40"/>
         </fieldset>    
     </div>
     </div>
