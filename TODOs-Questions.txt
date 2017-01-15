@@ -52,3 +52,5 @@ addLetter(canvas,content,x,y,fontsize) , blunt, it just adds a given content at 
 HTML DOM elements need to be inspected in one place, retrieved and then passed as javascript objects wherever necessary. Reading HTML DOM elements whenever and wherever, will increase the tight dependency of javascript to a given page. 
 
 This leaves the potential of using one javascript file across multiple pages.
+
+TESTING PULL REQUEST
