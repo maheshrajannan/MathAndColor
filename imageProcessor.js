@@ -28,6 +28,7 @@
             contentCoordinateGroupHistory.push(contentCoordinateGroup);
         }
 
+        //ContentCanvas class.
         function erase(canvas) {
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -74,6 +75,7 @@
             }
         }
         /**
+        ContentCanvas
         http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
         **/
         function getMouseCoordinate(canvas, evt) {
@@ -91,6 +93,7 @@
         //canvas.addEventListener("keyup", keyUpHandler, true);
         //canvas.addEventListener('mousemove',mouseMoveHandler,true);
 
+        //ContentCanvas
         function addletter(canvas, letter, x, y,fontSize,align) {
             var context = canvas.getContext("2d");
             context.font = fontSize+"pt Calibri";
