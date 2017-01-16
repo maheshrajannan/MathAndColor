@@ -146,20 +146,20 @@
             console.log("canvasBounds.y:" + canvasBounds.y);
             console.log("coordinate coordinate:" + this.coordinate.printValue());
 
-            //INFO: Where i click is where the coordinate of the symbol gets written.
+            //INFO: Where i click is where the coordinate of the last digit gets written.
             /**
                             33%
                             44
                             --
                             __
-                            this.getMaxX=function(padding){
-                                return Math.round(Number(this.coordinate.x)
-                                 + Number(padding)+ (Number(fontSize)/1.5));                
-                            }                
+          this.getNumericMaxX = function(padding) {
+            return Math.round(Number(this.coordinate.x) +
+              Number(padding) + Number(fontSize));
+          }              
             **/
             //INFO: align to right margin.
             if ((Number(this.coordinate.x) + Number(padding) +
-                (Number(fontSize) / 1.5) + canvasBounds.left) > canvasBounds.right) {
+                Number(fontSize) + canvasBounds.left) > canvasBounds.right) {
               console.log("readjusted x for right bounds from x :" + this.coordinate.x);
               console.log("Number(canvasBounds.right)" +
                 "- Number(padding) -" +
@@ -174,13 +174,21 @@
               console.log("to :" + this.coordinate.x);
             }
             //INFO: align to left margin.
-            //TODO: works correctly for large numbers, but for single digits too much spacing.                
+            //TODO: works correctly for large numbers, but for single digits too much spacing.  
+            /**
+                      this.getNumericMinX = function(padding) {
+            var lineLength = Number(fontSize) * Number(this.getLineLength());
+            return Math.round(
+              Number(this.coordinate.x) - Number(padding) - (Number(lineLength) * 0.70)
+            );
+          }
+            **/              
             if (
               Number(this.coordinate.x) <
-              (Number(padding) + Number(lineLength) * 0.70 + Number(fontSize))
+              (Number(padding) + Number(lineLength) * 0.70 )
             ) {
               console.log("readjusted x for left bounds from x :" + x);
-              this.coordinate.x = Number(padding) + Number(lineLength) * 0.70 + Number(fontSize);
+              this.coordinate.x = Number(padding) + Number(lineLength) * 0.70;
               console.log("to :" + this.coordinate.x);
             }
             //INFO:Basically adjusting for
@@ -266,10 +274,8 @@
           }
           this.getNumericMinX = function(padding) {
             var lineLength = Number(fontSize) * Number(this.getLineLength());
-            ///1.5 because modulus operator is bigger.
             return Math.round(
-              Number(this.coordinate.x) - Number(padding) - (Number(lineLength) * 0.70) -
-              Number(this.fontSize)
+              Number(this.coordinate.x) - Number(padding) - (Number(lineLength) * 0.70)
             );
           }
           this.getTextMinX = function(padding) {
