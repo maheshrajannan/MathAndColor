@@ -8,7 +8,9 @@ Next Features:
 
 6. Enter text or numbers.DONE
 7. write legend in the simplest way. 55 = RED.DONE
-8. Write name in the simplest way. <<Your name Here>>.DONE
+8. Write name in the simplest way. <<Your name Here>>.DONE.
+9. Change title based on image selected.
+9. Detect screensize
 9. Show in mobile as overlay..Though meant for laptops, people will most likely have first look in their mobile.
 10. Pre-fill numbers at specified coordinates.
 11. prefill name place holder in simplest way.
@@ -27,20 +29,4 @@ https://help.github.com/articles/about-collaborative-development-models/
 
 In the shared repository model, collaborators are granted push access to a single shared repository and topic branches are created when changes need to be made. Pull requests are useful in this model as they initiate code review and general discussion about a set of changes before the changes are merged into the main development branch. This model is more prevalent with small teams and organizations collaborating on private projects.
 
-Miny Changes here, with out updating.
-Mahesh made a change at line 30.
-Mahesh made a change at line 31.
-
 --
-
-ChangingHtml,Miny
-change directly by mahesh on todd team
-ChanginHtml2,Miny
-ChanginHtml3,Miny
-ChanginHtml4,Miny, without updaying todteam changes
-
-ChanginHtml5,Miny
-ChanginHtml6,Miny
-#2change directly by mahesh on todd team
-ChanginHtml7,Miny
-ChanginHtml8,Miny

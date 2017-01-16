@@ -15,8 +15,12 @@
         $("div#leftDivId img").click(function () {
             $("div#leftDivId img").attr("border","0");
             $(this).attr("border","4");
-            $("input#image_from_list").val($(this).attr("col"));
-            $('#bkImage').attr('src',$(this).attr("col"));
+            console.log("image source is "+$(this).attr("src"));
+            //TODO: what is this for ?
+            //$("input#image_from_list").val($(this).attr("col"));
+            $('#bkImage').attr('src',$(this).attr("src"));
+            //Change title
+            $("#mainTitleId").html($(this).attr("col"));
         }); 
 
         function toggleAdvanced(){
