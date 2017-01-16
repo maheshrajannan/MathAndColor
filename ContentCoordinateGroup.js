@@ -80,22 +80,22 @@
             console.log("coordinate coordinate:" + this.coordinate.printValue());
             if ((Number(this.coordinate.x) + Number(padding) +
                 canvasBounds.left) +
-              Number(this.contentText.length) * 0.90 * Number(fontSize) >
+              Number(this.contentText.length) * 0.71 * Number(fontSize) >
               canvasBounds.right) {
               console.log("readjusted x for right bounds from x :" + this.coordinate.x);
               console.log("Number(canvasBounds.right)" +
                 "- Number(padding)" +
                 "- Number(canvasBounds.left)" +
-                "- Number(this.contentText.length)*0.90*Number(fontSize)");
+                "- Number(this.contentText.length)*0.71*Number(fontSize)");
               console.log(Number(canvasBounds.right) +
                 "-" + Number(padding) +
                 "-" + Number(canvasBounds.left) +
-                "-" + Number(this.contentText.length) * 0.90 * Number(fontSize));
+                "-" + Number(this.contentText.length) * 0.71 * Number(fontSize));
               this.coordinate.x = Math.round(
                 Number(canvasBounds.right) -
                 Number(padding) -
                 Number(canvasBounds.left) -
-                Number(this.contentText.length) * 0.90 * Number(fontSize)
+                Number(this.contentText.length) * 0.71 * Number(fontSize)
               );
               console.log("to :" + this.coordinate.x);
             }
@@ -300,13 +300,13 @@
           this.getTextMaxX = function(padding) {
             console.log("Math.round(Number(this.coordinate.x)" +
               "Number(padding)+" +
-              "Number(fontSize)*this.contentText.length*0.80");
+              "Number(fontSize)*this.contentText.length*0.71");
             console.log(Number(this.coordinate.x) +
               "+" + Number(padding) +
-              "+" + Number(fontSize) * this.contentText.length * 0.90);
+              "+" + Number(fontSize) * this.contentText.length * 0.71);
             return Math.round(Number(this.coordinate.x) +
               Number(padding) +
-              Number(fontSize) * this.contentText.length * 0.90
+              Number(fontSize) * this.contentText.length * 0.71
             );
           }
           this.getMaxX = function(padding) {
