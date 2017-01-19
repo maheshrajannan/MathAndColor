@@ -9,19 +9,23 @@ Next Features:
 6. Enter text or numbers.DONE
 7. write legend in the simplest way. 55 = RED.DONE
 8. Write name in the simplest way. <<Your name Here>>.DONE.
-9. Change title based on image selected.
-9. Detect screensize
-9. Show in mobile as overlay..Though meant for laptops, people will most likely have first look in their mobile.
-10. Pre-fill numbers at specified coordinates.
-11. prefill name place holder in simplest way.
-12. prefill legend in simplest way.
-13. Store (default) numbers in index Db.
-14. Store (customized) numbers in index db.
-15. Store (text) in indexDb.
-16. Store customized text in indexDb.
-17. Host this on nodejs.
-18. Put https.
-19. Add a session.
+9. Change title based on image selected.DONE.
+12. Show in mobile as overlay..Though meant for laptops, people will most likely have first look in their mobile.
+13. Detect screensize.
+14. Resize/zoom to screenwidth button
+15. For smaller screen sizes default to overlay.
+16. For larger screen sizes default to inline view.
+17. Pre-fill numbers at specified coordinates.
+18. prefill name place holder in simplest way.
+19. prefill legend in simplest way.
+20. Store (default) numbers in index Db.
+21. Store (customized) numbers in index db.
+22. Store (text) in indexDb.
+23. Store customized text in indexDb.
+24. Host this on nodejs.
+25. Put https.
+26. Add a session.
+27. Put sensitive parts of javascript on server.
 
 --Pull Request Test branch
 
