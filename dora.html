@@ -47,6 +47,7 @@
             <button id="hideId" onclick="hideInputs()">Hide Inputs</button>
             <br/>
             <button id="configurationId" onclick="toggleAdvanced()">Advanced</button>
+            <br/>
             <button id="myBtn">Open Modal</button>
         </fieldset>
         <fieldset>
@@ -83,7 +84,84 @@
   <!-- Modal content -->
   <div class="modal-content">
     <span class="close">&times;</span>
-    <p>Some text in the Modal..</p>
+    <div id="containerDivId" class="container">
+
+        <div class="leftdiv"  id="leftDivId">
+            <fieldset>
+                <label id="numberALabelId" for="numberAId">A:</label>
+                <input type="name" maxlength="5" size="4" id="numberAId" placeholder="A"/>
+                <br/>
+                <label id="operatorLabelId" for="operatorId">Operator:</label> 
+                <select
+                    type="text" id="operatorId" style="width:128px;">
+                    <option>+</option>
+                    <option>-</option>
+                    <option>x</option>
+                    <option>&divide</option>
+                    <option>%</option>
+                </select>
+                <br/>
+                <label id="numberBLabelId" for="numberBId">B:</label>
+                <input type="name" maxlength="5" size="4" id="numberBId" placeholder="B"/>
+                <button id="doneId" onclick="validateInput('Numeric')">Add To Image</button>
+                <br/>
+            </fieldset>
+            <fieldset>
+                <br/>
+                <!--TODO: Change to text area.-->
+                <label id="textLabelId" for="textId">Text:</label>
+                <br/>
+                <textarea id="textId">Text</textarea>
+                <button id="doneId" onclick="validateInput('Text')">Add To Image</button>
+                <br/>
+            </fieldset>
+            <fieldset>
+                <button id="configurationId" onclick="toggleAdvanced()">Advanced</button>
+            </fieldset>
+            <fieldset>
+                <button id="showOtherImagesId" onclick="showOtherImages()">Other Images</button>
+                <br/>
+                <button id="prefillImageId" onclick="prefillImage()">Prefill Image</button>
+                <br/>
+                <input id="image_from_list" name="image_from_list" type="hidden" maxlength="5" size="4" value="none"  />
+                <br/>
+                <img src="images/butterfly.png" col="Butterfly" border="0" width="50 px" height="50 px" 
+                />
+                <img src="images/puppy.gif" col="Puppy" border="0" width="50 px" height="50 px"
+                />
+                <img src="images/teddyBear.jpg" col="Teddy Bear" border="0" width="50 px" height="50 px"
+                />
+                <br/>
+                <img id="doraImageId" src="images/dora.gif" col="Dora" border="0" width="50 px" height="50 px"
+                />
+                <img src="images/ropunzel.jpg" col="Ropunzel" border="0" width="50 px" height="50 px"
+                />
+                <img src="images/ariel.jpg" col="Ariel" border="0" width="50 px" height="50 px"
+                />
+                <br/>
+                <img src="images/sleepingBeauty.jpg" col="Sleeping Beauty" border="0" width="50 px" height="50 px"
+                />
+            </fieldset>
+        </div>
+
+        <div class="rightdiv" id="rightDivId">
+            <fieldset class="fieldSet1">
+                <label id="contentCoordinateGroupLabelId" for="contentCoordinateGroupId" >Add/Edit #:</label>
+                <div id="editMessageDivId"></div>
+                <input type="hidden" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
+                <br/>
+                <label for="xId">X:</label>
+                <input type="name" id="xId" size="4" placeholder="X"/>
+                <br/>
+                <label for="yId">Y:</label>
+                <input type="name" id="yId" size="4" placeholder="Y"/>
+                <br/>
+                <label for="fontSizeId">Font Size:</label>
+                <input type="name" id="fontSizeId" size="4" value="40"/>
+            </fieldset>    
+        </div>
+    </div>
+
   </div>
 
 </div>    

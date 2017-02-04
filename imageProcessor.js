@@ -6,7 +6,10 @@
 
 
         window.onload = function() {
-            $("#bannerDivId").width(1600);     
+            $("#bannerDivId").width(1600);   
+            $("#doraImageId").attr("border","4");  
+            console.log("image source is "+$("#doraImageId").attr("src"));
+            console.log("image source is "+$("#doraImageId").attr("border"));
             toggleAdvanced();
             onContentChange();
         };
@@ -115,7 +118,7 @@
         }
 
         //Validate the input and add text.
-        function validateInput() {
+        function validateInput(contentType) {
             var letterA = $('#numberAId').val();
             //TODO: explain the regex.
              if (/\D/.test(letterA)) {
@@ -130,24 +133,34 @@
                 $('#numberBId').focus() ;
                 return false; 
             }
-            addContent();
+            addContent(contentType);
         }
-        function addContent() {
+        function addContent(inContentType) {
             console.log("adding content");
             //INFO: common to both contentCoordinateGroup of type text and numeric.
             var x=$('#xId').val();
             var y=$('#yId').val();
             var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
-            var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();
-            var contentType=$('#contentTypeId').val();
+            var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();            
+            var contentType;
+            
             var contentCoordinateGroupWithinLimits;
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
-            //INFO: specific to numeric content coordinate group.
+            if(inContentType) {
+                console.log("inContentType:"+inContentType);
+                contentType = inContentType;
+            }else{
+                contentType =$('#contentTypeId').val();
+            }
+            console.log("contentType:"+contentType);
 
-            var contentCoordinateGroup = new ContentCoordinateGroup(x,y,fontSize,contentType);
+            //INFO: specific to numeric content coordinate group.
+            var contentCoordinateGroup = new ContentCoordinateGroup(
+                x,y,fontSize,contentType);
+
             if(contentCoordinateGroup.isNumeric()) {
                 var letterA = $('#numberAId').val();
                 var letterB = $('#numberBId').val();
