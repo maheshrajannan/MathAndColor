@@ -40,26 +40,44 @@
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
+
+        function readContentCoordinateGroup() {
+            var fontSize=$("#fontSizeId").val();
+            var contentType=$("#contentTypeId").val();
+            var contentCoordinateGroup = new ContentCoordinateGroup(
+                mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
+            return contentCoordinateGroup;
+        }
+        function setNumericContent(contentCoordinateGroup) {
+            var aValue=$("#numberAId").val();
+            var bValue=$("#numberBId").val();
+            var operatorValue=$("#operatorId").val();
+            contentCoordinateGroup.setNumericContent(
+                aValue,bValue,operatorValue);   
+            return contentCoordinateGroup;             
+        }
+        function setTextContent(contentCoordinateGroup) {
+            var contentText = $("#textId").val();
+            contentCoordinateGroup.setContentText(contentText);
+            return contentCoordinateGroup;            
+        }
+
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
         function mouseMoveHandler(canvas, event) {
             showInputs();
             mouseCoordinate = getMouseCoordinate(canvas, event);
             console.log("clicked at "+mouseCoordinate.printValue());
-            var fontSize=$("#fontSizeId").val();
-            var contentType=$("#contentTypeId").val();
-            var contentCoordinateGroup = new ContentCoordinateGroup(
-                mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
+            var contentCoordinateGroup = readContentCoordinateGroup();
             if(contentCoordinateGroup.isNumeric()) {
-                var aValue=$("#numberAId").val();
-                var bValue=$("#numberBId").val();
-                var operatorValue=$("#operatorId").val();
-                contentCoordinateGroup.setNumericContent(aValue,bValue,operatorValue);            
+                contentCoordinateGroup
+                 = setNumericContent(contentCoordinateGroup);
             }else{
-                var contentText = $("#textId").val();
-                contentCoordinateGroup.setContentText(contentText);
+                contentCoordinateGroup
+                 = setTextContent(contentCoordinateGroup);
             }
-            contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
+            contentCoordinateGroup.adjust(canvas,
+                Number(contentCoordinateGroup.fontSize)/4);
             var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
             if(contentCoordinateGroupWithinLimits){
