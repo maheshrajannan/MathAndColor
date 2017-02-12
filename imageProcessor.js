@@ -41,6 +41,7 @@
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
 
+        //Sets on DOM.
         function readContentCoordinateGroup() {
             var fontSize=$("#fontSizeId").val();
             var contentType=$("#contentTypeId").val();
@@ -48,6 +49,7 @@
                 mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
             return contentCoordinateGroup;
         }
+        //Sets on DOM.
         function setNumericContent(contentCoordinateGroup) {
             var aValue=$("#numberAId").val();
             var bValue=$("#numberBId").val();
@@ -56,12 +58,24 @@
                 aValue,bValue,operatorValue);   
             return contentCoordinateGroup;             
         }
+        //Sets on DOM.
         function setTextContent(contentCoordinateGroup) {
             var contentText = $("#textId").val();
             contentCoordinateGroup.setContentText(contentText);
             return contentCoordinateGroup;            
         }
-
+        //Sets on DOM.
+        function setPosition(coordinate) {
+            $("#xId").val(coordinate.x);
+            $("#yId").val(coordinate.y);
+        }
+        //Sets on DOM.
+        function clearAndFocusNumericInput(nextCoordinateNumber) {
+            $("#numberAId").focus();
+            $("#contentCoordinateGroupId").val("-1");
+            $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
+            $("#editMessageDivId").text("");                            
+        }
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
         function mouseMoveHandler(canvas, event) {
@@ -78,25 +92,23 @@
             }
             contentCoordinateGroup.adjust(canvas,
                 Number(contentCoordinateGroup.fontSize)/4);
-            var contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
+            var contentCoordinateGroupWithinLimits
+             = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
             var nextCoordinateNumber;
             if(contentCoordinateGroupWithinLimits){
                 console.log("near/on existing coordinate is being clicked");
                 populateExistingCordinate(contentCoordinateGroupWithinLimits);
             }else{
-                if( (contentCoordinateGroupHistory) && contentCoordinateGroupHistory.length > 0) {
+                if( (contentCoordinateGroupHistory)
+                 && contentCoordinateGroupHistory.length > 0) {
                     nextCoordinateNumber = Number(contentCoordinateGroupHistory.length) + 1;
                 }else{
                     nextCoordinateNumber = 1;
                 }
                 console.log("new coordinate is being clicked");
-                $("#xId").val(contentCoordinateGroup.coordinate.x);
-                $("#yId").val(contentCoordinateGroup.coordinate.y);
+                setPosition(contentCoordinateGroup.coordinate);
                 //TODO: check for overlap.
-                $("#numberAId").focus();
-                $("#contentCoordinateGroupId").val("-1");
-                $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
-                $("#editMessageDivId").text("");                
+                clearAndFocusNumericInput(nextCoordinateNumber);
             }
         }
         /**
@@ -136,6 +148,7 @@
         }
 
         //Validate the input and add text.
+        //interacts With DOM
         function validateInput(contentType) {
             var letterA = $('#numberAId').val();
             //TODO: explain the regex.
