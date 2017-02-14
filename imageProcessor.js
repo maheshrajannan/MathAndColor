@@ -42,15 +42,24 @@
         }
 
         //Sets on DOM.
-        function readContentCoordinateGroup() {
+        function readContentCoordinateGroup(inContentType) {
             var fontSize=$("#fontSizeId").val();
-            var contentType=$("#contentTypeId").val();
+            var contentType;
+
+            if(inContentType) {
+                console.log("inContentType:"+inContentType);
+                contentType = inContentType;
+            }else{
+                contentType =$('#contentTypeId').val();
+            }
+            console.log("contentType:"+contentType);
+
             var contentCoordinateGroup = new ContentCoordinateGroup(
                 mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
             return contentCoordinateGroup;
         }
-        //Sets on DOM.
-        function setNumericContent(contentCoordinateGroup) {
+        //Reads From DOM.
+        function readNumericContent(contentCoordinateGroup) {
             var aValue=$("#numberAId").val();
             var bValue=$("#numberBId").val();
             var operatorValue=$("#operatorId").val();
@@ -58,14 +67,41 @@
                 aValue,bValue,operatorValue);   
             return contentCoordinateGroup;             
         }
-        //Sets on DOM.
+        //Sets on DOM
+        function setNumericContent(contentCoordinateGroup) {
+            //TODO: change dropdown and populate values...
+            //TODO: repopulate A and B, only if pre-populate existing is selected. 
+            //default is it is NOT selected.            
+            $('#numberAId').val(contentCoordinateGroup.a);
+            $('#numberBId').val(contentCoordinateGroup.b);
+            $('#operatorId').val(contentCoordinateGroup.operator);
+            $('#contentTypeId').val(contentCoordinateGroup.contentType);
+        } 
+        //Sets on DOM
         function setTextContent(contentCoordinateGroup) {
-            var contentText = $("#textId").val();
-            contentCoordinateGroup.setContentText(contentText);
-            return contentCoordinateGroup;            
+            $('#textId').val(contentCoordinateGroup.textContent);
+            $('#contentTypeId').val(contentCoordinateGroup.contentType);
         }
         //Sets on DOM.
+        function readTextContent(contentCoordinateGroup) {
+            var textContent = $("#textId").val();
+            contentCoordinateGroup.setTextContent(textContent);
+            return contentCoordinateGroup;            
+        }
+
+        //Interacts with methods that Set on DOM.
+        function readContent(contentCoordinateGroup) {
+            if(contentCoordinateGroup.isNumeric()) {
+                contentCoordinateGroup = readNumericContent(contentCoordinateGroup);
+            }else{
+                contentCoordinateGroup = readTextContent(contentCoordinateGroup);
+            }
+            return contentCoordinateGroup;
+        }
+
+        //Sets on DOM.
         function setPosition(coordinate) {
+            console.log("Setting position"+coordinate.printValue());
             $("#xId").val(coordinate.x);
             $("#yId").val(coordinate.y);
         }
@@ -85,10 +121,10 @@
             var contentCoordinateGroup = readContentCoordinateGroup();
             if(contentCoordinateGroup.isNumeric()) {
                 contentCoordinateGroup
-                 = setNumericContent(contentCoordinateGroup);
+                 = readNumericContent(contentCoordinateGroup);
             }else{
                 contentCoordinateGroup
-                 = setTextContent(contentCoordinateGroup);
+                 = readTextContent(contentCoordinateGroup);
             }
             contentCoordinateGroup.adjust(canvas,
                 Number(contentCoordinateGroup.fontSize)/4);
@@ -180,38 +216,20 @@
             //INFO: Editing existing coordinate.
             var currentContentCoordinateGroup;
 
-            if(inContentType) {
-                console.log("inContentType:"+inContentType);
-                contentType = inContentType;
-            }else{
-                contentType =$('#contentTypeId').val();
-            }
-            console.log("contentType:"+contentType);
-
             //INFO: specific to numeric content coordinate group.
-            var contentCoordinateGroup = new ContentCoordinateGroup(
-                x,y,fontSize,contentType);
+            var contentCoordinateGroup = readContentCoordinateGroup(inContentType);
+            contentCoordinateGroup = readContent(contentCoordinateGroup);
 
-            if(contentCoordinateGroup.isNumeric()) {
-                var letterA = $('#numberAId').val();
-                var letterB = $('#numberBId').val();
-                var operator = $('#operatorId').val();
-                contentCoordinateGroup.setNumericContent(letterA,letterB,operator);
-            }else{
-                var contentText = $('#textId').val();
-                contentCoordinateGroup.setContentText(contentText);
-            }
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
 
             if(contentCoordinateGroupId>0) {
+                //INFO: Begin editing existing coordinate.
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
-                x=contentCoordinateGroup.coordinate.x;
-                y=contentCoordinateGroup.coordinate.y;
-                $('#xId').val(x);
-                $('#yId').val(y);            
+                setPosition(contentCoordinateGroup.coordinate);
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
-                contentCoordinateGroupHistory[contentCoordinateGroupId-1]=contentCoordinateGroup;
+                contentCoordinateGroupHistory[contentCoordinateGroupId-1]
+                =contentCoordinateGroup;
                 console.log("Redrawing");
                 erase(canvas);
                 console.log("total:"+contentCoordinateGroupHistory.length);
@@ -223,13 +241,11 @@
             }else{
                 //INFO: adding a new coordinate.
                 //INFO: checking if new coordinate is with in limits of any of old coordinates.
-                contentCoordinateGroupWithinLimits = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
+                contentCoordinateGroupWithinLimits
+                 = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
                 if(contentCoordinateGroupWithinLimits == null) {
                     console.log("Adding new values");
-                    x=contentCoordinateGroup.coordinate.x;
-                    y=contentCoordinateGroup.coordinate.y;
-                    $('#xId').val(x);
-                    $('#yId').val(y);            
+                    setPosition(contentCoordinateGroup.coordinate);
                     //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
                     contentCoordinateGroup.draw(canvas);
                     addToHistory(contentCoordinateGroup);
@@ -242,21 +258,17 @@
                 }
             }
         }
+        //INFO: calls methods that set on dom.
         function populateCoordinate(contentCoordinateGroup) {
-            $('#xId').val(contentCoordinateGroup.coordinate.x);
-            $('#yId').val(contentCoordinateGroup.coordinate.y);
+            setPosition(contentCoordinateGroup.coordinate);
             onContentChange(contentCoordinateGroup.contentType);
             if(contentCoordinateGroup.isNumeric()) {
                 //TODO: change dropdown and populate values...
                 //TODO: repopulate A and B, only if pre-populate existing is selected. 
                 //default is it is NOT selected.            
-                $('#numberAId').val(contentCoordinateGroup.a);
-                $('#numberBId').val(contentCoordinateGroup.b);
-                $('#operatorId').val(contentCoordinateGroup.operator);
-                $('#contentTypeId').val(contentCoordinateGroup.contentType);
+                setNumericContent(contentCoordinateGroup);
             } else{
-                $('#textId').val(contentCoordinateGroup.contentText);
-                $('#contentTypeId').val(contentCoordinateGroup.contentType);
+                setTextContent(contentCoordinateGroup);
             }
         }
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
@@ -265,16 +277,19 @@
             $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
         }
+        //INFO: Works on DOM.
         function showInputs() {
             $("#leftDivId").show();
             $("#rightDivId").show();
             $("#bannerDivId").width(1600);     
         }
+        //INFO: Works on DOM.
         function hideInputs() {
             $("#leftDivId").hide();
             $("#rightDivId").hide();       
             $("#bannerDivId").width(1000);     
         }
+        //INFO: works on DOM.
         function onContentChange(inContentType) {
             var contentType = "";
             if(inContentType) {

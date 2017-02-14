@@ -22,7 +22,7 @@
           this.line2Coordinate;
           this.operatorCoordinate;
 
-          this.contentText = "";
+          this.textContent = "";
           this.textCoordinate;
 
           this.setId = function(id) {
@@ -56,8 +56,8 @@
             this.setB(b);
             this.setOperator(operator);
           }
-          this.setContentText = function(contentText) {
-            this.contentText = contentText;
+          this.setTextContent = function(textContent) {
+            this.textContent = textContent;
           }
           this.adjust = function(canvas, padding) {
             if (this.isNumeric()) {
@@ -80,22 +80,22 @@
             console.log("coordinate coordinate:" + this.coordinate.printValue());
             if ((Number(this.coordinate.x) + Number(padding) +
                 canvasBounds.left) +
-              Number(this.contentText.length) * 0.71 * Number(fontSize) >
+              Number(this.textContent.length) * 0.71 * Number(fontSize) >
               canvasBounds.right) {
               console.log("readjusted x for right bounds from x :" + this.coordinate.x);
               console.log("Number(canvasBounds.right)" +
                 "- Number(padding)" +
                 "- Number(canvasBounds.left)" +
-                "- Number(this.contentText.length)*0.71*Number(fontSize)");
+                "- Number(this.textContent.length)*0.71*Number(fontSize)");
               console.log(Number(canvasBounds.right) +
                 "-" + Number(padding) +
                 "-" + Number(canvasBounds.left) +
-                "-" + Number(this.contentText.length) * 0.71 * Number(fontSize));
+                "-" + Number(this.textContent.length) * 0.71 * Number(fontSize));
               this.coordinate.x = Math.round(
                 Number(canvasBounds.right) -
                 Number(padding) -
                 Number(canvasBounds.left) -
-                Number(this.contentText.length) * 0.71 * Number(fontSize)
+                Number(this.textContent.length) * 0.71 * Number(fontSize)
               );
               console.log("to :" + this.coordinate.x);
             }
@@ -253,7 +253,7 @@
           }
           this.initializeTextCoordinates = function() {
             this.textCoordinate = new ContentCoordinate(this.coordinate.x,
-              this.coordinate.y, this.contentText, this.fontSize);
+              this.coordinate.y, this.textContent, this.fontSize);
             console.log("textCoordinate:" + this.textCoordinate.printValue());
           }
           this.getLineLength = function() {
@@ -300,13 +300,13 @@
           this.getTextMaxX = function(padding) {
             console.log("Math.round(Number(this.coordinate.x)" +
               "Number(padding)+" +
-              "Number(fontSize)*this.contentText.length*0.71");
+              "Number(fontSize)*this.textContent.length*0.71");
             console.log(Number(this.coordinate.x) +
               "+" + Number(padding) +
-              "+" + Number(fontSize) * this.contentText.length * 0.71);
+              "+" + Number(fontSize) * this.textContent.length * 0.71);
             return Math.round(Number(this.coordinate.x) +
               Number(padding) +
-              Number(fontSize) * this.contentText.length * 0.71
+              Number(fontSize) * this.textContent.length * 0.71
             );
           }
           this.getMaxX = function(padding) {
@@ -394,7 +394,7 @@
                 "," + this.aCoordinate.content + this.operatorCoordinate.content + this.bCoordinate.content + "=?]";
             } else {
               return "ContentCoordinateGroup [id=" +
-                this.id + "," + this.coordinate.printValue() + "," + this.contentText + "]";
+                this.id + "," + this.coordinate.printValue() + "," + this.textContent + "]";
             }
           }
         }
