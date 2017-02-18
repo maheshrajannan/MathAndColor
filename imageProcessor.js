@@ -112,6 +112,25 @@
             $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
             $("#editMessageDivId").text("");                            
         }
+
+        //INFO: by pass all checks and modify x coordinate.
+        function modifyXCoordinate() {
+            var newX=$('#xId').val();
+            console.log("Changing mouse position"
+             + mouseCoordinate.printValue() + " to "+newX);
+            mouseCoordinate.setX(newX);
+            console.log("Changing mouse position" + mouseCoordinate.printValue());
+            $('#numberAId').val();
+        }
+        //INFO: by pass all checks and modify y coordinate.
+        function modifyYCoordinate() {
+            var newY=$('#yId').val();
+            console.log("Changing mouse position" + mouseCoordinate.printValue());
+            mouseCoordinate.setY(newY);
+            console.log("Changing mouse position" + mouseCoordinate.printValue());
+        }
+
+
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
         function mouseMoveHandler(canvas, event) {
@@ -205,9 +224,6 @@
         function addContent(inContentType) {
             console.log("adding content");
             //INFO: common to both contentCoordinateGroup of type text and numeric.
-            var x=$('#xId').val();
-            var y=$('#yId').val();
-            var fontSize = $('#fontSizeId').val();
             var canvas = document.getElementById("myCanvas");
             var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();            
             var contentType;
@@ -221,7 +237,7 @@
             contentCoordinateGroup = readContent(contentCoordinateGroup);
 
             //INFO: adjust it, just in case x and y are edited.
-            contentCoordinateGroup.adjust(canvas,Number(fontSize)/4);
+            contentCoordinateGroup.adjust(canvas,Number(contentCoordinateGroup.fontSize)/4);
 
             if(contentCoordinateGroupId>0) {
                 //INFO: Begin editing existing coordinate.
@@ -252,7 +268,10 @@
                     console.log("total"+contentCoordinateGroupHistory.length);                
                 }else {
                     console.log("New value is existing value, so Populating existing values");
-                    contentCoordinateGroupWithinLimits.editReason="Because Space for 1 digit, instead of "+ contentCoordinateGroup.getLineLength() + " digits.";
+                    contentCoordinateGroupWithinLimits.editReason
+                    ="Because Space for 1 digit, instead of "+
+                     contentCoordinateGroup.getLength() +
+                      " digits.";
                     //INFO: populate x,y a,b,operator and TODO: id.
                     populateExistingCordinate(contentCoordinateGroupWithinLimits);
                 }

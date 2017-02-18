@@ -261,6 +261,13 @@
             console.log("Line Length a or b:" + lineLength);
             return lineLength;
           }
+          this.getLength = function() {
+            if(this.isNumeric()) {
+              return this.getLineLength();
+            }else {
+              return this.textContent.length;
+            }
+          }
           this.getLine = function() {
             //TODO: Note, you may have to bind "this" to correct object instance.
             //to avoid confusion with in js.
