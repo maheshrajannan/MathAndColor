@@ -26,6 +26,8 @@ Next Features:
 25. Put https.
 26. Add a session.
 27. Put sensitive parts of javascript on server.
+28. On page load, the image is not selected.
+29. On page load, the page title is not changed.
 
 --Pull Request Test branch
 
