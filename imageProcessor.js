@@ -42,24 +42,6 @@
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
-
-        //Sets on DOM.
-        function readContentCoordinateGroup(inContentType) {
-            var fontSize=$("#fontSizeId").val();
-            var contentType;
-
-            if(inContentType) {
-                console.log("inContentType:"+inContentType);
-                contentType = inContentType;
-            }else{
-                contentType =$('#contentTypeId').val();
-            }
-            console.log("contentType:"+contentType);
-
-            var contentCoordinateGroup = new ContentCoordinateGroup(
-                mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
-            return contentCoordinateGroup;
-        }
         //Sets on DOM
         function setNumericContent(contentCoordinateGroup) {
             //TODO: change dropdown and populate values...
@@ -101,7 +83,7 @@
             $("#editMessageDivId").text("");                            
         }
 
-        //Sets on dom.
+        //Sets on DOM.
         //INFO: by pass all checks and modify x coordinate.
         function modifyXCoordinate() {
             var newX=$('#xId').val();
@@ -112,7 +94,7 @@
             $('#numberAId').val();
         }
 
-        //Sets on dom.
+        //Sets on DOM.
         //INFO: by pass all checks and modify y coordinate.
         function modifyYCoordinate() {
             var newY=$('#yId').val();
@@ -127,7 +109,7 @@
             showInputs();
             mouseCoordinate = getMouseCoordinate(canvas, event);
             console.log("clicked at "+mouseCoordinate.printValue());
-            var contentCoordinateGroup = readContentCoordinateGroup();
+            var contentCoordinateGroup = domReader.readContentCoordinateGroup();
             if(contentCoordinateGroup.isNumeric()) {
                 contentCoordinateGroup
                  = domReader.readNumericContent(contentCoordinateGroup);
@@ -223,7 +205,7 @@
             var currentContentCoordinateGroup;
 
             //INFO: specific to numeric content coordinate group.
-            var contentCoordinateGroup = readContentCoordinateGroup(inContentType);
+            var contentCoordinateGroup = domReader.readContentCoordinateGroup(inContentType);
             contentCoordinateGroup = readContent(contentCoordinateGroup);
 
             //INFO: adjust it, just in case x and y are edited.
