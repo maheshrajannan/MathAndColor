@@ -3,6 +3,7 @@
         var CONTENT_TYPE_TEXT="Text";
         var mouseCoordinate;
         var contentCoordinateGroupHistory=[];
+        var domReader = new DomReader();
 
 
         window.onload = function() {
@@ -26,6 +27,7 @@
             $("#mainTitleId").html($(this).attr("col"));
         }); 
 
+        //Sets on dom.
         function toggleAdvanced(){
             $(".fieldSet1").toggle(); 
         }
@@ -58,15 +60,6 @@
                 mouseCoordinate.x,mouseCoordinate.y,fontSize,contentType);
             return contentCoordinateGroup;
         }
-        //Reads From DOM.
-        function readNumericContent(contentCoordinateGroup) {
-            var aValue=$("#numberAId").val();
-            var bValue=$("#numberBId").val();
-            var operatorValue=$("#operatorId").val();
-            contentCoordinateGroup.setNumericContent(
-                aValue,bValue,operatorValue);   
-            return contentCoordinateGroup;             
-        }
         //Sets on DOM
         function setNumericContent(contentCoordinateGroup) {
             //TODO: change dropdown and populate values...
@@ -82,19 +75,14 @@
             $('#textId').val(contentCoordinateGroup.textContent);
             $('#contentTypeId').val(contentCoordinateGroup.contentType);
         }
-        //Sets on DOM.
-        function readTextContent(contentCoordinateGroup) {
-            var textContent = $("#textId").val();
-            contentCoordinateGroup.setTextContent(textContent);
-            return contentCoordinateGroup;            
-        }
 
         //Interacts with methods that Set on DOM.
         function readContent(contentCoordinateGroup) {
             if(contentCoordinateGroup.isNumeric()) {
-                contentCoordinateGroup = readNumericContent(contentCoordinateGroup);
+                contentCoordinateGroup = domReader.readNumericContent(
+                    contentCoordinateGroup);
             }else{
-                contentCoordinateGroup = readTextContent(contentCoordinateGroup);
+                contentCoordinateGroup = domReader.readTextContent(contentCoordinateGroup);
             }
             return contentCoordinateGroup;
         }
@@ -113,6 +101,7 @@
             $("#editMessageDivId").text("");                            
         }
 
+        //Sets on dom.
         //INFO: by pass all checks and modify x coordinate.
         function modifyXCoordinate() {
             var newX=$('#xId').val();
@@ -122,6 +111,8 @@
             console.log("Changing mouse position" + mouseCoordinate.printValue());
             $('#numberAId').val();
         }
+
+        //Sets on dom.
         //INFO: by pass all checks and modify y coordinate.
         function modifyYCoordinate() {
             var newY=$('#yId').val();
@@ -129,7 +120,6 @@
             mouseCoordinate.setY(newY);
             console.log("Changing mouse position" + mouseCoordinate.printValue());
         }
-
 
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
@@ -140,10 +130,10 @@
             var contentCoordinateGroup = readContentCoordinateGroup();
             if(contentCoordinateGroup.isNumeric()) {
                 contentCoordinateGroup
-                 = readNumericContent(contentCoordinateGroup);
+                 = domReader.readNumericContent(contentCoordinateGroup);
             }else{
                 contentCoordinateGroup
-                 = readTextContent(contentCoordinateGroup);
+                 = domReader.readTextContent(contentCoordinateGroup);
             }
             contentCoordinateGroup.adjust(canvas,
                 Number(contentCoordinateGroup.fontSize)/4);
@@ -290,6 +280,7 @@
                 setTextContent(contentCoordinateGroup);
             }
         }
+        //Sets on DOM
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
             populateCoordinate(contentCoordinateGroupWithinLimits);
             $('#contentCoordinateGroupId').val(contentCoordinateGroupWithinLimits.id);     
