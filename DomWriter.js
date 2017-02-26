@@ -14,5 +14,11 @@ function DomWriter() {
     this.setTextContent = function(contentCoordinateGroup) {
             $('#textId').val(contentCoordinateGroup.textContent);
             $('#contentTypeId').val(contentCoordinateGroup.contentType);
-        }        
+        }
+    //Sets on DOM.
+    this.setPosition = function(coordinate) {
+            console.log("Setting position"+coordinate.printValue());
+            $("#xId").val(coordinate.x);
+            $("#yId").val(coordinate.y);
+        }                
 }

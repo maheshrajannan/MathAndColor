@@ -43,22 +43,6 @@
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
         }
-        //Sets on DOM
-        function setNumericContent(contentCoordinateGroup) {
-            //TODO: change dropdown and populate values...
-            //TODO: repopulate A and B, only if pre-populate existing is selected. 
-            //default is it is NOT selected.            
-            $('#numberAId').val(contentCoordinateGroup.a);
-            $('#numberBId').val(contentCoordinateGroup.b);
-            $('#operatorId').val(contentCoordinateGroup.operator);
-            $('#contentTypeId').val(contentCoordinateGroup.contentType);
-        } 
-        //Sets on DOM
-        function setTextContent(contentCoordinateGroup) {
-            $('#textId').val(contentCoordinateGroup.textContent);
-            $('#contentTypeId').val(contentCoordinateGroup.contentType);
-        }
-
         //Interacts with methods that Set on DOM.
         function readContent(contentCoordinateGroup) {
             if(contentCoordinateGroup.isNumeric()) {
@@ -70,12 +54,6 @@
             return contentCoordinateGroup;
         }
 
-        //Sets on DOM.
-        function setPosition(coordinate) {
-            console.log("Setting position"+coordinate.printValue());
-            $("#xId").val(coordinate.x);
-            $("#yId").val(coordinate.y);
-        }
         //Sets on DOM.
         function clearAndFocusNumericInput(nextCoordinateNumber) {
             $("#numberAId").focus();
@@ -134,7 +112,7 @@
                     nextCoordinateNumber = 1;
                 }
                 console.log("new coordinate is being clicked");
-                setPosition(contentCoordinateGroup.coordinate);
+                domWriter.setPosition(contentCoordinateGroup.coordinate);
                 //TODO: check for overlap.
                 clearAndFocusNumericInput(nextCoordinateNumber);
             }
@@ -215,7 +193,7 @@
             if(contentCoordinateGroupId>0) {
                 //INFO: Begin editing existing coordinate.
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
-                setPosition(contentCoordinateGroup.coordinate);
+                domWriter.setPosition(contentCoordinateGroup.coordinate);
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
                 contentCoordinateGroupHistory[contentCoordinateGroupId-1]
                 =contentCoordinateGroup;
@@ -234,7 +212,7 @@
                  = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
                 if(contentCoordinateGroupWithinLimits == null) {
                     console.log("Adding new values");
-                    setPosition(contentCoordinateGroup.coordinate);
+                    domWriter.setPosition(contentCoordinateGroup.coordinate);
                     //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
                     contentCoordinateGroup.draw(canvas);
                     addToHistory(contentCoordinateGroup);
@@ -252,7 +230,7 @@
         }
         //INFO: calls methods that set on dom.
         function populateCoordinate(contentCoordinateGroup) {
-            setPosition(contentCoordinateGroup.coordinate);
+            domWriter.setPosition(contentCoordinateGroup.coordinate);
             onContentChange(contentCoordinateGroup.contentType);
             if(contentCoordinateGroup.isNumeric()) {
                 //TODO: change dropdown and populate values...
