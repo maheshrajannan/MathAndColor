@@ -4,6 +4,7 @@
         var mouseCoordinate;
         var contentCoordinateGroupHistory=[];
         var domReader = new DomReader();
+        var domWriter = new DomWriter();
 
 
         window.onload = function() {
@@ -257,9 +258,9 @@
                 //TODO: change dropdown and populate values...
                 //TODO: repopulate A and B, only if pre-populate existing is selected. 
                 //default is it is NOT selected.            
-                setNumericContent(contentCoordinateGroup);
+                domWriter.setNumericContent(contentCoordinateGroup);
             } else{
-                setTextContent(contentCoordinateGroup);
+                domWriter.setTextContent(contentCoordinateGroup);
             }
         }
         //Sets on DOM
