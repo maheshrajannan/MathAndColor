@@ -55,6 +55,7 @@
         }
 
         //Sets on DOM.
+        //TODO: also focus on text input.
         function clearAndFocusNumericInput(nextCoordinateNumber) {
             $("#numberAId").focus();
             $("#contentCoordinateGroupId").val("-1");
