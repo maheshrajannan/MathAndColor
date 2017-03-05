@@ -5,6 +5,7 @@
         var contentCoordinateGroupHistory=[];
         var domReader = new DomReader();
         var domWriter = new DomWriter();
+        var domController = new DomController();
 
 
         window.onload = function() {
@@ -12,7 +13,7 @@
             $("#doraImageId").attr("border","4");  
             console.log("image source is "+$("#doraImageId").attr("src"));
             console.log("image source is "+$("#doraImageId").attr("border"));
-            toggleAdvanced();
+            domController.toggleAdvanced();
             onContentChange();
         };
         //INFO: outside of onload
@@ -27,11 +28,6 @@
             //Change title
             $("#mainTitleId").html($(this).attr("col"));
         }); 
-
-        //Sets on dom.
-        function toggleAdvanced(){
-            $(".fieldSet1").toggle(); 
-        }
 
         function addToHistory(contentCoordinateGroup){
             contentCoordinateGroup.setId(Number(contentCoordinateGroupHistory.length+1));
@@ -86,7 +82,7 @@
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
         function mouseMoveHandler(canvas, event) {
-            showInputs();
+            domController.showInputs();
             mouseCoordinate = getMouseCoordinate(canvas, event);
             console.log("clicked at "+mouseCoordinate.printValue());
             var contentCoordinateGroup = domReader.readContentCoordinateGroup();
@@ -249,18 +245,7 @@
             $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
         }
-        //INFO: Works on DOM.
-        function showInputs() {
-            $("#leftDivId").show();
-            $("#rightDivId").show();
-            $("#bannerDivId").width(1600);     
-        }
-        //INFO: Works on DOM.
-        function hideInputs() {
-            $("#leftDivId").hide();
-            $("#rightDivId").hide();       
-            $("#bannerDivId").width(1000);     
-        }
+
         //INFO: works on DOM.
         function onContentChange(inContentType) {
             var contentType = "";
