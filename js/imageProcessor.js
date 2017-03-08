@@ -51,15 +51,6 @@
         }
 
         //Sets on DOM.
-        //TODO: also focus on text input.
-        function clearAndFocusNumericInput(nextCoordinateNumber) {
-            $("#numberAId").focus();
-            $("#contentCoordinateGroupId").val("-1");
-            $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
-            $("#editMessageDivId").text("");                            
-        }
-
-        //Sets on DOM.
         //INFO: by pass all checks and modify x coordinate.
         function modifyXCoordinate() {
             var newX=$('#xId').val();
@@ -111,7 +102,7 @@
                 console.log("new coordinate is being clicked");
                 domWriter.setPosition(contentCoordinateGroup.coordinate);
                 //TODO: check for overlap.
-                clearAndFocusNumericInput(nextCoordinateNumber);
+                domWriter.clearAndFocusNumericInput(nextCoordinateNumber);
             }
         }
         /**

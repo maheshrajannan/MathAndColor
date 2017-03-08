@@ -33,5 +33,4 @@ function DomWriter() {
         $('#contentCoordinateGroupLabelId').text("Adding "+ nextCoordinateNumber);
         $("#editMessageDivId").text("");                            
     }
-
 }
