@@ -257,23 +257,11 @@
             console.log("Content Type is "+contentType);
             //TODO: good to have, not must have, organize in div or field sets.
             if(contentType==="Text") {
-                $("#numberAId").hide();
-                $("#numberBId").hide();
-                $("#operatorId").hide();
-                $("#numberALabelId").hide();
-                $("#numberBLabelId").hide();
-                $("#operatorLabelId").hide();
-                $("#textId").show();
-                $("#textLabelId").show();
+                domController.hideNumericInputs();
+                domController.showTextInputs();
             }else{
-                $("#numberAId").show();
-                $("#numberBId").show();
-                $("#operatorId").show();
-                $("#numberALabelId").show();
-                $("#numberBLabelId").show();
-                $("#operatorLabelId").show();
-                $("#textId").hide();
-                $("#textLabelId").hide();
+                domController.showNumericInputs();
+                domController.hideTextInputs();
             }
         }
         function prefillImage() {

@@ -1,5 +1,5 @@
 /**
-A content(element) at a given coordinate.
+Controls behavior.
 **/
 function DomController() {
     this.toggleAdvanced = function() {
@@ -14,5 +14,29 @@ function DomController() {
         $("#leftDivId").hide();
         $("#rightDivId").hide();       
         $("#bannerDivId").width(1000);     
+    }
+    this.hideNumericInputs = function() {
+        $("#numberAId").hide();
+        $("#numberBId").hide();
+        $("#operatorId").hide();
+        $("#numberALabelId").hide();
+        $("#numberBLabelId").hide();
+        $("#operatorLabelId").hide();        
+    }
+    this.showNumericInputs = function() {
+        $("#numberAId").show();
+        $("#numberBId").show();
+        $("#operatorId").show();
+        $("#numberALabelId").show();
+        $("#numberBLabelId").show();
+        $("#operatorLabelId").show();
+    }
+    this.hideTextInputs = function() {
+        $("#textId").hide();
+        $("#textLabelId").hide();        
+    }
+    this.showTextInputs = function() {
+        $("#textId").show();
+        $("#textLabelId").show();
     }
 }
