@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Dialog - Default functionality</title>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#dialog" ).dialog();
+  } );
+  </script>
+</head>
+<body>
+ 
+        <!--
+        http://stackoverflow.com/questions/18431332/delete-only-text-but-not-the-image-using-canvas
+        http://jsfiddle.net/m1erickson/fg5sV/
+        INFO: both canvas and image overlap.Only the text goes on to the canvas.
+        -->
+        <img id="bkImage" src="images/dora.gif"
+         width=1000 height=1000></canvas>
+        <canvas id="myCanvas" width=1000 height=1000 tabindex="1" 
+    onclick="mouseMoveHandler(this,event)">
+        Your browser does not support the HTML5 canvas tag.
+        </canvas>
+ 
+<div id="dialog" title="Basic dialog">
+  <p>
+  	This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.
+  	https://jqueryui.com/dialog/
+  </p>
+</div>
+ 
+ 
+</body>
+</html>
