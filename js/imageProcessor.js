@@ -1,11 +1,11 @@
         var FONT_SIZE = $('#fontSizeId').val();
         var CONTENT_TYPE_NUMERIC="Numeric";
         var CONTENT_TYPE_TEXT="Text";
-        var mouseCoordinate;
         var contentCoordinateGroupHistory=[];
         var domReader = new DomReader();
         var domWriter = new DomWriter();
         var domController = new DomController();
+        var currentCoordinate = new CurrentContentCoordinate();
 
 
         window.onload = function() {
@@ -50,33 +50,13 @@
             return contentCoordinateGroup;
         }
 
-        //Sets on DOM.
-        //INFO: by pass all checks and modify x coordinate.
-        function modifyXCoordinate() {
-            var newX=$('#xId').val();
-            console.log("Changing mouse position"
-             + mouseCoordinate.printValue() + " to "+newX);
-            mouseCoordinate.setX(newX);
-            console.log("Changing mouse position" + mouseCoordinate.printValue());
-            $('#numberAId').val();
-        }
-
-        //Sets on DOM.
-        //INFO: by pass all checks and modify y coordinate.
-        function modifyYCoordinate() {
-            var newY=$('#yId').val();
-            console.log("Changing mouse position" + mouseCoordinate.printValue());
-            mouseCoordinate.setY(newY);
-            console.log("Changing mouse position" + mouseCoordinate.printValue());
-        }
-
         //INFO: capture the last coordinate of mouse, by mouse listener.
         //on key down, write to the last known coordinate of the mouse.
         function mouseMoveHandler(canvas, event) {
             domController.showInputs();
-            mouseCoordinate = getMouseCoordinate(canvas, event);
-            console.log("clicked at "+mouseCoordinate.printValue());
-            var contentCoordinateGroup = domReader.readContentCoordinateGroup();
+            currentCoordinate.setMouseCoordinate(canvas, event);
+            var contentCoordinateGroup = domReader.readContentCoordinateGroup(
+                currentCoordinate.mouseCoordinate);
             if(contentCoordinateGroup.isNumeric()) {
                 contentCoordinateGroup
                  = domReader.readNumericContent(contentCoordinateGroup);
@@ -105,17 +85,7 @@
                 domWriter.clearAndFocusNumericInput(nextCoordinateNumber);
             }
         }
-        /**
-        ContentCanvas
-        http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
-        **/
-        function getMouseCoordinate(canvas, evt) {
-            var rect = canvas.getBoundingClientRect();
-            var x = Math.round(evt.clientX - rect.left);
-            var y = Math.round(evt.clientY - rect.top);
-            var coordinate = new Coordinate(x,y);
-            return coordinate;
-        }
+
 
 
         //INFO:Instead of adding it on load, if we add it as event based on canvas element,
@@ -172,7 +142,8 @@
             var currentContentCoordinateGroup;
 
             //INFO: specific to numeric content coordinate group.
-            var contentCoordinateGroup = domReader.readContentCoordinateGroup(inContentType);
+            var contentCoordinateGroup = domReader.readContentCoordinateGroup(
+                currentCoordinate.mouseCoordinate,inContentType);
             contentCoordinateGroup = readContent(contentCoordinateGroup);
 
             //INFO: adjust it, just in case x and y are edited.

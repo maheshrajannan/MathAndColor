@@ -19,7 +19,7 @@ function DomReader() {
     }
 
     //Reads From DOM.
-    this.readContentCoordinateGroup = function(inContentType) {
+    this.readContentCoordinateGroup = function(mouseCoordinate,inContentType) {
             var fontSize=$("#fontSizeId").val();
             var contentType;
 
