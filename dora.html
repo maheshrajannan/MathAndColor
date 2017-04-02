@@ -16,7 +16,7 @@
         <fieldset>
             <label for="contentTypeId">Content Type:</label>
             <select
-                type="text" id="contentTypeId" onchange="onContentChange()">
+                type="text" id="contentTypeId" onchange="domController.onContentChange()">
                 <option>Text</option>
                 <option>Numeric</option>
             </select>
@@ -226,6 +226,8 @@
     <script type="text/javascript" src="js/DomController.js">
     </script>
     <script type="text/javascript" src="js/CurrentContentCoordinate.js">
+    </script>
+    <script type="text/javascript" src="js/ContentCache.js">
     </script>
     <script type="text/javascript" src="js/imageProcessor.js">
     </script>

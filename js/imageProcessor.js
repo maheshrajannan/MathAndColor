@@ -1,12 +1,11 @@
         var FONT_SIZE = $('#fontSizeId').val();
         var CONTENT_TYPE_NUMERIC="Numeric";
         var CONTENT_TYPE_TEXT="Text";
-        var contentCoordinateGroupHistory=[];
         var domReader = new DomReader();
         var domWriter = new DomWriter();
         var domController = new DomController();
         var currentCoordinate = new CurrentContentCoordinate();
-
+        var contentCache = new ContentCache();
 
         window.onload = function() {
             $("#bannerDivId").width(1600);   
@@ -14,7 +13,7 @@
             console.log("image source is "+$("#doraImageId").attr("src"));
             console.log("image source is "+$("#doraImageId").attr("border"));
             domController.toggleAdvanced();
-            onContentChange();
+            domController.onContentChange();
         };
         //INFO: outside of onload
 
@@ -29,25 +28,10 @@
             $("#mainTitleId").html($(this).attr("col"));
         }); 
 
-        function addToHistory(contentCoordinateGroup){
-            contentCoordinateGroup.setId(Number(contentCoordinateGroupHistory.length+1));
-            contentCoordinateGroupHistory.push(contentCoordinateGroup);
-        }
-
         //ContentCanvas class.
         function erase(canvas) {
             var context = canvas.getContext("2d");
             context.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        //Interacts with methods that Set on DOM.
-        function readContent(contentCoordinateGroup) {
-            if(contentCoordinateGroup.isNumeric()) {
-                contentCoordinateGroup = domReader.readNumericContent(
-                    contentCoordinateGroup);
-            }else{
-                contentCoordinateGroup = domReader.readTextContent(contentCoordinateGroup);
-            }
-            return contentCoordinateGroup;
         }
 
         //INFO: capture the last coordinate of mouse, by mouse listener.
@@ -67,26 +51,19 @@
             contentCoordinateGroup.adjust(canvas,
                 Number(contentCoordinateGroup.fontSize)/4);
             var contentCoordinateGroupWithinLimits
-             = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
+             = contentCache.isAnyWithinLimits(contentCoordinateGroup);
             var nextCoordinateNumber;
             if(contentCoordinateGroupWithinLimits){
                 console.log("near/on existing coordinate is being clicked");
                 populateExistingCordinate(contentCoordinateGroupWithinLimits);
             }else{
-                if( (contentCoordinateGroupHistory)
-                 && contentCoordinateGroupHistory.length > 0) {
-                    nextCoordinateNumber = Number(contentCoordinateGroupHistory.length) + 1;
-                }else{
-                    nextCoordinateNumber = 1;
-                }
+                nextCoordinateNumber = contentCache.getNextCoordinate();
                 console.log("new coordinate is being clicked");
                 domWriter.setPosition(contentCoordinateGroup.coordinate);
                 //TODO: check for overlap.
                 domWriter.clearAndFocusNumericInput(nextCoordinateNumber);
             }
         }
-
-
 
         //INFO:Instead of adding it on load, if we add it as event based on canvas element,
         //then it can be re-used across pages.
@@ -144,7 +121,7 @@
             //INFO: specific to numeric content coordinate group.
             var contentCoordinateGroup = domReader.readContentCoordinateGroup(
                 currentCoordinate.mouseCoordinate,inContentType);
-            contentCoordinateGroup = readContent(contentCoordinateGroup);
+            contentCoordinateGroup = domReader.readContent(contentCoordinateGroup);
 
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas,Number(contentCoordinateGroup.fontSize)/4);
@@ -154,28 +131,23 @@
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
                 domWriter.setPosition(contentCoordinateGroup.coordinate);
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
-                contentCoordinateGroupHistory[contentCoordinateGroupId-1]
-                =contentCoordinateGroup;
+                contentCache.addToHistory(contentCoordinateGroup,contentCoordinateGroupId-1);
                 console.log("Redrawing");
+                //TODO: move erase also.
                 erase(canvas);
-                console.log("total:"+contentCoordinateGroupHistory.length);
-                for (var j = 0; j < contentCoordinateGroupHistory.length; j++){
-                    currentContentCoordinateGroup = contentCoordinateGroupHistory[j];
-                    currentContentCoordinateGroup.draw(canvas);
-                }
+                contentCache.draw(canvas);
                 //INFO: End of editing existing coordinate.
             }else{
                 //INFO: adding a new coordinate.
                 //INFO: checking if new coordinate is with in limits of any of old coordinates.
                 contentCoordinateGroupWithinLimits
-                 = contentCoordinateGroup.isAnyWithinLimits(contentCoordinateGroupHistory);
+                 = contentCache.isAnyWithinLimits(contentCoordinateGroup);
                 if(contentCoordinateGroupWithinLimits == null) {
                     console.log("Adding new values");
                     domWriter.setPosition(contentCoordinateGroup.coordinate);
                     //TODO: do contentCoordinateGroup.draw, that does the 5 things below.
                     contentCoordinateGroup.draw(canvas);
-                    addToHistory(contentCoordinateGroup);
-                    console.log("total"+contentCoordinateGroupHistory.length);                
+                    contentCache.addToHistory(contentCoordinateGroup);
                 }else {
                     console.log("New value is existing value, so Populating existing values");
                     contentCoordinateGroupWithinLimits.editReason
@@ -191,14 +163,7 @@
         function populateCoordinate(contentCoordinateGroup) {
             domWriter.setPosition(contentCoordinateGroup.coordinate);
             onContentChange(contentCoordinateGroup.contentType);
-            if(contentCoordinateGroup.isNumeric()) {
-                //TODO: change dropdown and populate values...
-                //TODO: repopulate A and B, only if pre-populate existing is selected. 
-                //default is it is NOT selected.            
-                domWriter.setNumericContent(contentCoordinateGroup);
-            } else{
-                domWriter.setTextContent(contentCoordinateGroup);
-            }
+            domWriter.setContent(contentCoordinateGroup);
         }
         //Sets on DOM
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
@@ -208,24 +173,6 @@
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     
         }
 
-        //INFO: works on DOM.
-        function onContentChange(inContentType) {
-            var contentType = "";
-            if(inContentType) {
-                contentType = inContentType;
-            }else {
-                contentType = $("#contentTypeId").val();
-            }
-            console.log("Content Type is "+contentType);
-            //TODO: good to have, not must have, organize in div or field sets.
-            if(contentType==="Text") {
-                domController.hideNumericInputs();
-                domController.showTextInputs();
-            }else{
-                domController.showNumericInputs();
-                domController.hideTextInputs();
-            }
-        }
         function prefillImage() {
             console.log("prefillImage");
         }

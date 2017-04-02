@@ -39,4 +39,22 @@ function DomController() {
         $("#textId").show();
         $("#textLabelId").show();
     }
+    //INFO: works on DOM.
+    this.onContentChange = function(inContentType) {
+        var contentType = "";
+        if(inContentType) {
+            contentType = inContentType;
+        }else {
+            contentType = $("#contentTypeId").val();
+        }
+        console.log("Content Type is "+contentType);
+        //TODO: good to have, not must have, organize in div or field sets.
+        if(contentType==="Text") {
+            this.hideNumericInputs();
+            this.showTextInputs();
+        }else{
+            this.showNumericInputs();
+            this.hideTextInputs();
+        }
+    }    
 }

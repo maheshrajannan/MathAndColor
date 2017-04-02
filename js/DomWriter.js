@@ -15,6 +15,16 @@ function DomWriter() {
         $('#textId').val(contentCoordinateGroup.textContent);
         $('#contentTypeId').val(contentCoordinateGroup.contentType);
     }
+    this.setContent = function(contentCoordinateGroup) {
+        if(contentCoordinateGroup.isNumeric()) {
+            //TODO: change dropdown and populate values...
+            //TODO: repopulate A and B, only if pre-populate existing is selected. 
+            //default is it is NOT selected.            
+            this.setNumericContent(contentCoordinateGroup);
+        } else{
+            this.setTextContent(contentCoordinateGroup);
+        }
+    }
     //Sets on DOM.
     this.setPosition = function(coordinate) {
         console.log("Setting position"+coordinate.printValue());

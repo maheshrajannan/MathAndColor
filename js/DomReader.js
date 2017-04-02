@@ -18,6 +18,17 @@ function DomReader() {
         return contentCoordinateGroup;            
     }
 
+    //Interacts with methods that reads from DOM.
+    this.readContent = function(contentCoordinateGroup) {
+        if(contentCoordinateGroup.isNumeric()) {
+            contentCoordinateGroup = this.readNumericContent(
+                contentCoordinateGroup);
+        }else{
+            contentCoordinateGroup = this.readTextContent(contentCoordinateGroup);
+        }
+        return contentCoordinateGroup;
+    }
+
     //Reads From DOM.
     this.readContentCoordinateGroup = function(mouseCoordinate,inContentType) {
             var fontSize=$("#fontSizeId").val();
