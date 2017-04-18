@@ -6,6 +6,7 @@
         var domController = new DomController();
         var currentCoordinate = new CurrentContentCoordinate();
         var contentCache = new ContentCache();
+        var validator =new Validator();
 
         window.onload = function() {
             $("#bannerDivId").width(1600);   
@@ -75,36 +76,18 @@
         function addletter(canvas, letter, x, y,fontSize,align) {
             var context = canvas.getContext("2d");
             context.font = fontSize+"pt Calibri";
-            if(align && 
-                ( align === "left" || align === "right" ||
-                    align === "center" || align === "justify" ||
-                     align ==="initial")
-                ) {
-                context.textAlign=align;
-            } else {
-                console.log("align:"+align);
-                context.textAlign = "right";
-            }
+            context.textAlign = validator.validate(align);
             context.fillText(letter, x, y );
         }
 
         //Validate the input and add text.
         //interacts With DOM
+        //TODO: move this to validator.
         function validateInput(contentType) {
             var letterA = $('#numberAId').val();
-            //TODO: explain the regex.
-             if (/\D/.test(letterA)) {
-                alert( letterA + " is not a number. Please enter a valid number for A." );
-                $('#numberAId').focus() ;
-                return false; 
-            }
-            //TODO: explain regex.
-            var letterB = $('#numberBId').val();                       
-            if (/\D/.test(letterB)) {
-                alert( letterB + " is not a number. Please enter a valid number for B." );
-                $('#numberBId').focus() ;
-                return false; 
-            }
+            validator.test(letterA,'numberAId','A');
+            var letterB = $('#numberBId').val();
+            validator.test(letterB,'numberBId','B');
             addContent(contentType);
         }
         function addContent(inContentType) {
@@ -162,12 +145,14 @@
         //INFO: calls methods that set on dom.
         function populateCoordinate(contentCoordinateGroup) {
             domWriter.setPosition(contentCoordinateGroup.coordinate);
-            onContentChange(contentCoordinateGroup.contentType);
+            //TODO: this belongs to DOMController
+            domController.onContentChange(contentCoordinateGroup.contentType);
             domWriter.setContent(contentCoordinateGroup);
         }
         //Sets on DOM
         function populateExistingCordinate(contentCoordinateGroupWithinLimits) {
             populateCoordinate(contentCoordinateGroupWithinLimits);
+            //TODO: this belongs to domWriter
             $('#contentCoordinateGroupId').val(contentCoordinateGroupWithinLimits.id);     
             $('#contentCoordinateGroupLabelId').text("Editing #"+contentCoordinateGroupWithinLimits.id);     
             $('#editMessageDivId').text(contentCoordinateGroupWithinLimits.editReason);     

@@ -1,5 +1,5 @@
 /**
-A content(element) at a given coordinate.
+Writes to the DOM.
 **/
 function DomWriter() {
     this.setNumericContent = function(contentCoordinateGroup) {
