@@ -79,15 +79,14 @@
             context.textAlign = validator.validate(align);
             context.fillText(letter, x, y );
         }
-
         //Validate the input and add text.
         //interacts With DOM
         //TODO: move this to validator.
         function validateInput(contentType) {
             var letterA = $('#numberAId').val();
-            validator.test(letterA,'numberAId','A');
+            validator.validateNumeric(letterA,'numberAId','A');
             var letterB = $('#numberBId').val();
-            validator.test(letterB,'numberBId','B');
+            validator.validateNumeric(letterB,'numberBId','B');
             addContent(contentType);
         }
         function addContent(inContentType) {

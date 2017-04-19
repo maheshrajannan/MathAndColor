@@ -1,3 +1,6 @@
+/**
+interacts with the specified field by id.
+**/
 function Validator() {
     this.validate = function(align) {
     	var resultAlign;
@@ -12,7 +15,7 @@ function Validator() {
             }
         return resultAlign;
     }
-    this.test = function(numberInput,fieldId,fieldLabel) {
+    this.validateNumeric = function(numberInput,fieldId,fieldLabel) {
         //TODO: explain the regex.
         if (/\D/.test(numberInput)) {
             alert( numberInput +
