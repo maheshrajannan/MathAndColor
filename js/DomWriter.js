@@ -12,8 +12,8 @@ function DomWriter() {
         this.setElementValue('contentTypeId',contentCoordinateGroup.contentType);            
     }
     this.setTextContent = function(contentCoordinateGroup) {
-        $('#textId').val(contentCoordinateGroup.textContent);
-        $('#contentTypeId').val(contentCoordinateGroup.contentType);
+        this.setElementValue('textId',contentCoordinateGroup.textContent);            
+        this.setElementValue('contentTypeId',contentCoordinateGroup.contentType);            
     }
     this.setContent = function(contentCoordinateGroup) {
         if(contentCoordinateGroup.isNumeric()) {
