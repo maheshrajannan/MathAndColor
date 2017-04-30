@@ -2,10 +2,15 @@
 A content(element) at a given coordinate.
 **/
 function DomReader() {
+
+    this.readElementValue=function(elementId){
+        return $('#'+elementId).val();
+    }
+
     this.readNumericContent = function(contentCoordinateGroup) {
-        var aValue=$("#numberAId").val();
-        var bValue=$("#numberBId").val();
-        var operatorValue=$("#operatorId").val();
+        var aValue=this.readElementValue("numberAId");
+        var bValue=this.readElementValue("numberBId");
+        var operatorValue=this.readElementValue("operatorId");
         contentCoordinateGroup.setNumericContent(
                 aValue,bValue,operatorValue);   
         return contentCoordinateGroup; 
@@ -13,7 +18,7 @@ function DomReader() {
     
     //read from DOM.
     this.readTextContent = function(contentCoordinateGroup) {
-        var textContent = $("#textId").val();
+        var textContent = this.readElementValue("textId");
         contentCoordinateGroup.setTextContent(textContent);
         return contentCoordinateGroup;            
     }
@@ -31,14 +36,14 @@ function DomReader() {
 
     //Reads From DOM.
     this.readContentCoordinateGroup = function(mouseCoordinate,inContentType) {
-            var fontSize=$("#fontSizeId").val();
+            var fontSize=this.readElementValue("fontSizeId");
             var contentType;
 
             if(inContentType) {
                 console.log("inContentType:"+inContentType);
                 contentType = inContentType;
             }else{
-                contentType =$('#contentTypeId').val();
+                contentType =this.readElementValue("contentTypeId");
             }
             console.log("contentType:"+contentType);
 
