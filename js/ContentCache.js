@@ -2,10 +2,15 @@ function ContentCache() {
     //TODO:move to CCGCache.
     var contentCoordinateGroupHistory=[];
 
-    this.addToHistory= function(contentCoordinateGroup,index){
-    	if(index) {
-        	contentCoordinateGroupHistory[index]=contentCoordinateGroup;
+    //TODO: rename to save.
+    this.addToHistory= function(contentCoordinateGroup,contentCoordinateGroupId){
+    	if(contentCoordinateGroupId) {
+            console.log("Updating Id# "+contentCoordinateGroupId);
+            //0th element, has id of 1, hence -1.
+        	contentCoordinateGroupHistory[(contentCoordinateGroupId-1)]
+            =contentCoordinateGroup;
     	}else {
+            console.log("inserting new element at "+contentCoordinateGroupId);
     		contentCoordinateGroup.setId(Number(contentCoordinateGroupHistory.length+1));
     		contentCoordinateGroupHistory.push(contentCoordinateGroup);    		
     	}

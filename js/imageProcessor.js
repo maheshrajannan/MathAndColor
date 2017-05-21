@@ -93,7 +93,9 @@
             console.log("adding content");
             //INFO: common to both contentCoordinateGroup of type text and numeric.
             var canvas = document.getElementById("myCanvas");
-            var contentCoordinateGroupId=$('#contentCoordinateGroupId').val();            
+            var contentCoordinateGroupId=Number($('#contentCoordinateGroupId').val()); 
+            console.log("contentCoordinateGroupId:"+contentCoordinateGroupId);           
+            console.log("contentCoordinateGroupId:"+(contentCoordinateGroupId>0));           
             var contentType;
             
             var contentCoordinateGroupWithinLimits;
@@ -104,16 +106,20 @@
             var contentCoordinateGroup = domReader.readContentCoordinateGroup(
                 currentCoordinate.mouseCoordinate,inContentType);
             contentCoordinateGroup = domReader.readContent(contentCoordinateGroup);
+            //console.log("contentCoordinateGroup:"+contentCoordinateGroup.printValue());           
 
             //INFO: adjust it, just in case x and y are edited.
             contentCoordinateGroup.adjust(canvas,Number(contentCoordinateGroup.fontSize)/4);
+            console.log(
+                "After adjusting contentCoordinateGroup:"
+                +contentCoordinateGroup.printValue());           
 
-            if(contentCoordinateGroupId>0) {
+            if(contentCoordinateGroupId > 0) {
                 //INFO: Begin editing existing coordinate.
                 console.log("Editing contentCoordinateGroupId"+contentCoordinateGroupId);
                 domWriter.setPosition(contentCoordinateGroup.coordinate);
                 contentCoordinateGroup.setId(contentCoordinateGroupId);
-                contentCache.addToHistory(contentCoordinateGroup,contentCoordinateGroupId-1);
+                contentCache.addToHistory(contentCoordinateGroup,contentCoordinateGroupId);
                 console.log("Redrawing");
                 //TODO: move erase also.
                 erase(canvas);
