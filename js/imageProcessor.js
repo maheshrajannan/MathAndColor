@@ -83,6 +83,7 @@
         //interacts With DOM
         //TODO: move this to validator.
         function validateInput(contentType) {
+            console.log("contentType");
             var letterA = $('#numberAId').val();
             validator.validateNumeric(letterA,'numberAId','A');
             var letterB = $('#numberBId').val();
@@ -93,13 +94,14 @@
             //TODO: get ride of this wrapper calls.
             console.log("modifyXCoordinate");
             currentCoordinate.modifyXCoordinate();
-            this.validateInput();
+            //INFO: just validateInput, not this.validateInput because this is not a class
+            validateInput('Numeric');
         }        
         function modifyYCoordinate() {
             //TODO: get ride of this wrapper calls.
             console.log("modifyYCoordinate");
             currentCoordinate.modifyYCoordinate();
-            this.validateInput();
+            validateInput('Numeric');
         }        
         function addContent(inContentType) {
             console.log("adding content"+inContentType);

@@ -15,7 +15,7 @@ function CurrentContentCoordinate() {
     this.modifyYCoordinate = function() {
         console.log("Changing mouse position,y");
         this.setNewMouseCoordinate(($('#xId').val()),($('#yId').val()));
-        console.log("Changing mouse position" + mouseCoordinate.printValue());
+        console.log("Changing mouse position" + this.mouseCoordinate.printValue());
     }
     /**
     ContentCanvas
