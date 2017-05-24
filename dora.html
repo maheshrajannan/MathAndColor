@@ -153,7 +153,7 @@
                 <!--INFO:TODO: changed to Modal, fix the overlay-->
                 <label id="contentCoordinateGroupLabelModalId" for="contentCoordinateGroupModalId" >Add/Edit #:</label>
                 <div id="editMessageDivModalId"></div>
-                <input type="name" id="contentCoordinateGroupModalId" size="4" placeholder="-1 or 1,2"/>
+                <input type="hidden" id="contentCoordinateGroupModalId" size="4" placeholder="-1 or 1,2"/>
                 <br/>
                 <label for="xModalId">X:</label>
                 <input type="name" id="xModalId" size="4" placeholder="X" />
@@ -198,13 +198,13 @@
         <fieldset class="fieldSet1">
             <label id="contentCoordinateGroupLabelId" for="contentCoordinateGroupId" >Add/Edit #:</label>
             <div id="editMessageDivId"></div>
-            <input type="name" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
+            <input type="hidden" id="contentCoordinateGroupId" size="4" placeholder="-1 or 1,2"/>
             <br/>
             <label for="xId">X:</label>
-            <input type="name" id="xId" size="4" placeholder="X" onchange="currentContentCoordinate.modifyXCoordinate()"/>
+            <input type="name" id="xId" size="4" placeholder="X" onchange="modifyXCoordinate()"/>
             <br/>
             <label for="yId">Y:</label>
-            <input type="name" id="yId" size="4" placeholder="Y" onchange="currentContentCoordinate.modifyYCoordinate()"/>
+            <input type="name" id="yId" size="4" placeholder="Y" onchange="modifyYCoordinate()"/>
             <br/>
             <label for="fontSizeId">Font Size:</label>
             <input type="name" id="fontSizeId" size="4" value="40"/>

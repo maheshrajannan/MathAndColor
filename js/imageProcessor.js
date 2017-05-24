@@ -89,8 +89,20 @@
             validator.validateNumeric(letterB,'numberBId','B');
             addContent(contentType);
         }
+        function modifyXCoordinate() {
+            //TODO: get ride of this wrapper calls.
+            console.log("modifyXCoordinate");
+            currentCoordinate.modifyXCoordinate();
+            this.validateInput();
+        }        
+        function modifyYCoordinate() {
+            //TODO: get ride of this wrapper calls.
+            console.log("modifyYCoordinate");
+            currentCoordinate.modifyYCoordinate();
+            this.validateInput();
+        }        
         function addContent(inContentType) {
-            console.log("adding content");
+            console.log("adding content"+inContentType);
             //INFO: common to both contentCoordinateGroup of type text and numeric.
             var canvas = document.getElementById("myCanvas");
             var contentCoordinateGroupId=Number($('#contentCoordinateGroupId').val()); 

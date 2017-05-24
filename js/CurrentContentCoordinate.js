@@ -1,24 +1,20 @@
-function CurrentContentCoordinate(x,y,content,fontSize) {
+function CurrentContentCoordinate() {
     //TODO: rename to CurrentCoordinate
     var mouseCoordinate;
     //Sets on DOM.
     //INFO: by pass all checks and modify x coordinate.
     this.modifyXCoordinate = function() {
         //TODO: use reader here.
-        var newX=$('#xId').val();
-        console.log("Changing mouse position"
-            + mouseCoordinate.printValue() + " to "+newX);
-        mouseCoordinate.setX(newX);
+        console.log("Changing mouse position");
+        setNewMouseCoordinate(($('#xId').val()),($('#yId').val()));
         console.log("Changing mouse position" + mouseCoordinate.printValue());
-        $('#numberAId').val();
     }
 
     //Sets on DOM.
     //INFO: by pass all checks and modify y coordinate.
     this.modifyYCoordinate = function() {
-        var newY=$('#yId').val();
-        console.log("Changing mouse position" + mouseCoordinate.printValue());
-        mouseCoordinate.setY(newY);
+        console.log("Changing mouse position,y");
+        this.setNewMouseCoordinate(($('#xId').val()),($('#yId').val()));
         console.log("Changing mouse position" + mouseCoordinate.printValue());
     }
     /**
@@ -33,7 +29,17 @@ function CurrentContentCoordinate(x,y,content,fontSize) {
         console.log("Returning mouseCoordinate"+coordinate.printValue());
         return coordinate;
     }
+    this.getNewMouseCoordinate = function(x,y){
+        var coordinate = new Coordinate(x,y);
+        console.log("Returning mouseCoordinate"+coordinate.printValue());
+        return coordinate;
+    }
     this.setMouseCoordinate=function(canvas,evt){
         this.mouseCoordinate = this.getMouseCoordinate(canvas,evt);
+    }
+    this.setNewMouseCoordinate=function(x,y){
+        console.log("Setting x="+x);
+        console.log("Setting y="+y);
+        this.mouseCoordinate = this.getNewMouseCoordinate(x,y);
     }
 }
