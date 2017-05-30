@@ -16,6 +16,7 @@ function Validator() {
         return resultAlign;
     }
     this.validateNumeric = function(numberInput,fieldId,fieldLabel) {
+        console.log("Validating "+numberInput+":"+fieldId+":"+fieldLabel);
         //TODO: explain the regex.
         if (/\D/.test(numberInput)) {
             alert( numberInput +

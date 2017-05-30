@@ -6,10 +6,12 @@ function DomWriter() {
         //TODO: change dropdown and populate values...
         //TODO: repopulate A and B, only if pre-populate existing is selected. 
         //default is it is NOT selected.
-        this.setElementValue('numberAId',contentCoordinateGroup.a);            
-        this.setElementValue('numberBId',contentCoordinateGroup.b);            
-        this.setElementValue('operatorId',contentCoordinateGroup.operator);            
-        this.setElementValue('contentTypeId',contentCoordinateGroup.contentType);            
+        this.setElementValue('numberAId',contentCoordinateGroup.numericContentCoordinateGroup.a);            
+        this.setElementValue('numberBId',contentCoordinateGroup.numericContentCoordinateGroup.b);            
+        this.setElementValue('operatorId',
+            contentCoordinateGroup.numericContentCoordinateGroup.operator);            
+        this.setElementValue('contentTypeId',
+            contentCoordinateGroup.contentType);            
     }
     this.setTextContent = function(contentCoordinateGroup) {
         this.setElementValue('textId',contentCoordinateGroup.textContent);            
