@@ -14,8 +14,10 @@ function DomWriter() {
             contentCoordinateGroup.contentType);            
     }
     this.setTextContent = function(contentCoordinateGroup) {
-        this.setElementValue('textId',contentCoordinateGroup.textContent);            
-        this.setElementValue('contentTypeId',contentCoordinateGroup.contentType);            
+        this.setElementValue('textId',
+            contentCoordinateGroup.textContentCoordinateGroup.textContent);            
+        this.setElementValue('contentTypeId',
+            contentCoordinateGroup.contentType);            
     }
     this.setContent = function(contentCoordinateGroup) {
         if(contentCoordinateGroup.isNumeric()) {

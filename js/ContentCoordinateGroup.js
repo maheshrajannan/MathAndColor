@@ -12,10 +12,8 @@
           this.editReason = "";
           this.contentType = contentType;
 
-          this.textContent = "";
-          this.textCoordinate;
-
           this.numericContentCoordinateGroup;
+          this.textContentCoordinateGroup;
 
           this.setId = function(id) {
             this.id = id;
@@ -26,7 +24,10 @@
             this.numericContentCoordinateGroup
              = new NumericContentCoordinateGroup(a,b,operator,this.fontSize,this.coordinate);
           }
-
+          this.setTextContent = function(textContent) {
+            this.textContentCoordinateGroup=new TextContentCoordinateGroup(
+              textContent,this.fontSize,this.coordinate);
+          }
           this.isNumeric = function(contentType) {
             if (contentType) {
               return contentType === CONTENT_TYPE_NUMERIC;
@@ -43,143 +44,54 @@
             }
           }
 
-          this.setTextContent = function(textContent) {
-            this.textContent = textContent;
-          }
           this.adjust = function(canvas, padding) {
             if (this.isNumeric()) {
               this.numericContentCoordinateGroup.numericAdjust(canvas, padding);
             } else {
-              this.textAdjust(canvas, padding);
+              this.textContentCoordinateGroup.textAdjust(canvas, padding);
             }
-          }
-          this.textAdjust = function(canvas, padding) {
-            console.log("text adjust");
-            //left, top, right, bottom, x, y, width, height
-            var canvasBounds = canvas.getBoundingClientRect();
-
-            console.log("canvasBounds.x:" + canvasBounds.x);
-            console.log("canvasBounds.left:" + canvasBounds.left);
-            console.log("canvasBounds.right:" + canvasBounds.right);
-            console.log("canvasBounds.top:" + canvasBounds.top);
-            console.log("canvasBounds.bottom:" + canvasBounds.bottom);
-            console.log("canvasBounds.y:" + canvasBounds.y);
-            console.log("coordinate coordinate:" + this.coordinate.printValue());
-            if ((Number(this.coordinate.x) + Number(padding) +
-                canvasBounds.left) +
-              Number(this.textContent.length) * 0.71 * Number(fontSize) >
-              canvasBounds.right) {
-              console.log("readjusted x for right bounds from x :" + this.coordinate.x);
-              console.log("Number(canvasBounds.right)" +
-                "- Number(padding)" +
-                "- Number(canvasBounds.left)" +
-                "- Number(this.textContent.length)*0.71*Number(fontSize)");
-              console.log(Number(canvasBounds.right) +
-                "-" + Number(padding) +
-                "-" + Number(canvasBounds.left) +
-                "-" + Number(this.textContent.length) * 0.71 * Number(fontSize));
-              this.coordinate.x = Math.round(
-                Number(canvasBounds.right) -
-                Number(padding) -
-                Number(canvasBounds.left) -
-                Number(this.textContent.length) * 0.71 * Number(fontSize)
-              );
-              console.log("to :" + this.coordinate.x);
-            }
-            //INFO: align to left margin.
-            //TODO: works correctly for large numbers, but for single digits too much spacing.                
-            if (
-              Number(this.coordinate.x) <
-              (Number(padding))
-            ) {
-              console.log("readjusted x for left bounds from x :" + x);
-              this.coordinate.x = Number(padding);
-              console.log("to :" + this.coordinate.x);
-            }
-            console.log("( Number(y) + Number(canvasBounds.top) + Number(this.fontSize) ) > canvasBounds.bottom");
-            console.log((Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize)) + " > " + canvasBounds.bottom);
-            if ((Number(this.coordinate.y) + Number(canvasBounds.top) + Number(this.fontSize)) > canvasBounds.bottom) {
-              console.log("readjusted y for bottom from y :" + y);
-              this.coordinate.y = Math.round(
-                canvasBounds.bottom - Number(canvasBounds.top) - Number(this.fontSize));
-              console.log("to :" + this.coordinate.y);
-            }
-            //INFO: the numbers are starting somewhere in the middle, so ensuring 1 font size gap at top
-            console.log("Number(y) < Number(this.fontSize)");
-            if (Number(this.coordinate.y) < Number(this.fontSize)) {
-              console.log("readjusted y for top from y :" + this.coordinate.y);
-              this.coordinate.y = Number(this.fontSize);
-              console.log("to :" + this.coordinate.y);
-            }
-            this.initializeTextCoordinates();
           }
 
           this.initializeCoordinates = function() {
             if (this.isNumeric()) {
               this.numericContentCoordinateGroup.initializeNumericCoordinates();
             } else {
-              this.initializeTextCoordinates();
+              this.textContentCoordinateGroup.initializeTextCoordinates();
             }
           }
-          this.initializeTextCoordinates = function() {
-            this.textCoordinate = new ContentCoordinate(this.coordinate.x,
-              this.coordinate.y, this.textContent, this.fontSize);
-            console.log("textCoordinate:" + this.textCoordinate.printValue());
-          }
+
           this.getLength = function() {
             if(this.isNumeric()) {
               return this.numericContentCoordinateGroup.getLineLength();
             }else {
-              return this.textContent.length;
+              return this.textContentCoordinateGroup.textContent.length;
             }
           }
 
-          this.getTextMinX = function(padding) {
-            console.log("Number(this.coordinate.x) - Number(padding)");
-            console.log(Number(this.coordinate.x) + "-" + Number(padding));
-            console.log(Number(this.coordinate.x) - Number(padding));
-            return Math.round(
-              Number(this.coordinate.x) - Number(padding)
-            );
-          }
+
           this.getMinX = function(padding) {
             if (this.isNumeric()) {
               return this.numericContentCoordinateGroup.getNumericMinX(padding);
             } else {
-              return this.getTextMinX(padding);
+              return this.textContentCoordinateGroup.getTextMinX(padding);
             }
           }
-          this.getTextMaxX = function(padding) {
-            console.log("Math.round(Number(this.coordinate.x)" +
-              "Number(padding)+" +
-              "Number(fontSize)*this.textContent.length*0.71");
-            console.log(Number(this.coordinate.x) +
-              "+" + Number(padding) +
-              "+" + Number(fontSize) * this.textContent.length * 0.71);
-            return Math.round(Number(this.coordinate.x) +
-              Number(padding) +
-              Number(fontSize) * this.textContent.length * 0.71
-            );
-          }
+
           this.getMaxX = function(padding) {
             if (this.isNumeric()) {
               return this.numericContentCoordinateGroup.getNumericMaxX(padding);
             } else {
-              return this.getTextMaxX(padding);
+              return this.textContentCoordinateGroup.getTextMaxX(padding);
             }
           }
           this.getMinY = function(padding) {
             return Math.round(Number(this.coordinate.y) - Number(padding));
           }
-          this.getTextMaxY = function(padding) {
-            return Math.round(Number(this.coordinate.y)
-             + Number(padding) + Number(this.fontSize));
-          }
           this.getMaxY = function(padding) {
             if (this.isNumeric()) {
               return this.numericContentCoordinateGroup.getNumericMaxY(padding);
             } else {
-              return this.getTextMaxY(padding);
+              return this.textContentCoordinateGroup.getTextMaxY(padding);
             }
           }
           this.draw = function(canvas) {
@@ -194,7 +106,7 @@
               this.numericContentCoordinateGroup.line2Coordinate.draw(canvas);
             } else {
               console.log("Drawing text");
-              this.textCoordinate.draw(canvas, "left");
+              this.textContentCoordinateGroup.textCoordinate.draw(canvas, "left");
             }
           }
           this.getContentRectangle = function(padding) {
@@ -244,8 +156,7 @@
             if (this.isNumeric()) {
               return this.numericContentCoordinateGroup.printValue();
             } else {
-              return "ContentCoordinateGroup [id=" +
-                this.id + "," + this.coordinate.printValue() + "," + this.textContent + "]";
+              return this.textContentCoordinateGroup.printValue();
             }
           }
-        }
+}
